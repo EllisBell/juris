@@ -17,3 +17,4 @@ class Acordao(object):
         self.sumario = sumario
         self.dec_texto_parcial = dec_texto_parcial
         self.dec_texto_integral = dec_texto_integral
+        self.html_texto_integral = html_texto_integral
