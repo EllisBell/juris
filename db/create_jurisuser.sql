@@ -1,0 +1,1 @@
+CREATE ROLE jurisuser PASSWORD 'intenserecovery';
