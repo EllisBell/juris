@@ -53,6 +53,8 @@ def get_list_content(row):
 
 def get_text_with_newlines(row):
     html_text = get_html(row)
+    if not html_text:
+        return ""
     html_with_newlines = hp.replace_html_new_lines(html_text)
     newline_soup = get_soup(html_with_newlines)
     text_with_newlines = newline_soup.get_text(strip=False)
@@ -71,6 +73,8 @@ def get_processed_html(row):
 
 
 def prepare_html_for_saving(html_to_prepare):
+    if not html_to_prepare:
+        return ""
     new_html = hp.remove_font_tags(html_to_prepare)
     new_html = hp.close_p_tags(new_html)
     new_html = hp.replace_bold(new_html)
@@ -101,7 +105,7 @@ def get_acordao(case_url):
     index = 1
     recorridos = []
     while True:
-        recorrido = get_content(get_row(rows, "Recorrido " + index + ":"))
+        recorrido = get_content(get_row(rows, "Recorrido " + str(index) + ":"))
         if not recorrido:
             break
         recorridos.append(recorrido)
@@ -136,8 +140,11 @@ def get_acordao(case_url):
     dec_texto_integral = get_text_with_newlines(get_row(rows, "Decisão Texto Integral:"))
 
     # now get html
-    html_for_saving = prepare_html_for_saving(html_texto_integral)
+    html_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
 
-    ac = acordao.Acordao(processo, relator, descritores, numero, data, votacao, txt_integral_flag, txt_parcial_flag,
-                         meio_processual, decisao, sumario, dec_texto_parcial, dec_texto_integral, html_for_saving)
+    ac = acordao.Acordao(processo, 'tribunal', seccao, num_convencional,
+                         relator, descritores, numero, data, votacao, aditamento, trib_recurso,
+                         proc_trib_recurso, txt_integral_flag, txt_parcial_flag, meio_processual, recorrente,
+                         recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac, juris_nac,
+                         sumario, dec_texto_parcial, dec_texto_integral, html_for_saving, case_url)
     return ac

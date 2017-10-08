@@ -25,7 +25,7 @@ recorrente          varchar,--http://www.dgsi.pt/jtcn.nsf/89d1c0288c2dd49c802575
 decisao			    varchar,
 indic_eventuais     varchar,
 area_tematica       varchar,-- http://www.dgsi.pt/jtrp.nsf/56a6e7121657f91e80257cda00381fdf/aa677fb005b0c4078025686b00670104?OpenDocument
-doutrina            varchar,-- s
+doutrina            varchar,-- see above
 legis_nacional      varchar, -- see above
 juris_nacional      varchar, -- see above
 sumario	 		    varchar,
