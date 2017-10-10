@@ -50,7 +50,9 @@ def get_list_content(row):
     list_cont = [term.strip() for term in list_cont if not term.isspace()]
     return list_cont
 
-
+# This may or may not be necessary as it seems html parsing replaces
+# <br> with newlines anyway. Not sure, only seems to happen in some cases.
+# Seems to work with paragraphs too
 def get_text_with_newlines(row):
     html_text = get_html(row)
     if not html_text:
@@ -60,6 +62,11 @@ def get_text_with_newlines(row):
     text_with_newlines = newline_soup.get_text(strip=False)
     return text_with_newlines
 
+# TODO want no strip on newlines but strip whitespace at start of lines...
+def get_text_no_strip(row):
+    if row is not None:
+        return row.find_all('td')[1].get_text()
+    return ""
 
 # save this html as txt integral html
 def get_processed_html(row):
@@ -97,8 +104,15 @@ def get_acordao(case_url):
     votacao = get_content(get_row(rows, "Votação:"))
 
     aditamento = get_content(get_row(rows, "Aditamento:"))
+
     trib_recurso = get_content(get_row(rows, "Tribunal Recurso:"))
+    if not trib_recurso:
+        trib_recurso = get_content(get_row(rows, "Tribunal Recorrido:"))
     proc_trib_recurso = get_content(get_row(rows, "Processo no Tribunal Recurso:"))
+    if not proc_trib_recurso:
+        trib_recurso = get_content(get_row(rows, "Processo no Tribunal Recorrido:"))
+
+    data_dec_recorrida = get_content(get_row(rows, "Data Dec. Recorrida:"))
 
     recorrente = get_content(get_row(rows, "Recorrente:"))
     # get multiple recorridos
@@ -109,42 +123,32 @@ def get_acordao(case_url):
         if not recorrido:
             break
         recorridos.append(recorrido)
+        index += 1
 
     indic_eventuais = get_content(get_row(rows, "Indicações Eventuais:"))
 
-    area_tematica = get_text_with_newlines(get_row(rows, "Área Temática:"))
-    doutrina = get_text_with_newlines(get_row(rows, "Doutrina:"))
-    legis_nac = get_text_with_newlines(get_row(rows, "Legislação Nacional:"))
-    juris_nac = get_text_with_newlines(get_row(rows, "Jurisprudência Nacional:"))
+    area_tematica = get_text_no_strip(get_row(rows, "Área Temática:"))
+    doutrina = get_text_no_strip(get_row(rows, "Doutrina:"))
+    legis_nac = get_text_no_strip(get_row(rows, "Legislação Nacional:"))
+    juris_nac = get_text_no_strip(get_row(rows, "Jurisprudência Nacional:"))
 
     txt_integral_flag = get_content(get_row(rows, "Texto Integral:"))
     txt_parcial_flag = get_content(get_row(rows, "Texto Parcial:"))
     meio_processual = get_content(get_row(rows, "Meio Processual:"))
     decisao = get_content(get_row(rows, "Decisão:"))
     # TODO for sumario we need to get newlines as well
-    #sumario = get_content(get_row(rows, "Sumário:"))
-    sumario = get_text_with_newlines(get_row(rows, "Sumário:"))
+    # sumario = get_content(get_row(rows, "Sumário:"))
+    sumario = get_text_no_strip(get_row(rows, "Sumário:"))
     dec_texto_parcial = get_content(get_row(rows, "Decisão Texto Parcial:"))
 
-    # At this point
-    # Get the row for texto integral
-    # From the row, get the column with the content
-    # Pass that whole thing to html_prework to replace with new lines
-    # then make soup from that, then get text
-
-    # html_texto_integral = get_html(get_row(rows, "Decisão Texto Integral:"))
-    # html_for_integral_soup = hp.replace_html_new_lines(html_texto_integral)
-    # integral_soup = get_soup(html_for_integral_soup)
-    # dec_texto_integral = integral_soup.get_text(strip=False)
-
-    dec_texto_integral = get_text_with_newlines(get_row(rows, "Decisão Texto Integral:"))
+    dec_texto_integral = get_text_no_strip(get_row(rows, "Decisão Texto Integral:"))
 
     # now get html
     html_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
 
     ac = acordao.Acordao(processo, 'tribunal', seccao, num_convencional,
                          relator, descritores, numero, data, votacao, aditamento, trib_recurso,
-                         proc_trib_recurso, txt_integral_flag, txt_parcial_flag, meio_processual, recorrente,
-                         recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac, juris_nac,
-                         sumario, dec_texto_parcial, dec_texto_integral, html_for_saving, case_url)
+                         proc_trib_recurso, data_dec_recorrida, txt_integral_flag, txt_parcial_flag, meio_processual,
+                         recorrente, recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac,
+                         juris_nac, sumario, dec_texto_parcial, dec_texto_integral, html_for_saving, case_url)
     return ac

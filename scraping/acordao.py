@@ -3,9 +3,10 @@ import psycopg2 as ppg
 
 class Acordao(object):
     def __init__(self, processo, tribunal, seccao, num_convencional, relator, descritores, numero, data, votacao,
-                 aditamento, trib_recurso, proc_trib_recurso, texto_integral_flag, texto_parcial_flag, meio_processual,
-                 recorrente, recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nacional,
-                 juris_nacional, sumario, dec_texto_parcial, dec_texto_integral, html_texto_integral, url):
+                 aditamento, trib_recurso, proc_trib_recurso, data_dec_recorrida, texto_integral_flag,
+                 texto_parcial_flag, meio_processual, recorrente, recorridos, decisao, indic_eventuais,
+                 area_tematica, doutrina, legis_nacional, juris_nacional, sumario, dec_texto_parcial,
+                 dec_texto_integral, html_texto_integral, url):
         self.processo = processo
         self.tribunal = tribunal
         self.seccao = seccao
@@ -18,6 +19,7 @@ class Acordao(object):
         self.aditamento = aditamento
         self.trib_recurso = trib_recurso
         self.proc_trib_recurso = proc_trib_recurso
+        self.data_dec_recorrida = data_dec_recorrida
         self.texto_integral_flag = texto_integral_flag
         self.texto_parcial_flag = texto_parcial_flag
         self.meio_processual = meio_processual
