@@ -4,11 +4,6 @@ import re
 import html_prework as hp
 import acordao as acordao
 
-# TODOTODOTODO Index of row for each section is not always consistent between pages But if names of sections are
-# consistent (and I think they are) - have method that finds the row based on the name of the section e.g. meio
-# processual, relator etc.
-# 
-
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 
@@ -68,17 +63,6 @@ def get_text_no_strip(row):
         return row.find_all('td')[1].get_text()
     return ""
 
-# save this html as txt integral html
-def get_processed_html(row):
-    col = row.find_all('td')[1]
-    col_html = str(col)
-    new_html = hp.remove_font_tags(col_html)
-    new_html = hp.close_p_tags(new_html)
-    new_html = hp.replace_bold(new_html)
-    new_html = hp.replace_italics(new_html)
-    return new_html
-
-
 def prepare_html_for_saving(html_to_prepare):
     if not html_to_prepare:
         return ""
@@ -88,6 +72,11 @@ def prepare_html_for_saving(html_to_prepare):
     new_html = hp.replace_italics(new_html)
     new_html = hp.replace_s_tags(new_html)
     return new_html
+
+def get_tribunal_id():
+    # get which tribunal this is
+    # make call to database to get the id number for it
+    # Or instead of using id numbers, have unique short name and then a long display name
 
 
 def get_acordao(case_url):
@@ -136,10 +125,9 @@ def get_acordao(case_url):
     txt_parcial_flag = get_content(get_row(rows, "Texto Parcial:"))
     meio_processual = get_content(get_row(rows, "Meio Processual:"))
     decisao = get_content(get_row(rows, "Decisão:"))
-    # TODO for sumario we need to get newlines as well
-    # sumario = get_content(get_row(rows, "Sumário:"))
+
     sumario = get_text_no_strip(get_row(rows, "Sumário:"))
-    dec_texto_parcial = get_content(get_row(rows, "Decisão Texto Parcial:"))
+    dec_texto_parcial = get_text_no_strip(get_row(rows, "Decisão Texto Parcial:"))
 
     dec_texto_integral = get_text_no_strip(get_row(rows, "Decisão Texto Integral:"))
 

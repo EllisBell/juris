@@ -32,7 +32,8 @@ sumario	 		    varchar,
 txt_parcial 	    varchar,
 txt_integral 	    varchar,
 html_txt_integral   varchar,
-url                 varchar
+url                 varchar,
+date_loaded         date
 )
 
 CREATE TABLE acordao_descritor (
