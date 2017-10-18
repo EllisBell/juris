@@ -6,7 +6,7 @@ DROP TABLE acordao;
 CREATE TABLE acordao (
 id		 		    serial CONSTRAINT acordao_pk PRIMARY KEY,
 processo 		    varchar,
-tribunal_id         integer REFERENCES tribunal(id),
+tribunal_id         varchar REFERENCES tribunal(id_name),
 seccao              varchar,--http://www.dgsi.pt/jtca.nsf/170589492546a7fb802575c3004c6d7d/e1cd173243db516180258183003cf652?OpenDocument
 num_convencional    varchar,
 relator  		    varchar,

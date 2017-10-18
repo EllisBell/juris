@@ -45,6 +45,7 @@ def get_list_content(row):
     list_cont = [term.strip() for term in list_cont if not term.isspace()]
     return list_cont
 
+
 # This may or may not be necessary as it seems html parsing replaces
 # <br> with newlines anyway. Not sure, only seems to happen in some cases.
 # Seems to work with paragraphs too
@@ -57,11 +58,13 @@ def get_text_with_newlines(row):
     text_with_newlines = newline_soup.get_text(strip=False)
     return text_with_newlines
 
+
 # TODO want no strip on newlines but strip whitespace at start of lines...
 def get_text_no_strip(row):
     if row is not None:
         return row.find_all('td')[1].get_text()
     return ""
+
 
 def prepare_html_for_saving(html_to_prepare):
     if not html_to_prepare:
@@ -73,7 +76,9 @@ def prepare_html_for_saving(html_to_prepare):
     new_html = hp.replace_s_tags(new_html)
     return new_html
 
+
 def get_tribunal_id():
+    return None
     # get which tribunal this is
     # make call to database to get the id number for it
     # Or instead of using id numbers, have unique short name and then a long display name

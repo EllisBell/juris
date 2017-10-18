@@ -1,8 +1,14 @@
 drop table tribunal;
 
+-- potentially change this to unique short name, long name (no id)
+-- and add primary key
 create table tribunal (
-id serial,
-name varchar
-);
+id_name     varchar constraint tribunal_pk primary key,
+long_name   varchar
+)
 
-insert into tribunal(name) values ('Tribunal da Relação de Lisboa');
+insert into tribunal(id_name, long_name) values ('TRL', 'Tribunal da Relação de Lisboa');
+insert into tribunal(id_name, long_name) values ('TRP', 'Tribunal da Relação do Porto');
+
+
+select * from tribunal t;

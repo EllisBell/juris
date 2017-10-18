@@ -33,11 +33,12 @@ def scrape_page(page_url):
 # To speed this up a bit, display maximum number of acordaos on page (looks like it's 1000)
 # Scrape just the links and check against urls in database. Then only scrape the ones we do
 # not yet have in database
-def scrape_trib(trib_url, start_index):
+def scrape_trib(trib_url, start_index, end_index=-1):
     base_trib_url = base_url + trib_url
     # keep going until you get to the end
+    # if end index was provided go to end index
     # display lots of acordaos (1000 seems to be max)
-    while True:
+    while start_index != end_index:
         acordao_urls = scrape_page(base_trib_url + "&Start=" + start_index + "&Count=1000")
         # check if got anything back
         if not acordao_urls:
