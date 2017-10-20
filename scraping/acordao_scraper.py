@@ -5,6 +5,7 @@ import html_prework as hp
 import acordao as acordao
 
 headers = {'User-Agent': 'Mozilla/5.0'}
+base_url = "http://www.dgsi.pt"
 
 
 def gimme_rows(case_url):
@@ -84,8 +85,9 @@ def get_tribunal_id():
     # Or instead of using id numbers, have unique short name and then a long display name
 
 
-def get_acordao(case_url):
-    rows = gimme_rows(case_url)
+def get_acordao(case_url, trib_id):
+    full_case_url = base_url + case_url
+    rows = gimme_rows(full_case_url)
 
     processo = get_content(get_row(rows, "Processo:"))
     # get seccao, num_convencional
@@ -139,7 +141,7 @@ def get_acordao(case_url):
     # now get html
     html_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
 
-    ac = acordao.Acordao(processo, 'tribunal', seccao, num_convencional,
+    ac = acordao.Acordao(processo, trib_id, seccao, num_convencional,
                          relator, descritores, numero, data, votacao, aditamento, trib_recurso,
                          proc_trib_recurso, data_dec_recorrida, txt_integral_flag, txt_parcial_flag, meio_processual,
                          recorrente, recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac,

@@ -1,42 +1,43 @@
 import psycopg2 as ppg
 
-class acordao_saver(object):
-    def __init__(self):
-        self.conn = ppg.connect("dbname=jurisdb user=jurisuser password=intenserecovery")
 
+class AcordaoSaver(object):
+    def __init__(self):
+        # TODO review when to connect, close etc... pooled connections?
+        self.conn = ppg.connect("dbname=jurisdb user=jurisuser password=intenserecovery")
 
     # have function for checking whether acordao already in db before saving
     def check_exists(self, processo, data):
-    # query db to check if acordao with this processo and date already saved
-        return False;
+        # query db to check if acordao with this processo and date already saved
+        return False
 
-    def get_currently_saved(self):
-        #query db to get urls of all currently saved acordaos
+    def get_currently_saved(self, trib_id):
+        # query db to get urls of all currently saved acordaos
         cur = self.conn.cursor()
-        sql = "select id_name from tribunal;"
-        cur.execute(sql)
+        sql = "select url from acordao where tribunal_id = %s;"
+        cur.execute(sql, (trib_id,))
         results = cur.fetchall()
-        return results
-
-
+        url_list = [result[0] for result in results]
+        # return set to make checking if in here faster
+        return set(url_list)
 
     # TODO need to give this the tribunal to which it pertains (e.g. pass in tribunal id)
     def save(self, acordao):
-        # connect to db. do this somewhere else
-        conn = ppg.connect("dbname=jurisdb user=jurisuser password=intenserecovery")
-        cur = conn.cursor()
+        cur = self.conn.cursor()
 
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
-                 txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, txt_integral, html_txt_integral)
-                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
+                 txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, txt_integral, html_txt_integral,
+                 url)
+                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
 
         cur.execute(sql, (
-            acordao.processo, acordao.relator, acordao.numero, acordao.data, acordao.votacao, acordao.texto_integral_flag,
+            acordao.processo, acordao.tribunal, acordao.relator, acordao.numero, acordao.data, acordao.votacao,
+            acordao.texto_integral_flag,
             acordao.texto_parcial_flag,
             acordao.meio_processual, acordao.decisao, acordao.sumario, acordao.dec_texto_parcial,
-            acordao.dec_texto_integral, acordao.html_texto_integral))
+            acordao.dec_texto_integral, acordao.html_texto_integral, acordao.url))
 
-        # since we included "RETURING id" in insert stmt, we can get the id from result
+        # since we included "RETURNING id" in insert stmt, we can get the id from result
         acordao_id = cur.fetchone()[0]
 
         for desc in acordao.descritores:
@@ -51,5 +52,7 @@ class acordao_saver(object):
 
             cur.execute(rec_sql, (acordao_id, rec))
 
-        conn.commit()
-        conn.close()
+        self.conn.commit()
+
+    def close_connection(self):
+        self.conn.close()
