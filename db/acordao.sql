@@ -51,3 +51,6 @@ recorrido varchar)
 -- to run this file in psql: \i ''C:\Users/Tom/ProgStuff/Projects/juris/sql_dev/acordao.sql'
 
 select * from acordao;
+delete from acordao_recorrido;
+delete from acordao_descritor;
+delete from acordao;

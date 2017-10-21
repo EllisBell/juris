@@ -1,6 +1,9 @@
 import psycopg2 as ppg
+import datetime
 
-
+# Should I be using something like sqlalchemy (providing a layer of abstraction/ORM) rather than pyscopg2 directly?
+# Would this make sense given this may or may not tie in with django
+# If not should I have a simple db abstraction class anyway?
 class AcordaoSaver(object):
     def __init__(self):
         # TODO review when to connect, close etc... pooled connections?
@@ -27,15 +30,15 @@ class AcordaoSaver(object):
 
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
                  txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, txt_integral, html_txt_integral,
-                 url)
-                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
+                 url, date_loaded)
+                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
 
         cur.execute(sql, (
             acordao.processo, acordao.tribunal, acordao.relator, acordao.numero, acordao.data, acordao.votacao,
             acordao.texto_integral_flag,
             acordao.texto_parcial_flag,
             acordao.meio_processual, acordao.decisao, acordao.sumario, acordao.dec_texto_parcial,
-            acordao.dec_texto_integral, acordao.html_texto_integral, acordao.url))
+            acordao.dec_texto_integral, acordao.html_texto_integral, acordao.url, datetime.datetime.now().date()))
 
         # since we included "RETURNING id" in insert stmt, we can get the id from result
         acordao_id = cur.fetchone()[0]

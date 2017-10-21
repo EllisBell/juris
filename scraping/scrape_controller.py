@@ -15,3 +15,5 @@ def scrape_and_save(trib_url, trib_id):
     for url in unsaved_urls:
         ac = acs.get_acordao(url, trib_id)
         ac_saver.save(ac)
+
+    ac_saver.close_connection()
