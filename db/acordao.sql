@@ -4,7 +4,7 @@ DROP TABLE acordao;
 
 
 CREATE TABLE acordao (
-id		 		    serial CONSTRAINT acordao_pk PRIMARY KEY,
+acordao_id		    serial CONSTRAINT acordao_pk PRIMARY KEY,
 processo 		    varchar,
 tribunal_id         varchar REFERENCES tribunal(id_name),
 seccao              varchar,--http://www.dgsi.pt/jtca.nsf/170589492546a7fb802575c3004c6d7d/e1cd173243db516180258183003cf652?OpenDocument
@@ -37,14 +37,14 @@ date_loaded         date
 )
 
 CREATE TABLE acordao_descritor (
-acordao_id integer REFERENCES acordao(id),
+acordao_id integer REFERENCES acordao(acordao_id),
 descritor  varchar
 )
 
 -- there can also be recorrido 2, 3, etc. probably best to have other table
 --http://www.dgsi.pt/jtcn.nsf/89d1c0288c2dd49c802575c8003279c7/9dae9d2a2192345f802581a80035b8a2?OpenDocument
 CREATE TABLE acordao_recorrido (
-acordao_id integer REFERENCES acordao(id),
+acordao_id integer REFERENCES acordao(acordao_id),
 recorrido varchar)
 
 
@@ -54,3 +54,7 @@ select * from acordao;
 delete from acordao_recorrido;
 delete from acordao_descritor;
 delete from acordao;
+
+
+alter table acordao
+rename id to acordao_id;

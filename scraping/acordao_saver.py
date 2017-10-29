@@ -31,7 +31,7 @@ class AcordaoSaver(object):
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
                  txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, txt_integral, html_txt_integral,
                  url, date_loaded)
-                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"""
+                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING acordao_id"""
 
         cur.execute(sql, (
             acordao.processo, acordao.tribunal, acordao.relator, acordao.numero, acordao.data, acordao.votacao,

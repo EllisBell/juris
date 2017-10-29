@@ -5,6 +5,7 @@ import acordao_saver
 
 # for scraping and saving everything unsaved
 # call this for each trib you want to scrape
+# trib_url is something like "/jtrl.nsf?OpenDatabase"
 def scrape_and_save(trib_url, trib_id):
     all_urls = ts.scrape_trib(trib_url, count=10)
 
