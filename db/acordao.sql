@@ -37,6 +37,7 @@ date_loaded         date
 )
 
 CREATE TABLE acordao_descritor (
+acordao_desc_id serial CONSTRAINT acordao_desc_pk PRIMARY KEY,
 acordao_id integer REFERENCES acordao(acordao_id),
 descritor  varchar
 )
@@ -44,6 +45,7 @@ descritor  varchar
 -- there can also be recorrido 2, 3, etc. probably best to have other table
 --http://www.dgsi.pt/jtcn.nsf/89d1c0288c2dd49c802575c8003279c7/9dae9d2a2192345f802581a80035b8a2?OpenDocument
 CREATE TABLE acordao_recorrido (
+acordao_recorrido_id serial CONSTRAINT acordao_rec_pk PRIMARY KEY,
 acordao_id integer REFERENCES acordao(acordao_id),
 recorrido varchar)
 
@@ -51,10 +53,14 @@ recorrido varchar)
 -- to run this file in psql: \i ''C:\Users/Tom/ProgStuff/Projects/juris/sql_dev/acordao.sql'
 
 select * from acordao;
+select * from acordao_recorrido;
+select * from acordao_descritor;
+
 delete from acordao_recorrido;
 delete from acordao_descritor;
 delete from acordao;
 
+select * from django_migrations;
+delete from django_migrations
 
-alter table acordao
-rename id to acordao_id;
+

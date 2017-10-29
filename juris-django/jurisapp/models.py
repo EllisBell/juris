@@ -1,8 +1,15 @@
-from django.db import models
 from __future__ import unicode_literals
+from django.db import models
 
 
 # Create your models here.
+
+class Tribunal(models.Model):
+    id_name = models.CharField(primary_key=True, max_length=6)
+    long_name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'tribunal'
 
 # N.B. changing most fields from CharField to TextField (with no max length)
 # Hope this doesn't cause issues...
@@ -30,7 +37,7 @@ class Acordao(models.Model):
     area_tematica = models.TextField(blank=True, null=True)
     doutrina = models.TextField(blank=True, null=True)
     legis_nacional = models.TextField(blank=True, null=True)
-    juris_nacional = models.CharField(max_length=-1, blank=True, null=True)
+    juris_nacional = models.TextField(blank=True, null=True)
     sumario = models.TextField(max_length=-1, blank=True, null=True)
     txt_parcial = models.TextField(blank=True, null=True)
     txt_integral = models.TextField(blank=True, null=True)
@@ -38,29 +45,32 @@ class Acordao(models.Model):
     url = models.TextField(blank=True, null=True)
     date_loaded = models.DateField(blank=True, null=True)
 
+    def __str__(self):
+        return self.processo
+
     class Meta:
         db_table = 'acordao'
 
 
 class AcordaoDescritor(models.Model):
+    acordao_desc_id = models.AutoField(primary_key=True)
     acordao = models.ForeignKey(Acordao, models.DO_NOTHING, blank=True, null=True)
-    descritor = models.CharField(max_length=-1, blank=True, null=True)
+    descritor = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.descritor + " (acordao " + str(self.acordao.acordao_id) + ")"
 
     class Meta:
         db_table = 'acordao_descritor'
 
 
 class AcordaoRecorrido(models.Model):
+    acordao_recorrido_id = models.AutoField(primary_key=True)
     acordao = models.ForeignKey(Acordao, models.DO_NOTHING, blank=True, null=True)
-    recorrido = models.CharField(max_length=-1, blank=True, null=True)
+    recorrido = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'acordao_recorrido'
 
 
-class Tribunal(models.Model):
-    id_name = models.CharField(primary_key=True, max_length=-1)
-    long_name = models.CharField(max_length=-1, blank=True, null=True)
 
-    class Meta:
-        db_table = 'tribunal'

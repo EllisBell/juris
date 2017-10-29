@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jurisapp.apps.JurisappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jurisdb',
-        'USER': 'jurisuser',
-        'PASSWORD': 'intenserecovery',
+        'USER': 'postgres',
+        'PASSWORD': 'gallowspole',
         'HOST': 'localhost',
 
     }
