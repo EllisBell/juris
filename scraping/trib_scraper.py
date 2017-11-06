@@ -25,7 +25,7 @@ def scrape_page(page_url):
 # the whole thing every time.
 
 # To speed this up a bit, display maximum number of acordaos on page (looks like it's 1000)
-def scrape_trib(trib_url, start_index = 1, count=-1):
+def scrape_trib(trib_url, start_index=1, count=-1):
     base_trib_url = base_url + trib_url
     # keep going until you get to the end
     keep_going = count < 0

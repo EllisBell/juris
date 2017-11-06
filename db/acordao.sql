@@ -63,4 +63,6 @@ delete from acordao;
 select * from django_migrations;
 delete from django_migrations
 
+select count(distinct(url)) dist from acordao;
+
 

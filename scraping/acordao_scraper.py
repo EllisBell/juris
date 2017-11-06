@@ -16,7 +16,13 @@ def gimme_rows(case_url):
 
 
 def get_soup(html):
-    return BeautifulSoup(html, 'html.parser')
+    # n.b. using lxml instead of html.parser as it deals with unclosed tags better
+    # n.b. specifying encoding as encoding of some pages was not being detected correctly
+    # TODO this could lead to problems if page is not windows-1252 encoded so write
+    # TODO something that deals with this
+    return BeautifulSoup(html, 'lxml', from_encoding='windows-1252')
+    # return BeautifulSoup(html, 'lxml')
+    # return BeautifulSoup(html, 'html.parser')
 
 
 def get_row(rows, section_header):
@@ -147,3 +153,8 @@ def get_acordao(case_url, trib_id):
                          recorrente, recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac,
                          juris_nac, sumario, dec_texto_parcial, dec_texto_integral, html_for_saving, case_url)
     return ac
+
+
+if __name__ == "__main__":
+    print("hello world")
+    get_acordao("/jtrl.nsf/33182fc732316039802565fa00497eec/dfd77f12a75d13f2802581c80058e338?OpenDocument", "TRL")
