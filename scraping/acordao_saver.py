@@ -1,9 +1,11 @@
 import psycopg2 as ppg
 import datetime
 
+
 # Should I be using something like sqlalchemy (providing a layer of abstraction/ORM) rather than pyscopg2 directly?
 # Would this make sense given this may or may not tie in with django
 # If not should I have a simple db abstraction class anyway?
+# tbh since this is just for scraping and Django will handle interacting between app and db, probs not necessary
 class AcordaoSaver(object):
     def __init__(self):
         # TODO review when to connect, close etc... pooled connections?

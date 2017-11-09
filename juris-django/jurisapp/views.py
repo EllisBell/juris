@@ -34,7 +34,11 @@ def search(request):
     # do it with postgres full text search (using ts_query, ts_vector etc.)
     # if necessary try indexing - see what works best: indexing each search column vs one index concatenating all
     # then try replicating through Django
+    # n.b. (still need to fix todo below) - index on txt_integral worked like a charm
+    # question is whether to concatenate all columns to index, so that can search across all
+    # or have individual indices (may be necessary for weighting)
     # TODO note: postgres giving error when using ts_vector: word too long to be indexed (larger than 2047 chars)
-    # todo find out where these are / why they exist
+    # todo find out where these are / why they exist - see board for more info
+
 
     # useful to know when in PSQL "explain <query>" to get cost

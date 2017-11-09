@@ -65,4 +65,32 @@ delete from django_migrations
 
 select count(distinct(url)) dist from acordao;
 
+-- index stuff:
+-- index on just txt_integral:
+create index acordao_idx on acordao using GIN(to_tsvector('portuguese', txt_integral));
+
+select count(*) from acordao where to_tsvector('portuguese', txt_integral) @@ to_tsquery('portuguese', 'crime');
+
+drop index acordao_idx;
+
+-- unaccent / dictionary stuff:
+-- NOTE: had to to this as unaccent is not there by default in database!
+create extension unaccent;
+
+-- creating new text search config to use unaccent + portuguese stem:
+create text search configuration tuga (copy = portuguese);
+alter text search configuration tuga
+alter mapping for hword, hword_part, word
+with unaccent, portuguese_stem;
+
+-- but this gives some odd results e.g. ã is converted to ae
+-- UPDATE: actually above may be wrong - that was maybe just the way psql was displaying results
+-- may be able to change dictionary that unaccent uses..
+-- or create a new filter dictionary instead of unaccent e.g. with just
+-- á -- a; ã -- a; à -- a; and so on. and test if that works.
+-- If a new one is created can compare results when using new one vs when using unaccent;
+
+select 'c', 'ç', to_tsvector('tuga', 'ç');
+select to_tsvector('tuga', 'não');
+
 
