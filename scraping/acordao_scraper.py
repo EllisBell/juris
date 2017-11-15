@@ -1,16 +1,19 @@
-import requests
+import scraper
 from bs4 import BeautifulSoup
-import re
 import html_prework as hp
 import acordao as acordao
 
-headers = {'User-Agent': 'Mozilla/5.0'}
 base_url = "http://www.dgsi.pt"
 
 
+def get_page(url):
+    content = scraper.try_get_page_content(url, 5, 1)
+    return content
+
+
 def gimme_rows(case_url):
-    r = requests.get(case_url, headers=headers)
-    this_soup = get_soup(r.content)
+    content = get_page(case_url)
+    this_soup = get_soup(content)
     case_rows = this_soup.find_all('tr')
     return case_rows
 

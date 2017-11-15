@@ -1,4 +1,4 @@
-import requests
+import scraper
 from bs4 import BeautifulSoup
 import re
 
@@ -10,8 +10,8 @@ base_url = 'http://www.dgsi.pt'
 # Return how many acordaos scraped
 # Here just scrape for acordao urls
 def scrape_page(page_url):
-    r = requests.get(page_url, headers=headers)
-    soup = BeautifulSoup(r.content, 'html.parser')
+    content = scraper.try_get_page_content(page_url, 5, 1)
+    soup = BeautifulSoup(content, 'html.parser')
     # Get links for the acordaos
     links = soup.find_all('a', href=re.compile('OpenDocument'))
     acordao_urls = [link['href'] for link in links]
@@ -40,6 +40,7 @@ def scrape_trib(trib_url, start_index=1, count=-1):
     all_acordao_urls = []
 
     while keep_going or remaining_count > 0:
+        # get links to acordaos from page
         acordao_urls = scrape_page(base_trib_url + "&Start=" + str(start_index) + "&Count=" + str(max_page_count))
         # check if got anything back
         if not acordao_urls:
@@ -50,6 +51,7 @@ def scrape_trib(trib_url, start_index=1, count=-1):
             acordao_urls = acordao_urls[:remaining_count]
 
         all_acordao_urls.extend(acordao_urls)
+        # subtract the number of acordaos we just got from the remaining count
         remaining_count = remaining_count - len(acordao_urls)
         start_index = start_index + len(acordao_urls)
 

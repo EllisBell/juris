@@ -6,11 +6,8 @@ from .models import Acordao
 # Create your views here.
 # placeholder just to get started
 def index(request):
-    acordaos = Acordao.objects.all()
-    acordao_string = ""
-    for acordao in acordaos:
-        acordao_string += "<br>d" + str(acordao)
-    return HttpResponse(acordao_string)
+    return render(request, 'jurisapp/index.html')
+
 
 # experiment with postgres full text search
 # gonna need a template with a search box
@@ -20,9 +17,15 @@ def index(request):
 # improve js while doing it
 # and then learn a framework and make another proj with it
 def search(request):
-    return None
+    query = request.GET['query']
+
+    acordaos = Acordao.objects.filter(txt_integral__contains='crime')
+    total = len(acordaos)
+    context_dict = {'total': total, 'acordaos': acordaos}
+    return render(request, 'jurisapp/search_results.html', context_dict)
+
     # postgres full text search
-    #https://docs.djangoproject.com/en/1.11/ref/contrib/postgres/search/
+    # https://docs.djangoproject.com/en/1.11/ref/contrib/postgres/search/
     # https://www.postgresql.org/docs/current/static/textsearch.html
     # e.g. search on txt_integral Acordao.objects.filter(txt_integral__search='crimes')
 
