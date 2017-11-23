@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Acordao
+from django.contrib.postgres.search import SearchQuery, SearchVector
 
 
 # Create your views here.
@@ -19,9 +20,36 @@ def index(request):
 def search(request):
     query = request.GET['query']
 
-    acordaos = Acordao.objects.filter(txt_integral__contains='crime')
-    total = len(acordaos)
+    #acordaos = Acordao.objects.annotate(search=SearchVector('txt_integral', config='tuga')).filter(search=SearchQuery(query, config='tuga'))
+
+    query_string = """select acordao_id from acordao where to_tsvector('tuga', coalesce(txt_integral,'')) 
+    @@ to_tsquery('tuga', %s)"""
+
+    # Searching across multiple columns with ranking; cols weighted differently. Concatenated ts_vector in where clause
+    # is indexed
+    query_string = """select acordao_id, ts_rank_cd(setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
+    || setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
+    || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
+    || setweight(to_tsvector('tuga', coalesce(relator, '')), 'A'), to_tsquery('tuga', 'hazelnuts')) as rank
+    from acordao where to_tsvector('tuga', coalesce(txt_integral, ''))
+    || to_tsvector('tuga', coalesce(sumario, ''))
+    || to_tsvector('tuga', coalesce(processo, ''))
+    || to_tsvector('tuga', coalesce(relator, ''))
+    @@ to_tsquery('tuga', %s)"""
+
+    res = Acordao.objects.raw(query_string, [query])
+    # TODO nb. using raw sql is much much faster for some reason
+    # todo by the way the above raw sql breaks when passing more than one word to query term
+    # todo yet to try indexing vectored column and using that (with and without raw sql)
+    # todo also look at paging - i think displaying all results is delaying things
+    print("got to here")
+    # total = Acordao.objects.filter(txt_integral__contains=query).count()
+    ls = list(res)
+    total = len(ls)
+    print("got total")
+    acordaos = []
     context_dict = {'total': total, 'acordaos': acordaos}
+    print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
 
     # postgres full text search

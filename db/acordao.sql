@@ -65,54 +65,23 @@ delete from django_migrations
 
 select count(distinct(url)) dist from acordao;
 
--- index stuff:
--- index on just txt_integral:
-create index acordao_idx on acordao using GIN(to_tsvector('portuguese', txt_integral));
-create index acordao_idx on acordao using GIN(to_tsvector('tuga', txt_integral));
+-- test data for testing weightings
+insert into acordao(sumario, txt_integral)
+values('and the word is hazelnuts', 'nada a ver mesmo')
+
+insert into acordao(sumario, txt_integral)
+values('nada a ver mesmo', 'and the word is hazelnuts')
+
+insert into acordao(processo, txt_integral)
+values('hazelnuts', 'this has it in the processo')
+
+insert into acordao(relator, txt_integral)
+values('hazelnuts', 'this has it in the relator')
+
+insert into acordao(relator, txt_integral)
+values('bla blu 2', 'this has it in the relator')
 
 
-select count(*) from acordao where to_tsvector('portuguese', txt_integral) @@ to_tsquery('portuguese', 'crime');
+select * from acordao where txt_integral like '%hazelnuts%';
 
--- NOTE does index have to be made with coalesce cause django passes coalesce???
--- django seemingly still not using index, or even with index quite slow?
--- solution might be to use raw sql... but not ideal
-
-drop index acordao_idx;
-
--- unaccent / dictionary stuff:
--- NOTE: had to to this as unaccent is not there by default in database!
-create extension unaccent;
-
--- creating new text search config to use unaccent + portuguese stem:
-create text search configuration tuga (copy = portuguese);
-alter text search configuration tuga
-alter mapping for hword, hword_part, word
-with unaccent, portuguese_stem;
-
--- but this gives some odd results e.g. ã is converted to ae
--- UPDATE: actually above may be wrong - that was maybe just the way psql was displaying results
--- may be able to change dictionary that unaccent uses..
--- or create a new filter dictionary instead of unaccent e.g. with just
--- á -- a; ã -- a; à -- a; and so on. and test if that works.
--- If a new one is created can compare results when using new one vs when using unaccent;
-
-select 'c', 'ç', to_tsvector('tuga', 'ç');
-select to_tsvector('tuga', 'não');
-
-SELECT "acordao"."acordao_id", "acordao"."processo", "acordao"."tribunal_id", "acordao"."seccao", "acordao"."num_convencional", "acordao"."relator", "acordao"."numero", "acordao"."data", "acordao"."votacao", "acordao"."aditamento", "acordao"."trib_recorrido", "acordao"."proc_trib_recorrido", "acordao"."data_dec_recorrida", "acordao"."txt_integral_flag", "acordao"."txt_parcial_flag", "acordao"."privacidade", "acordao"."meio_processual", "acordao"."recorrente", "acordao"."decisao", "acordao"."indic_eventuais", "acordao"."area_tematica", "acordao"."doutrina", "acordao"."legis_nacional", "acordao"."juris_nacional", "acordao"."sumario", "acordao"."txt_parcial", "acordao"."txt_integral", "acordao"."html_txt_integral", "acordao"."url", "acordao"."date_loaded", to_tsvector('tuga', COALESCE("acordao"."txt_integral",'')) AS "search" FROM "acordao" WHERE to_tsvector('tuga', COALESCE("acordao"."txt_integral",'')) @@ (plainto_tsquery('tuga', 'crime')) = true;
-
--- UPDATE
--- using raw sql in Django seems to be faster for some reason
---  term = 'crime'
--- query = "select acordao_id from acordao where to_tsvector('tuga', coalesce(txt_integral,'')) @@ to_tsquery('tuga', %s)"
--- res = Acordao.objects.raw(query, [term])
-
--- Anyway:::
--- Plan is - make 1 ts_vector column from all searchable columns (txt_integral, sumario, descritores, relator, etc.)
--- have index on that
--- Have weightings as well
--- integrate it into Django model
--- Search on that through Django ORM. If too slow, try raw
--- OR
--- index on each relevant column
--- search across several columns 
+select acordao_id, sumario from acordao order by acordao_id desc
