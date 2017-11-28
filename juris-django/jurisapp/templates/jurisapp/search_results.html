@@ -1,6 +1,11 @@
-{{ total }} results
+{{ total }} results <br><br>
 {% for acordao in acordaos %}
+{{ acordao.tribunal.long_name }} <br>
 {{ acordao.relator }} and {{ acordao.processo }} <br>
+<a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">link</a> <br>
+{% for desc in acordao.acordaodescritor_set.all %}
+{{ desc.descritor}} <br>
+{% endfor %}
 {{ acordao.sumario }}<br><br>
 {% endfor %}
 

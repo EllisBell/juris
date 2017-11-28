@@ -56,6 +56,8 @@ select * from acordao;
 select * from acordao_recorrido;
 select * from acordao_descritor;
 
+
+
 delete from acordao_recorrido;
 delete from acordao_descritor;
 delete from acordao;

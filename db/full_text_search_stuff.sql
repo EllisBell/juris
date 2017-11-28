@@ -62,7 +62,12 @@ alter table acordao add column searchable_idx_col tsvector;
 update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
 || setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
 || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
-|| setweight(to_tsvector('tuga', coalesce(relator, '')), 'A');
+|| setweight(to_tsvector('tuga', coalesce(relator, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(acd.descritor, '')), 'B')
+from acordao_descritor as acd
+where acordao.acordao_id = acd.acordao_id;
+
+select count(*) from acordao;
 
 create index acordao_idx on acordao using gin(searchable_idx_col);
 
@@ -73,13 +78,24 @@ begin
         setweight(to_tsvector('tuga', coalesce(new.txt_integral, '')), 'D')
         || setweight(to_tsvector('tuga', coalesce(new.sumario, '')), 'C')
         || setweight(to_tsvector('tuga', coalesce(new.processo, '')), 'A')
-        || setweight(to_tsvector('tuga', coalesce(new.relator, '')), 'A');
+        || setweight(to_tsvector('tuga', coalesce(new.relator, '')), 'A')
+        || setweight(to_tsvector('tuga', coalesce(acd.descritor, '')), 'B')
+        from acordao_descritor as acd
+        where acordao.acordao_id = acd.acordao_id;
      return new;
 end
 $$ LANGUAGE plpgsql;
 
 create trigger tsvectorupdate before insert or update
 on acordao for each row execute procedure acordao_trigger();
+
+drop trigger tsvectorupdate on acordao;
+drop function acordao_trigger();
+
+-- searching using new column
+select acordao_id, ts_rank_cd(searchable_idx_col, query) rank
+from acordao, to_tsquery('tuga', 'crime') as query
+where searchable_idx_col @@ query order by rank desc limit 10
 
 -- TODO add descritores to indexed column as well!
 

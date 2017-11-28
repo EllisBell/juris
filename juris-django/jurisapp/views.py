@@ -25,18 +25,14 @@ def search(request):
     query_string = """select acordao_id from acordao where to_tsvector('tuga', coalesce(txt_integral,'')) 
     @@ to_tsquery('tuga', %s)"""
 
+    # split query into multiple words
+    query = get_qualified_query(query)
+
     # Searching across multiple columns with ranking; cols weighted differently. Concatenated ts_vector in where clause
     # is indexed
-    query_string = """select acordao_id, ts_rank_cd(setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
-    || setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
-    || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
-    || setweight(to_tsvector('tuga', coalesce(relator, '')), 'A'), to_tsquery('tuga', 'hazelnuts')) as rank
-    from acordao where to_tsvector('tuga', coalesce(txt_integral, ''))
-    || to_tsvector('tuga', coalesce(sumario, ''))
-    || to_tsvector('tuga', coalesce(processo, ''))
-    || to_tsvector('tuga', coalesce(relator, ''))
-    @@ to_tsquery('tuga', %s)"""
-
+    query_string = """select acordao_id, ts_rank_cd('{0.01, 0.2, 0.4, 1.0}', searchable_idx_col, query) rank
+    from acordao, to_tsquery('tuga', %s) as query where searchable_idx_col @@ query
+    order by rank desc"""
     res = Acordao.objects.raw(query_string, [query])
     # TODO nb. using raw sql is much much faster for some reason
     # todo by the way the above raw sql breaks when passing more than one word to query term
@@ -44,10 +40,10 @@ def search(request):
     # todo also look at paging - i think displaying all results is delaying things
     print("got to here")
     # total = Acordao.objects.filter(txt_integral__contains=query).count()
-    ls = list(res)
-    total = len(ls)
+    acordao_list = list(res)
+    total = len(acordao_list)
     print("got total")
-    acordaos = []
+    acordaos = acordao_list
     context_dict = {'total': total, 'acordaos': acordaos}
     print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
@@ -72,4 +68,21 @@ def search(request):
     # todo find out where these are / why they exist - see board for more info
 
 
-    # useful to know when in PSQL "explain <query>" to get cost
+    # useful to know when in PSQL "explain analyze <query>" to get cost and explain plan
+
+def get_qualified_query(query):
+    if (query[0] == "\"" and query[-1] == "\"") or (query[0] == "'" and query[-1] == "'"):
+        query.replace("\"", "")
+        query.replace("'", "")
+        words = query.split()
+        query = "<->".join(words)
+    # revamp but this is the general idea
+    elif 'OR' in query:
+        query = query.replace('OR', '')
+        words = query.split()
+        query = "|".join(words)
+    # if not in quotes or or, it is an and search
+    else:
+        words = query.split()
+        query = "&".join(words)
+    return query
