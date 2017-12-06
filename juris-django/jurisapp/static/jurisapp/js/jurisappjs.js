@@ -13,4 +13,10 @@ $(document).ready(function() {
 		}
 	});
 
+    // this adds event to buttons loaded through ajax call
+    $(document).on("click", '#nextBtn', function(event) {
+        query = $(this).data("query");
+        alert(query);
+    });
+
 });

@@ -1,4 +1,5 @@
 {{ total }} results <br><br>
+query is {{ query }} <br><br>
 {% for acordao in acordaos %}
 {{ acordao.tribunal.long_name }} <br>
 {{ acordao.relator }} and {{ acordao.processo }} <br>
@@ -8,4 +9,23 @@
 {% endfor %}
 {{ acordao.sumario }}<br><br>
 {% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+    {% if acordaos.has_previous %}
+        <!-- TODO instead of linking, may have to have buttons and use javascript... -->
+        <button type="button" id="prevBtn" data-query="{{ query }}">antes</button>
+        <a href="?page={{ acordaos.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current">
+        Page {{ acordaos.number }} of {{ acordaos.paginator.num_pages }}.
+    </span>
+
+    {% if acordaos.has_next %}
+        <a href="search?query={{ acordaos.query }}&page={{ acordaos.next_page_number }}">next</a>
+        <button type="button" id="nextBtn" data-query="{{ query }}">depois</button>
+    {% endif %}
+</span>
+</div>
 

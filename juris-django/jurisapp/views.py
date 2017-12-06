@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Acordao
-from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.db.models import F
+from . import acordao_search
 
 
 # Create your views here.
@@ -19,32 +22,53 @@ def index(request):
 # and then learn a framework and make another proj with it
 def search(request):
     query = request.GET['query']
+    term = query
+    print("got query")
+    page = request.GET.get('page')
+    print("page is:")
+    print(page)
+    if page is None:
+        page = 1
 
-    #acordaos = Acordao.objects.annotate(search=SearchVector('txt_integral', config='tuga')).filter(search=SearchQuery(query, config='tuga'))
+    print("NOW PAGE IS")
+    print(page)
 
-    query_string = """select acordao_id from acordao where to_tsvector('tuga', coalesce(txt_integral,'')) 
-    @@ to_tsquery('tuga', %s)"""
+    num_per_page = 25
+   # current_offset = (page - 1) * num_per_page
 
-    # split query into multiple words
-    query = get_qualified_query(query)
+    # TODO ok this isn't going to work as it returns just the limit amount
+    # todo so paginator will only have that amount and only have 1 page
+    # todo may want to set paginator.count to the total by running a count query and returning it as well?
+    #acordao_results = acordao_search.search_acordaos(query, num_per_page, current_offset)
 
-    # Searching across multiple columns with ranking; cols weighted differently. Concatenated ts_vector in where clause
-    # is indexed
-    query_string = """select acordao_id, ts_rank_cd('{0.01, 0.2, 0.4, 1.0}', searchable_idx_col, query) rank
-    from acordao, to_tsquery('tuga', %s) as query where searchable_idx_col @@ query
-    order by rank desc"""
-    res = Acordao.objects.raw(query_string, [query])
-    # TODO nb. using raw sql is much much faster for some reason
-    # todo by the way the above raw sql breaks when passing more than one word to query term
-    # todo yet to try indexing vectored column and using that (with and without raw sql)
-    # todo also look at paging - i think displaying all results is delaying things
-    print("got to here")
-    # total = Acordao.objects.filter(txt_integral__contains=query).count()
-    acordao_list = list(res)
-    total = len(acordao_list)
+    # Evaluate results so can count to paginator as list
+    # Otherwise it can't use raw query set
+    #acordao_results = [acordao for acordao in acordao_results]
+
+    # UPDATE Added searchvectorfield to Acordao model; this seems to work pretty well
+    #acordao_results = Acordao.objects.filter(searchable_idx_col=SearchQuery(query, config='tuga'))
+
+    ## LOOK AT THIS - using ranking - have to use F to get value of searchable_idx_col
+    search_query = SearchQuery(query, config='tuga')
+    acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query))\
+        .filter(searchable_idx_col=search_query).order_by('-rank')
+
+    paginator = Paginator(acordao_results, 25)
+
+    try:
+        # request may or may not have come with a page number
+        acordaos = paginator.page(page)
+    except PageNotAnInteger:
+        # if no page number, deliver the first page
+        acordaos = paginator.page(1)
+    except EmptyPage:
+        # if page out of range, deliver last page of results
+        acordaos = paginator.page(paginator.num_pages)
+
+
     print("got total")
-    acordaos = acordao_list
-    context_dict = {'total': total, 'acordaos': acordaos}
+    # TODO the query we pass has to be the search term
+    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': term}
     print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
 
@@ -69,20 +93,3 @@ def search(request):
 
 
     # useful to know when in PSQL "explain analyze <query>" to get cost and explain plan
-
-def get_qualified_query(query):
-    if (query[0] == "\"" and query[-1] == "\"") or (query[0] == "'" and query[-1] == "'"):
-        query.replace("\"", "")
-        query.replace("'", "")
-        words = query.split()
-        query = "<->".join(words)
-    # revamp but this is the general idea
-    elif 'OR' in query:
-        query = query.replace('OR', '')
-        words = query.split()
-        query = "|".join(words)
-    # if not in quotes or or, it is an and search
-    else:
-        words = query.split()
-        query = "&".join(words)
-    return query
