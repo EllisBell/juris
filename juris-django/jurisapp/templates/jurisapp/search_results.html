@@ -4,6 +4,7 @@ query is {{ query }} <br><br>
 {{ acordao.tribunal.long_name }} <br>
 {{ acordao.relator }} and {{ acordao.processo }} <br>
 <a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">link</a> <br>
+<a href = "/jurisapp/acordao/{{ acordao.acordao_id }}" target="_blank">my link</a><br>
 {% for desc in acordao.acordaodescritor_set.all %}
 {{ desc.descritor}} <br>
 {% endfor %}
@@ -14,7 +15,9 @@ query is {{ query }} <br><br>
     <span class="step-links">
     {% if acordaos.has_previous %}
         <!-- TODO instead of linking, may have to have buttons and use javascript... -->
-        <button type="button" id="prevBtn" data-query="{{ query }}">antes</button>
+        <button type="button" id="prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
+            antes
+        </button>
         <a href="?page={{ acordaos.previous_page_number }}">previous</a>
     {% endif %}
 
@@ -23,8 +26,9 @@ query is {{ query }} <br><br>
     </span>
 
     {% if acordaos.has_next %}
-        <a href="search?query={{ acordaos.query }}&page={{ acordaos.next_page_number }}">next</a>
-        <button type="button" id="nextBtn" data-query="{{ query }}">depois</button>
+        <button type="button" id="nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
+            depois
+        </button>
     {% endif %}
 </span>
 </div>

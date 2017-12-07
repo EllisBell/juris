@@ -22,7 +22,6 @@ def index(request):
 # and then learn a framework and make another proj with it
 def search(request):
     query = request.GET['query']
-    term = query
     print("got query")
     page = request.GET.get('page')
     print("page is:")
@@ -68,7 +67,7 @@ def search(request):
 
     print("got total")
     # TODO the query we pass has to be the search term
-    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': term}
+    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': query}
     print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
 
@@ -93,3 +92,11 @@ def search(request):
 
 
     # useful to know when in PSQL "explain analyze <query>" to get cost and explain plan
+
+# individual acordao
+def acordao(request, acordao_id):
+    print("got to acordao view")
+    ac = Acordao.objects.get(pk=acordao_id)
+    context_dict = {'acordao': ac}
+    return render(request, 'jurisapp/acordao.html', context_dict)
+

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Acordao</title>
+</head>
+<body>
+ {{ acordao.acordao_id }} <br>
+ {{ acordao.processo }} <br><br>
+ <!-- autoescape off to render html as html -->
+ {% autoescape off %}
+ {{ acordao.html_txt_integral }}
+{% endautoescape %}
+</body>
+</html>
