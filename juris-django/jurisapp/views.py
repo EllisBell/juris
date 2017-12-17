@@ -33,12 +33,6 @@ def search(request):
     print(page)
 
     num_per_page = 25
-   # current_offset = (page - 1) * num_per_page
-
-    # TODO ok this isn't going to work as it returns just the limit amount
-    # todo so paginator will only have that amount and only have 1 page
-    # todo may want to set paginator.count to the total by running a count query and returning it as well?
-    #acordao_results = acordao_search.search_acordaos(query, num_per_page, current_offset)
 
     # Evaluate results so can count to paginator as list
     # Otherwise it can't use raw query set

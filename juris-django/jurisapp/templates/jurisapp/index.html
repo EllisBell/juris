@@ -3,15 +3,33 @@
 <!-- TODO adding jquery and js and stuff but this needs to be looked at -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="{% static "jurisapp/js/jurisappjs.js" %}"></script>
+<link rel="stylesheet" href="{% static "jurisapp/css/style.css" %}" />
+<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus>
-<br><br>
-<div id="searchResults"></div>
+	<header>
+		<div id="logo">
+			<h1> jurisprudência<span id="ponto">.</span>pt</h1>
+		</div>
+		<!-- use <nav>
+		</nav> -->
+	</header>
+	<div id="content">
+		<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus>
+		<br><br>
+		<div class="loading">
+			  <div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+		</div>
+		<div id="searchResults"></div>
+	</div>
 
 </body>
 </html>

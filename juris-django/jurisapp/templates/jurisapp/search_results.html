@@ -1,24 +1,12 @@
-{{ total }} results <br><br>
-query is {{ query }} <br><br>
-{% for acordao in acordaos %}
-{{ acordao.tribunal.long_name }} <br>
-{{ acordao.relator }} and {{ acordao.processo }} <br>
-<a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">link</a> <br>
-<a href = "/jurisapp/acordao/{{ acordao.acordao_id }}" target="_blank">my link</a><br>
-{% for desc in acordao.acordaodescritor_set.all %}
-{{ desc.descritor}} <br>
-{% endfor %}
-{{ acordao.sumario }}<br><br>
-{% endfor %}
+Procurou por "{{ query }}" <br><br>
+{{ total }} resultados <br><br>
 
 <div class="pagination">
     <span class="step-links">
     {% if acordaos.has_previous %}
-        <!-- TODO instead of linking, may have to have buttons and use javascript... -->
-        <button type="button" id="prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
-            antes
+        <button type="button" class="pageBtn prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
+            anterior
         </button>
-        <a href="?page={{ acordaos.previous_page_number }}">previous</a>
     {% endif %}
 
     <span class="current">
@@ -26,8 +14,44 @@ query is {{ query }} <br><br>
     </span>
 
     {% if acordaos.has_next %}
-        <button type="button" id="nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
-            depois
+        <button type="button" class="pageBtn nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
+            seguinte
+        </button>
+    {% endif %}
+</span>
+</div>
+
+{% for acordao in acordaos %}
+<div class="acordao-result">
+<a href="/jurisapp/acordao/{{ acordao.acordao_id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a><br>
+<span class="result-field">Tribunal:</span> {{ acordao.tribunal.long_name }} <br>
+<span class="result-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }} <br>
+<span class="result-field">Relator:</span> {{acordao.relator}}<br>
+<a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver acórdão dgsi</a> <br>
+<div class="result-descritores">
+{% for desc in acordao.acordaodescritor_set.all %}
+<span class="result-descritor">{{ desc.descritor}}</span> 
+{% endfor %}
+</div>
+<div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
+</div>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+    {% if acordaos.has_previous %}
+        <button type="button" class="pageBtn prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
+            anterior
+        </button>
+    {% endif %}
+
+    <span class="current">
+        Page {{ acordaos.number }} of {{ acordaos.paginator.num_pages }}.
+    </span>
+
+    {% if acordaos.has_next %}
+        <button type="button" class="pageBtn nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
+            seguinte
         </button>
     {% endif %}
 </span>
