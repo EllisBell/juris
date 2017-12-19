@@ -4,19 +4,15 @@ Procurou por "{{ query }}" <br><br>
 <div class="pagination">
     <span class="step-links">
     {% if acordaos.has_previous %}
-        <button type="button" class="pageBtn prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
-            anterior
-        </button>
+        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}"></i>
     {% endif %}
 
     <span class="current">
-        Page {{ acordaos.number }} of {{ acordaos.paginator.num_pages }}.
+        Página {{ acordaos.number }} de {{ acordaos.paginator.num_pages }}
     </span>
 
     {% if acordaos.has_next %}
-        <button type="button" class="pageBtn nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
-            seguinte
-        </button>
+        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}"></i>
     {% endif %}
 </span>
 </div>
@@ -40,19 +36,15 @@ Procurou por "{{ query }}" <br><br>
 <div class="pagination">
     <span class="step-links">
     {% if acordaos.has_previous %}
-        <button type="button" class="pageBtn prevBtn" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}">
-            anterior
-        </button>
+        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-page="{{ acordaos.previous_page_number }}"></i>
     {% endif %}
 
     <span class="current">
-        Page {{ acordaos.number }} of {{ acordaos.paginator.num_pages }}.
+        Página {{ acordaos.number }} de {{ acordaos.paginator.num_pages }}
     </span>
 
     {% if acordaos.has_next %}
-        <button type="button" class="pageBtn nextBtn" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}">
-            seguinte
-        </button>
+        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-page="{{ acordaos.next_page_number }}"></i>
     {% endif %}
 </span>
 </div>

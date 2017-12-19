@@ -11,6 +11,7 @@ Set the media query breakpoints at natural breakpoints for content
 html {
 	height: 100%;
 	overflow-y: scroll;
+	font-size: 16px;
 }
 
 body {
@@ -18,7 +19,8 @@ body {
 	padding:0px;
 	border:0px;
 	height: 100%;
-	font-size: 16px;
+	font-family: 'Barlow', sans-serif;
+	color: black;
 }
 
 header {
@@ -37,27 +39,33 @@ header h1 {
 	color: #3c434f;
 }
 
+#logo a {
+	text-decoration: none;
+	font-family: 'Barlow', sans-serif;
+	color: #3c434f;
+}
+
 #ponto {
-	color: #2aed9c;
+	/*color: #2aed9c;*/
+	color: #12e880;
 }
 
 #content {
 	padding-top: 5px;	
 	margin: 0 auto;
 	max-width: 65%;
-	font-family: 'Barlow', sans-serif;
+	height:100%;
 }
 
 #searchbox {
 	display: block;
+	width: 50%;
 	margin: 0 auto;
 	box-shadow: none;
 	border:none;
 	border-bottom: 3px solid black;
 	border-radius: 0;
 	font-size: 2rem;
-	font-family: 'Barlow', sans-serif;
-
 }
 
 #searchbox:focus {
@@ -69,24 +77,48 @@ header h1 {
 	width:100%;
 }
 
+.pagination i {
+	color: #12e880;
+	font-size: 1.5rem;
+}
+
+/*.pagination .current {
+	margin:1%;
+}*/
+
+.pagination .pageBtn:hover {
+	cursor: pointer;
+}
+
+.pagination .nextBtn {
+	margin-left: 1%;
+}
+
+.pagination .prevBtn {
+	margin-right: 1%;
+}
+
 .acordao-result {
 	margin-top: 2%;
 	margin-bottom: 2%;
 	padding-bottom:1%;
-	font-size: 1.1em;
+	font-size: 1.1rem;
 }
 
 .acordao-result::after {
   content: "";
   display: block;
-  border-bottom: 2px solid black;
-  width: 35%;
+  border-bottom: 2px solid #3c434f;
+  width: 40%;
   position: relative;
   padding-bottom:1%;
 }
 
 .acordao-result .main-link {
-	font-size: 1.2rem
+	font-size: 1.2rem;
+	color: black;
+	text-decoration: none;
+	border-bottom: 2px solid #12e880;
 }
 
 .result-field {
@@ -109,10 +141,15 @@ header h1 {
 }
 
 .loading {
-  position: absolute;
+ /* position: absolute;
   top: 50%;
-  left: 50%;
-  visibility: hidden;
+  left: 50%;*/
+  display: block;
+ margin: 0 auto;
+ position: relative;
+ top:20%;
+ visibility: hidden;
+ text-align: center;
 }
 
 /*.loading-bar {
@@ -132,7 +169,7 @@ header h1 {
 }
 
 .loading-bar:nth-child(1) {
-  background-color: #2aed9c;
+  background-color: #12e880;
   animation-delay: 0;
 }
 .loading-bar:nth-child(2) {
@@ -140,7 +177,7 @@ header h1 {
   animation-delay: 0.09s;
 }
 .loading-bar:nth-child(3) {
-  background-color: #2aed9c;
+  background-color: #12e880;
   animation-delay: .18s;
 }
 .loading-bar:nth-child(4) {
@@ -158,4 +195,15 @@ header h1 {
   40% {
     transform: scale(1);
   }
+}
+
+@media only screen and (max-width: 1000px) {
+	html {
+		font-size: 12px;
+	}
+
+@media only screen and (max-width: 524px) {
+	html {
+		font-size: 10px;
+	}
 }
