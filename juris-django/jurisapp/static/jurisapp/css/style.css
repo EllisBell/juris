@@ -54,7 +54,8 @@ header h1 {
 	padding-top: 5px;	
 	margin: 0 auto;
 	max-width: 65%;
-	height:100%;
+	/* TODO fix this height issue; avoid whitespace at bottom */
+	height:80%;
 }
 
 #searchbox {
@@ -75,6 +76,7 @@ header h1 {
 
 #searchResults {
 	width:100%;
+	padding-bottom: 2%
 }
 
 .pagination i {
@@ -114,11 +116,16 @@ header h1 {
   padding-bottom:1%;
 }
 
+.acordao-result .result-link {
+	margin-bottom: 2%;
+}
+
 .acordao-result .main-link {
 	font-size: 1.2rem;
 	color: black;
 	text-decoration: none;
 	border-bottom: 2px solid #12e880;
+	font-weight: bold;
 }
 
 .result-field {
@@ -145,11 +152,11 @@ header h1 {
   top: 50%;
   left: 50%;*/
   display: block;
- margin: 0 auto;
- position: relative;
- top:20%;
- visibility: hidden;
- text-align: center;
+  margin: 0 auto;
+  position: relative;
+  top:20%;
+  visibility: hidden;
+  text-align: center;
 }
 
 /*.loading-bar {
@@ -197,6 +204,42 @@ header h1 {
   }
 }
 
+#container {
+	height: 100%;
+}
+
+/* STYLE FOR ACORDAO PAGE */
+#ac-sidebar {
+	float:left;
+	height:100%;
+	width: 28%;
+	padding-top:1%;
+	padding-left: 2%;
+	background-color: #effff4;
+	font-size: 1.25rem;
+}
+
+#ac-sidebar div {
+	margin-bottom: 2%;
+}
+
+.ac-sidebar-field {
+	font-weight: bold;
+}
+
+
+#ac-content {
+	width: 60%;
+	margin-left: 30%;
+	padding-left: 2%;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 @media only screen and (max-width: 1000px) {
 	html {
 		font-size: 12px;
@@ -204,6 +247,13 @@ header h1 {
 
 @media only screen and (max-width: 524px) {
 	html {
-		font-size: 10px;
+		font-size: 12px;
+	}
+
+	#searchbox {
+		font-size: 1.5rem;
+		width:85%;
 	}
 }
+
+

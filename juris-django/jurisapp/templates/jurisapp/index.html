@@ -1,28 +1,9 @@
-<!DOCTYPE html>
-{% load static %}
-<!-- TODO adding jquery and js and stuff but this needs to be looked at -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="{% static "jurisapp/js/jurisappjs.js" %}"></script>
-<link rel="stylesheet" href="{% static "jurisapp/css/style.css" %}" />
-<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
-<script src="https://use.fontawesome.com/5cf83d41d3.js"></script>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-	<header>
-		<div id="logo">
-			<h1><a href="/jurisapp/"> jurisprudência<span id="ponto">.</span>pt</a></h1>
-		</div>
-		<!-- use <nav>
-		</nav> -->
-	</header>
+{% extends 'jurisapp/base.html' %}
+
+{% block body_block %}
+
 	<div id="content">
 		<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus>
-		<br><br>
 		<div class="loading">
 			  <div class="loading-bar"></div>
 			  <div class="loading-bar"></div>
@@ -32,5 +13,5 @@
 		<div id="searchResults"></div>
 	</div>
 
-</body>
-</html>
+
+{% endblock %}

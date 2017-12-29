@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Acordao</title>
-</head>
-<body>
- {{ acordao.acordao_id }} <br>
- {{ acordao.processo }} <br><br>
- <!-- autoescape off to render html as html -->
- {% autoescape off %}
- {{ acordao.html_txt_integral }}
-{% endautoescape %}
-</body>
-</html>
+{% extends 'jurisapp/base.html' %}
+
+{% block body_block %}
+
+<div id="container">
+
+	<div id="ac-sidebar"> 
+		<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
+		<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
+		<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
+		<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
+	</div>
+
+	<div id="ac-content">
+	 <!-- autoescape off to render html as html -->
+	 {% autoescape off %}
+	 {{ acordao.html_txt_integral }}
+	{% endautoescape %}
+	</div>
+</div>
+
+{% endblock %}
