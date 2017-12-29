@@ -138,9 +138,16 @@ header h1 {
 }
 
 .result-descritor {
-	margin-right:1%;
 	font-weight: bold;
     white-space: nowrap;
+    background-color: #b5ffc5;
+    /*background-color: #12e880;*/
+}
+
+.descritor-div {
+	margin-right:1%;
+	margin-top: 0.3%;
+	display: inline-block;
 }
 
 .long-text {
@@ -241,18 +248,45 @@ header h1 {
 }
 
 @media only screen and (max-width: 1000px) {
-	html {
-		font-size: 12px;
+	#searchbox {
+		font-size: 1.5rem;
+		width:60%;
 	}
+}
+
+@media only screen and (max-width: 700px) {
+	#searchbox {
+		width:65%;
+	}
+
+	#content {
+		max-width: 80%;
+	}
+}
+
 
 @media only screen and (max-width: 524px) {
 	html {
-		font-size: 12px;
+		font-size: 14px;
+	}
+
+	#content {
+		max-width: 85%;
 	}
 
 	#searchbox {
 		font-size: 1.5rem;
 		width:85%;
+	}
+
+	.result-descritor {
+	    white-space: normal;
+	}
+
+	.descritor-div {
+		display: block;
+		white-space: normal;
+		margin-top: 1%;
 	}
 }
 

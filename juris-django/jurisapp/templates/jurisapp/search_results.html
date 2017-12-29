@@ -26,7 +26,7 @@ Procurou por "{{ query }}" <br><br>
 <a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver acórdão dgsi</a> <br>
 <div class="result-descritores">
 {% for desc in acordao.acordaodescritor_set.all %}
-<span class="result-descritor">{{ desc.descritor}}</span> 
+<div class="descritor-div"><span class="result-descritor">{{ desc.descritor}}</span></div> 
 {% endfor %}
 </div>
 <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
