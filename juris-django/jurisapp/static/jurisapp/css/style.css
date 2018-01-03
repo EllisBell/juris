@@ -26,7 +26,7 @@ body {
 header {
 	height: 10%;
 	margin-top: 0px;
-	margin-bottom:20px;
+	margin-bottom:15px;
 	padding:10px;
 }
 
@@ -48,6 +48,7 @@ header h1 {
 #ponto {
 	/*color: #2aed9c;*/
 	color: #12e880;
+	/*color: #98ff98;*/
 }
 
 #content {
@@ -140,7 +141,8 @@ header h1 {
 .result-descritor {
 	font-weight: bold;
     white-space: nowrap;
-    background-color: #b5ffc5;
+    /*background-color: #b5ffc5;*/
+    background-color: #9ff8cd;
     /*background-color: #12e880;*/
 }
 
@@ -213,6 +215,8 @@ header h1 {
 
 #container {
 	height: 100%;
+	position: relative;
+	top: -5%;
 }
 
 /* STYLE FOR ACORDAO PAGE */
@@ -220,10 +224,18 @@ header h1 {
 	float:left;
 	height:100%;
 	width: 28%;
-	padding-top:1%;
-	padding-left: 2%;
-	background-color: #effff4;
+	padding-left: 10px;
+	padding-top: 5px;
+	/*background-color: #d6fce9;*/
+	/*background-color: #c2d6cd;*/
+	background-color: white;
 	font-size: 1.25rem;
+	/*border-right: 2px solid #12e880;*/
+}
+
+#colortest {
+	color: #12e880;
+	font-size: 2.5rem;
 }
 
 #ac-sidebar div {
@@ -236,9 +248,10 @@ header h1 {
 
 
 #ac-content {
-	width: 60%;
+	max-width: 60%;
 	margin-left: 30%;
 	padding-left: 2%;
+
 }
 
 .clearfix::after {
@@ -251,6 +264,22 @@ header h1 {
 	#searchbox {
 		font-size: 1.5rem;
 		width:60%;
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	#ac-sidebar {
+		float:none;
+		width: 100%;
+		height: auto;
+		background-color: yellow;
+		margin-top: 3%;
+	    background-color: #d6fce9;
+	}
+
+	#ac-content {
+		max-width: 65%;
+		margin: 0 auto;
 	}
 }
 
@@ -287,6 +316,11 @@ header h1 {
 		display: block;
 		white-space: normal;
 		margin-top: 1%;
+	}
+
+	#ac-content {
+		max-width: 85%;
+		margin: 0 auto;
 	}
 }
 
