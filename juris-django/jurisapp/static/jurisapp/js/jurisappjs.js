@@ -5,30 +5,74 @@ $(document).ready(function() {
 	//var code = event.
 		if(event.keyCode == 13) {
 			event.preventDefault();
-			$('#searchResults').html("")
-			$(".loading").css("visibility", "visible");
+			//$('#searchResults').html("")
+			//$(".loading").css("visibility", "visible");
+			showLoadingBar();
 			var query;
 			query = $(this).val();
-		 	$.get('/jurisapp/search/', {query: query}, function(data) {
+
+			var tribs = getCheckedTribs();
+
+		 	$.get('/jurisapp/search/', {query: query, tribs: tribs}, function(data) {
 				$(".loading").css("visibility", "hidden");
 				$('#searchResults').html(data);
 			});
 		}
 	});
 
+	function getCheckedTribs() {
+		var tribs = []
+		$(".tribCheck").each(function() {
+			if($(this).prop("checked")) {
+				tribs.push($(this).data("trib"));
+			}
+		});
+		return tribs;
+	}
+
     // this adds event to buttons loaded through ajax call
     $(document).on("click", '.pageBtn', function(event) {
-        query = $(this).data("query");
-        page = $(this).data("page");
+        var query = $(this).data("query");
+        var page = $(this).data("page");
+        // Get array of tribs as string and parse into array
+        // Comes from server as single quoted values so replace with double quotes for JSON parse to work
+        var tribs = $(this).data("tribs");
+        tribs = JSON.parse(tribs.replace(/'/g, "\""));
+
         // TODO look into improving pagination/search results UX e.g. when to clear, where to focus, progress bar etc.
         $(window).scrollTop(0);
-        $('#searchResults').html("")
- 		$(".loading").css("visibility", "visible");
-        $.get('/jurisapp/search/', {query: query, page: page}, function(data) {
+ 		showLoadingBar();
+
+        $.get('/jurisapp/search/', {query: query, tribs: tribs, page: page}, function(data) {
 				$(".loading").css("visibility", "hidden");
 				$('#searchResults').html(data);
 		 });
     });
+
+    function showLoadingBar() {
+            $('#searchResults').html("")
+ 		$(".loading").css("visibility", "visible");
+    }
+
+
+
+
+
+    // Changing checkbox/label colour when checked
+    $("input[type='checkbox']").change(function() {
+    	var chkBox = $(this);
+     	var label = $(this).parent();
+
+    	if(chkBox.is(':checked')) {
+    		label.css("background-color", "#9ff8cd");
+    	}
+    	else {
+    		label.css("background-color", "#e3e5e4");
+    	}
+    });
+
+
+    /****************** acordao page **********************/
 
 
 /*    loadResults = function(query, page) {
@@ -36,9 +80,8 @@ $(document).ready(function() {
 				$('#searchResults').html(data);}
     }*/
 
-   // var fixHandler = 
 
-   function handleSidebar() {
+   function fixSidebarWhenScrollingOnWideScreen() {
    	var sidebar = $('#ac-sidebar');
    	if($(window).width() >= 900) {		
 		var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
@@ -59,10 +102,10 @@ $(document).ready(function() {
 	}
    }
 
-   handleSidebar();
+   fixSidebarWhenScrollingOnWideScreen();
 
    $(window).resize(function() {
-   	handleSidebar();
+   	fixSidebarWhenScrollingOnWideScreen();
    });
 
 });

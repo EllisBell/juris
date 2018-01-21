@@ -23,6 +23,12 @@ def index(request):
 def search(request):
     query = request.GET['query']
     print("got query")
+
+    tribs = request.GET.getlist('tribs[]')
+    if tribs:
+        print("got tribs...")
+        print(tribs)
+
     page = request.GET.get('page')
     print("page is:")
     print(page)
@@ -43,8 +49,9 @@ def search(request):
 
     ## LOOK AT THIS - using ranking - have to use F to get value of searchable_idx_col
     search_query = SearchQuery(query, config='tuga')
+    ## NB filtering on acordao as well
     acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query))\
-        .filter(searchable_idx_col=search_query).order_by('-rank')
+        .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
 
     paginator = Paginator(acordao_results, 25)
 
@@ -61,7 +68,7 @@ def search(request):
 
     print("got total")
     # TODO the query we pass has to be the search term
-    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': query}
+    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': query, 'tribs': tribs}
     print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
 

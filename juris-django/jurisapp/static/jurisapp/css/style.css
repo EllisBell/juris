@@ -75,6 +75,21 @@ header h1 {
 	box-shadow: none;
 }
 
+#tribCheckBoxes {
+	margin: 0 auto;
+	margin-top: 3%;
+}
+
+.tribLabel {
+	margin-right: 5%;
+	white-space: nowrap;
+	/* default colour for checked */
+	background-color: #9ff8cd;
+	display: inline-block;
+	margin-bottom: 2%;
+}
+
+
 #searchResults {
 	width:100%;
 	padding-bottom: 2%

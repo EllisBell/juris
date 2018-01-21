@@ -4,6 +4,30 @@
 
 	<div id="content">
 		<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus>
+
+		<div id="tribCheckBoxes">
+			<label class="tribLabel">
+				Tribunal da Relação de Lisboa
+				<input type="checkbox" class="tribCheck" id="trlCheck" checked="true" data-trib="TRL">
+			</label>
+			<label class="tribLabel">
+				Tribunal da Relação do Porto
+				<input type="checkbox" class="tribCheck" id="trpCheck" checked="true" data-trib="TRP">
+			</label>
+			<label class="tribLabel">
+				Tribunal da Relação de Coimbra				
+				<input type="checkbox" class="tribCheck" id="trcCheck" checked="true" data-trib="TRC">
+			</label>
+			<label class="tribLabel">
+				Tribunal da Relação de Guimarães
+				<input type="checkbox" class="tribCheck" id="trgCheck" checked="true" data-trib="TRG">
+			</label>
+			<label class="tribLabel">
+				Tribunal da Relação de Évora
+				<input type="checkbox" class="tribCheck" id="treCheck" checked="true" data-trib="TRE">				
+			</label>
+		</div>
+
 		<div class="loading">
 			  <div class="loading-bar"></div>
 			  <div class="loading-bar"></div>
@@ -12,6 +36,7 @@
 		</div>
 		<div id="searchResults"></div>
 	</div>
+
 
 
 {% endblock %}
