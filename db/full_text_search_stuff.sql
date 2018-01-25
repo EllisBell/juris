@@ -59,6 +59,9 @@ from acordao where to_tsvector('tuga', coalesce(txt_integral, ''))
 ---- CREATING NEW COLUMN
 alter table acordao add column searchable_idx_col tsvector;
 
+update acordao set searchable_idx_col = null;
+
+-- TODO this gives us only one value from descritores... fix
 update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
 || setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
 || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
@@ -67,8 +70,30 @@ update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(t
 from acordao_descritor as acd
 where acordao.acordao_id = acd.acordao_id;
 
-select count(*) from acordao;
+-- Function to get all descritores for an acordao, concatenated
+create function get_concatenated_descritores(p_acordao integer) returns varchar as $$
+declare
+    v_descritores varchar;
+begin
+    select string_agg(descritor, ' ')
+    into v_descritores
+    from acordao_descritor
+    where acordao_id = p_acordao;
 
+    return v_descritores;
+end
+$$ LANGUAGE plpgsql;
+
+-- updating searchable_idx_col (using above function for descritores)
+update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
+|| setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
+|| setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(relator, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
+from acordao_descritor as acd
+where acordao.acordao_id = acd.acordao_id;
+
+-- Create the index on searchable_idx_col; This will update automatically when new row inserted/updated;
 create index acordao_idx on acordao using gin(searchable_idx_col);
 
 -- TRIGGER for above (using PL/pgSQL)
@@ -79,9 +104,9 @@ begin
         || setweight(to_tsvector('tuga', coalesce(new.sumario, '')), 'C')
         || setweight(to_tsvector('tuga', coalesce(new.processo, '')), 'A')
         || setweight(to_tsvector('tuga', coalesce(new.relator, '')), 'A')
-        || setweight(to_tsvector('tuga', coalesce(acd.descritor, '')), 'B')
+        || setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
         from acordao_descritor as acd
-        where acordao.acordao_id = acd.acordao_id;
+        where acordao_id = acd.acordao_id;
      return new;
 end
 $$ LANGUAGE plpgsql;

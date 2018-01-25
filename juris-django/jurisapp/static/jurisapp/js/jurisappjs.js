@@ -5,12 +5,9 @@ $(document).ready(function() {
 	//var code = event.
 		if(event.keyCode == 13) {
 			event.preventDefault();
-			//$('#searchResults').html("")
-			//$(".loading").css("visibility", "visible");
 			showLoadingBar();
-			var query;
-			query = $(this).val();
 
+			var query = $(this).val();
 			var tribs = getCheckedTribs();
 
 		 	$.get('/jurisapp/search/', {query: query, tribs: tribs}, function(data) {
@@ -34,7 +31,8 @@ $(document).ready(function() {
     $(document).on("click", '.pageBtn', function(event) {
         var query = $(this).data("query");
         var page = $(this).data("page");
-        // Get array of tribs as string and parse into array
+        // Get array of tribs as string and parse into array. Tribs passed from server so this search uses same set of tribs,
+        // rather than the ones currently checked (which may have changed)
         // Comes from server as single quoted values so replace with double quotes for JSON parse to work
         var tribs = $(this).data("tribs");
         tribs = JSON.parse(tribs.replace(/'/g, "\""));
@@ -54,11 +52,7 @@ $(document).ready(function() {
  		$(".loading").css("visibility", "visible");
     }
 
-
-
-
-
-    // Changing checkbox/label colour when checked
+    // Changing checkbox/label colour when checked/unchecked
     $("input[type='checkbox']").change(function() {
     	var chkBox = $(this);
      	var label = $(this).parent();

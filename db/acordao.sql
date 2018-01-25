@@ -86,6 +86,9 @@ values('bla blu 2', 'this has it in the relator')
 
 select * from acordao where txt_integral like '%hazelnuts%';
 
-select acordao_id, sumario from acordao order by acordao_id desc
+select acordao_id, sumario from acordao order by acordao_id desc;
 
-select * from acordao where acordao_id = 13880;
+update acordao set tribunal_id = 'TRP'
+where acordao_id = 18220;
+
+select * from acordao where acordao_id = 9600;

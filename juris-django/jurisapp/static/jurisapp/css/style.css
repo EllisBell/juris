@@ -243,9 +243,11 @@ header h1 {
 	padding-top: 5px;
 	/*background-color: #d6fce9;*/
 	/*background-color: #c2d6cd;*/
-	background-color: white;
-	font-size: 1.25rem;
 	/*border-right: 2px solid #12e880;*/
+}
+
+#acordao-main-info {
+	font-size: 1.25rem;
 }
 
 #colortest {
@@ -287,13 +289,21 @@ header h1 {
 		float:none;
 		width: 100%;
 		height: auto;
-		background-color: yellow;
 		margin-top: 3%;
 	    background-color: #d6fce9;
 	}
 
+	#acordao-main-info {
+		float:left;
+		width: 50%;
+	}
+
+	#acordao-icons {
+		clear: left;
+	}
+
 	#ac-content {
-		max-width: 65%;
+		max-width: 70%;
 		margin: 0 auto;
 	}
 }
@@ -306,12 +316,20 @@ header h1 {
 	#content {
 		max-width: 80%;
 	}
+
+	#acordao-main-info {
+		font-size: 1.15rem;
+	}
+
+	#ac-content {
+		max-width: 75%;
+	}
 }
 
 
 @media only screen and (max-width: 524px) {
 	html {
-		font-size: 14px;
+		font-size: 16px;
 	}
 
 	#content {
@@ -335,7 +353,6 @@ header h1 {
 
 	#ac-content {
 		max-width: 85%;
-		margin: 0 auto;
 	}
 }
 

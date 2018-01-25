@@ -5,18 +5,31 @@
 <div id="container">
 
 	<div id="ac-sidebar"> 
-		<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
-		<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
-		<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
-		<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
-        <i id="colortest" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+		<div id="acordao-main-info">
+			<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
+			<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
+			<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
+			<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
+    	</div>
+    	<div id="acordao-other-info">
+    		<div>Número: {{ acordao.numero }}</div>
+    		<div>Votação: {{ acordao.votacao }}</div>
+    		<div>Meio Processual: {{ acordao.meio_processual }}</div>
+    		<div>Decisão: {{ acordao.decisao }}</div>
+    	</div>
+    	<div id="acordao-icons">
+    		<i id="colortest" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    	</div>
 	</div>
 
 	<div id="ac-content">
-	 <!-- autoescape off to render html as html -->
-	 {% autoescape off %}
-	 {{ acordao.html_txt_integral }}
-	{% endautoescape %}
+		<h3>Sumário</h3>
+		{{ acordao.sumario }}
+		<h3>Texto Integral</h3>
+		<!-- autoescape off to render html as html -->
+		{% autoescape off %}
+		{{ acordao.html_txt_integral }}
+		{% endautoescape %}
 	</div>
 </div>
 

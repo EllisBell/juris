@@ -24,6 +24,7 @@ def search(request):
     query = request.GET['query']
     print("got query")
 
+    # n.b. the [] after tribs is apparently inserted by jQuery (even though we are passing 'tribs' it adds the '[]')
     tribs = request.GET.getlist('tribs[]')
     if tribs:
         print("got tribs...")
@@ -52,6 +53,11 @@ def search(request):
     ## NB filtering on acordao as well
     acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query))\
         .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
+
+    # AND / OR / PHRASE search
+    # The above query translates into a plainto_tsquery function call in sql. This joins terms with an & by default
+    # So need to account for OR searches or full phrase search
+
 
     paginator = Paginator(acordao_results, 25)
 
