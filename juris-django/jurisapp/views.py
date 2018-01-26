@@ -7,19 +7,10 @@ from django.db.models import F
 from . import acordao_search
 
 
-# Create your views here.
-# placeholder just to get started
 def index(request):
     return render(request, 'jurisapp/index.html')
 
 
-# experiment with postgres full text search
-# gonna need a template with a search box
-# and some javascript
-# n.b. current thinking is just do this in vanilla js
-# no jquery, no frameworks
-# improve js while doing it
-# and then learn a framework and make another proj with it
 def search(request):
     query = request.GET['query']
     print("got query")
@@ -39,25 +30,15 @@ def search(request):
     print("NOW PAGE IS")
     print(page)
 
-    num_per_page = 25
-
-    # Evaluate results so can count to paginator as list
-    # Otherwise it can't use raw query set
-    #acordao_results = [acordao for acordao in acordao_results]
-
-    # UPDATE Added searchvectorfield to Acordao model; this seems to work pretty well
-    #acordao_results = Acordao.objects.filter(searchable_idx_col=SearchQuery(query, config='tuga'))
-
     ## LOOK AT THIS - using ranking - have to use F to get value of searchable_idx_col
     search_query = SearchQuery(query, config='tuga')
     ## NB filtering on acordao as well
-    acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query))\
+    acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
         .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
 
     # AND / OR / PHRASE search
     # The above query translates into a plainto_tsquery function call in sql. This joins terms with an & by default
     # So need to account for OR searches or full phrase search
-
 
     paginator = Paginator(acordao_results, 25)
 
@@ -70,7 +51,6 @@ def search(request):
     except EmptyPage:
         # if page out of range, deliver last page of results
         acordaos = paginator.page(paginator.num_pages)
-
 
     print("got total")
     # TODO the query we pass has to be the search term
@@ -98,7 +78,32 @@ def search(request):
     # todo find out where these are / why they exist - see board for more info
 
 
-    # useful to know when in PSQL "explain analyze <query>" to get cost and explain plan
+def get_acordaos(query, tribs):
+    if '*' in query:
+        results = or_search(query, tribs)
+    else:
+        results = and_search(query, tribs)
+
+    return results
+
+
+def and_search(query, tribs):
+    return get_results(SearchQuery(query), tribs)
+
+
+def or_search(query, tribs):
+    words = query.split('*')
+    search_query = SearchQuery()
+    for word in words:
+        search_query = search_query & SearchQuery(word)
+
+    return get_results(search_query, tribs)
+
+
+def get_results(search_query, tribs):
+    return Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
+        .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
+
 
 # individual acordao
 def acordao(request, acordao_id):
@@ -106,4 +111,3 @@ def acordao(request, acordao_id):
     ac = Acordao.objects.get(pk=acordao_id)
     context_dict = {'acordao': ac}
     return render(request, 'jurisapp/acordao.html', context_dict)
-

@@ -240,10 +240,8 @@ header h1 {
 	height:100%;
 	width: 28%;
 	padding-left: 10px;
-	padding-top: 5px;
-	/*background-color: #d6fce9;*/
-	/*background-color: #c2d6cd;*/
-	/*border-right: 2px solid #12e880;*/
+	padding-top: 18px;
+	padding-bottom: 5px;
 }
 
 #acordao-main-info {
@@ -268,7 +266,10 @@ header h1 {
 	max-width: 60%;
 	margin-left: 30%;
 	padding-left: 2%;
-
+	padding-top: 1px;
+	font-size: 1.1rem;
+	line-height: 1.5rem;
+	/*border: 1px solid blue;*/
 }
 
 .clearfix::after {
@@ -326,6 +327,12 @@ header h1 {
 	}
 }
 
+@media only screen and (max-width: 700px) {
+  	#acordao-main-info {
+		float:none;
+	}
+}
+
 
 @media only screen and (max-width: 524px) {
 	html {
@@ -353,6 +360,7 @@ header h1 {
 
 	#ac-content {
 		max-width: 85%;
+		font-size: 1rem;
 	}
 }
 
