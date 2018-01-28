@@ -5,10 +5,15 @@ $(document).ready(function() {
 	//var code = event.
 		if(event.keyCode == 13) {
 			event.preventDefault();
-			showLoadingBar();
 
 			var query = $(this).val();
-			var tribs = getCheckedTribs();
+			var tribs = getCheckedTribs();			
+			
+			if(!query || tribs.length==0) {
+				return;
+			}
+
+			showLoadingBar();
 
 		 	$.get('/jurisapp/search/', {query: query, tribs: tribs}, function(data) {
 				$(".loading").css("visibility", "hidden");

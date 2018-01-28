@@ -22,24 +22,10 @@ def search(request):
         print(tribs)
 
     page = request.GET.get('page')
-    print("page is:")
-    print(page)
     if page is None:
         page = 1
 
-    print("NOW PAGE IS")
-    print(page)
-
-    ## LOOK AT THIS - using ranking - have to use F to get value of searchable_idx_col
-    search_query = SearchQuery(query, config='tuga')
-    ## NB filtering on acordao as well
-    acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
-        .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
-
-    # AND / OR / PHRASE search
-    # The above query translates into a plainto_tsquery function call in sql. This joins terms with an & by default
-    # So need to account for OR searches or full phrase search
-
+    acordao_results = get_acordaos(query, tribs)
     paginator = Paginator(acordao_results, 25)
 
     try:
@@ -53,7 +39,6 @@ def search(request):
         acordaos = paginator.page(paginator.num_pages)
 
     print("got total")
-    # TODO the query we pass has to be the search term
     context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': query, 'tribs': tribs}
     print("and to here")
     return render(request, 'jurisapp/search_results.html', context_dict)
@@ -79,8 +64,10 @@ def search(request):
 
 
 def get_acordaos(query, tribs):
-    if '*' in query:
+    if ' ou ' in query.lower():
         results = or_search(query, tribs)
+    elif (query[0] == "\"" and query[-1] == "\""):
+        results = phrase_search(query, tribs)
     else:
         results = and_search(query, tribs)
 
@@ -88,21 +75,43 @@ def get_acordaos(query, tribs):
 
 
 def and_search(query, tribs):
-    return get_results(SearchQuery(query), tribs)
+    return get_query_filtering_on_search_query(get_search_query(query), tribs)
 
 
 def or_search(query, tribs):
-    words = query.split('*')
-    search_query = SearchQuery()
+    words = [word.strip() for word in query.lower().split('ou')]
+    search_query = get_search_query(words[0])
     for word in words:
-        search_query = search_query & SearchQuery(word)
+        # combine SearchQuery objects with OR operator for or search
+        search_query = search_query | get_search_query(word)
 
-    return get_results(search_query, tribs)
+    return get_query_filtering_on_search_query(search_query, tribs)
 
 
-def get_results(search_query, tribs):
+def phrase_search(query, tribs):
+    search_query = get_search_query(query)
+    query = query.replace("\"", "")
+    words = query.split()
+    query = "<->".join(words)
+
+    query_set = get_basic_query(search_query, tribs)
+    query_set = query_set.extra(where=["searchable_idx_col @@ to_tsquery(%s, %s)"], params=['tuga', query])
+    return query_set
+
+
+def get_search_query(query):
+    return SearchQuery(query, config='tuga')
+
+
+def get_query_filtering_on_search_query(search_query, tribs):
+    # Filtering on SearchQuery translates into a plainto_tsquery function call in sql.
+    # This joins terms with an & by default
+    return get_basic_query(search_query, tribs).filter(searchable_idx_col=search_query)
+
+
+def get_basic_query(search_query, tribs):
     return Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
-        .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
+        .filter(tribunal__in=tribs).order_by('-rank')
 
 
 # individual acordao
