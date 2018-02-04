@@ -5,7 +5,7 @@ class Acordao(object):
     def __init__(self, processo, tribunal, seccao, num_convencional, relator, descritores, numero, data, votacao,
                  aditamento, trib_recurso, proc_trib_recurso, data_dec_recorrida, texto_integral_flag,
                  texto_parcial_flag, meio_processual, recorrente, recorridos, decisao, indic_eventuais,
-                 area_tematica, doutrina, legis_nacional, juris_nacional, sumario, dec_texto_parcial,
+                 area_tematica, doutrina, legis_nacional, juris_nacional, sumario, dec_texto_parcial, html_txt_parcial,
                  dec_texto_integral, html_texto_integral, url):
         self.processo = processo
         self.tribunal = tribunal
@@ -35,6 +35,7 @@ class Acordao(object):
         self.juris_nacional = juris_nacional
         self.sumario = sumario
         self.dec_texto_parcial = dec_texto_parcial
+        self.html_txt_parcial = html_txt_parcial
         self.dec_texto_integral = dec_texto_integral
         self.html_texto_integral = html_texto_integral
         self.url = url

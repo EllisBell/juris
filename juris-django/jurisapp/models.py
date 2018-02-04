@@ -42,6 +42,7 @@ class Acordao(models.Model):
     sumario = models.TextField(max_length=-1, blank=True, null=True)
     txt_parcial = models.TextField(blank=True, null=True)
     txt_integral = models.TextField(blank=True, null=True)
+    html_txt_parcial = models.TextField(blank=True, null=True)
     html_txt_integral = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)
     date_loaded = models.DateField(blank=True, null=True)

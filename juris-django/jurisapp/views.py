@@ -26,6 +26,14 @@ def search(request):
         page = 1
 
     acordao_results = get_acordaos(query, tribs)
+
+    #search_query = SearchQuery(query, config='tuga')
+    #acordao_results = Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
+    #    .filter(searchable_idx_col=search_query, tribunal__in=tribs).order_by('-rank')
+
+    print(acordao_results.query)
+    print(acordao_results.count())
+
     paginator = Paginator(acordao_results, 25)
 
     try:
@@ -75,6 +83,7 @@ def get_acordaos(query, tribs):
 
 
 def and_search(query, tribs):
+    print("in and search")
     return get_query_filtering_on_search_query(get_search_query(query), tribs)
 
 
@@ -110,6 +119,7 @@ def get_query_filtering_on_search_query(search_query, tribs):
 
 
 def get_basic_query(search_query, tribs):
+    print("in get basic query")
     return Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
         .filter(tribunal__in=tribs).order_by('-rank')
 

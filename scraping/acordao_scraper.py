@@ -148,13 +148,15 @@ def get_acordao(case_url, trib_id):
     dec_texto_integral = get_text_no_strip(get_row(rows, "Decisão Texto Integral:"))
 
     # now get html
-    html_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
+    html_parcial_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Parcial:")))
+    html_integral_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
 
     ac = acordao.Acordao(processo, trib_id, seccao, num_convencional,
                          relator, descritores, numero, data, votacao, aditamento, trib_recurso,
                          proc_trib_recurso, data_dec_recorrida, txt_integral_flag, txt_parcial_flag, meio_processual,
                          recorrente, recorridos, decisao, indic_eventuais, area_tematica, doutrina, legis_nac,
-                         juris_nac, sumario, dec_texto_parcial, dec_texto_integral, html_for_saving, case_url)
+                         juris_nac, sumario, dec_texto_parcial, html_parcial_for_saving, dec_texto_integral,
+                         html_integral_for_saving, case_url)
     return ac
 
 

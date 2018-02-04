@@ -31,6 +31,7 @@ juris_nacional      varchar, -- see above
 sumario	 		    varchar,
 txt_parcial 	    varchar,
 txt_integral 	    varchar,
+html_txt_parcial    varchar,
 html_txt_integral   varchar,
 url                 varchar,
 date_loaded         date
@@ -92,3 +93,12 @@ update acordao set tribunal_id = 'TRP'
 where acordao_id = 18220;
 
 select * from acordao where acordao_id = 9600;
+
+select * from acordao where searchable_txt_integral is null
+limit 10;
+
+select * from acordao where txt_parcial_flag = 'S' and txt_integral_flag = 'S'
+limit 2;
+
+alter table acordao add column html_txt_parcial varchar;
+
