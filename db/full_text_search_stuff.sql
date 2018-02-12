@@ -62,6 +62,7 @@ alter table acordao add column searchable_idx_col tsvector;
 update acordao set searchable_idx_col = null;
 
 -- TODO this gives us only one value from descritores... fix
+-- TODO FIXED BELOW
 update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
 || setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
 || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
@@ -90,6 +91,7 @@ update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(t
 || setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
 || setweight(to_tsvector('tuga', coalesce(relator, '')), 'A')
 || setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
+-- TODO do we need these lines? Don't need to join on to acd anymore
 from acordao_descritor as acd
 where acordao.acordao_id = acd.acordao_id;
 

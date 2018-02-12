@@ -1,45 +1,54 @@
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.db.models import F
 from .models import Acordao
 
 
-def search_acordaos(query, limit, offset):
-    # TODO nb. using raw sql is much much faster for some reason
-    # todo by the way the above raw sql breaks when passing more than one word to query term
-    # todo yet to try indexing vectored column and using that (with and without raw sql)
-    # todo also look at paging - i think displaying all results is delaying things
-
-    # filter(search=SearchQuery(query, config='tuga'))
-
-    # query_string = """select acordao_id from acordao where to_tsvector('tuga', coalesce(txt_integral,''))
-    #    @@ to_tsquery('tuga', %s)"""
-
-    # get query with right operators
-    query = get_qualified_query(query)
-
-    # Searching across multiple columns with ranking; cols weighted differently. Concatenated ts_vector in where clause
-    # is indexed
-    # TODO consider passing in different weights array to ts_rank_cd
-    # TODO watch for string.format if you do this as postgres array uses {} braces
-    query_string = """select acordao_id, ts_rank_cd(searchable_idx_col, query) rank
-        from acordao, to_tsquery('tuga', %s) as query where searchable_idx_col @@ query
-        order by rank desc limit {0} offset {1}""".format(limit, offset)
-
-    res = Acordao.objects.raw(query_string, [query])
-    return res
-
-
-def get_qualified_query(query):
-    if (query[0] == "\"" and query[-1] == "\"") or (query[0] == "'" and query[-1] == "'"):
-        query.replace("\"", "")
-        query.replace("'", "")
-        words = query.split()
-        query = "<->".join(words)
-    # revamp but this is the general idea
-    elif 'OR' in query:
-        query = query.replace('OR', '')
-        words = query.split()
-        query = "|".join(words)
-    # if not in quotes or or, it is an and search
+def get_acordaos(query, tribs):
+    if query[0] == "\"" and query[-1] == "\"":
+        results = phrase_search(query, tribs)
+    elif ' ou ' in query.lower():
+        results = or_search(query, tribs)
     else:
-        words = query.split()
-        query = "&".join(words)
-    return query
+        results = and_search(query, tribs)
+
+    return results
+
+
+def and_search(query, tribs):
+    return get_query_filtering_on_search_query(get_search_query(query), tribs)
+
+
+def or_search(query, tribs):
+    words = [word.strip() for word in query.lower().split('ou')]
+    search_query = get_search_query(words[0])
+    for word in words:
+        # combine SearchQuery objects with OR operator for or search
+        search_query = search_query | get_search_query(word)
+
+    return get_query_filtering_on_search_query(search_query, tribs)
+
+
+def phrase_search(query, tribs):
+    search_query = get_search_query(query)
+    query = query.replace("\"", "")
+    words = query.split()
+    query = "<->".join(words)
+
+    query_set = get_basic_query(search_query, tribs)
+    query_set = query_set.extra(where=["searchable_idx_col @@ to_tsquery(%s, %s)"], params=['tuga', query])
+    return query_set
+
+
+def get_search_query(query):
+    return SearchQuery(query, config='tuga')
+
+
+def get_query_filtering_on_search_query(search_query, tribs):
+    # Filtering on SearchQuery translates into a plainto_tsquery function call in sql.
+    # This joins terms with an & by default
+    return get_basic_query(search_query, tribs).filter(searchable_idx_col=search_query)
+
+
+def get_basic_query(search_query, tribs):
+    return Acordao.objects.annotate(rank=SearchRank(F('searchable_idx_col'), search_query)) \
+        .filter(tribunal__in=tribs).order_by('-rank')

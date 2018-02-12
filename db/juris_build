@@ -1,8 +1,6 @@
 DROP TABLE acordao_recorrido;
 DROP TABLE acordao_descritor;
 DROP TABLE acordao;
-drop table tribunal;
-
 
 CREATE TABLE acordao (
 acordao_id		    serial CONSTRAINT acordao_pk PRIMARY KEY,
@@ -35,7 +33,8 @@ txt_integral 	    varchar,
 html_txt_parcial    varchar,
 html_txt_integral   varchar,
 url                 varchar,
-date_loaded         date
+date_loaded         date,
+searchable_idx_col  tsvector
 )
 
 CREATE TABLE acordao_descritor (
@@ -51,57 +50,13 @@ acordao_recorrido_id serial CONSTRAINT acordao_rec_pk PRIMARY KEY,
 acordao_id integer REFERENCES acordao(acordao_id),
 recorrido varchar)
 
+create table tribunal (
+id_name     varchar constraint tribunal_pk primary key,
+long_name   varchar
+)
 
--- to run this file in psql: \i ''C:\Users/Tom/ProgStuff/Projects/juris/sql_dev/acordao.sql'
-
-select * from acordao;
-select * from acordao_recorrido;
-select * from acordao_descritor;
-
-
-
-delete from acordao_recorrido;
-delete from acordao_descritor;
-delete from acordao;
-
-select * from django_migrations;
-delete from django_migrations
-
-select count(distinct(url)) dist from acordao;
-
--- test data for testing weightings
-insert into acordao(sumario, txt_integral)
-values('and the word is hazelnuts', 'nada a ver mesmo')
-
-insert into acordao(sumario, txt_integral)
-values('nada a ver mesmo', 'and the word is hazelnuts')
-
-insert into acordao(processo, txt_integral)
-values('hazelnuts', 'this has it in the processo')
-
-insert into acordao(relator, txt_integral)
-values('hazelnuts', 'this has it in the relator')
-
-insert into acordao(relator, txt_integral)
-values('bla blu 2', 'this has it in the relator')
-
-
-select * from acordao where txt_integral like '%hazelnuts%';
-
-select acordao_id, sumario from acordao order by acordao_id desc;
-
-update acordao set tribunal_id = 'TRP'
-where acordao_id = 18220;
-
-select * from acordao where acordao_id = 13546;
-
-select * from acordao order by acordao_id desc limit 10;
-
-select * from acordao where searchable_txt_integral is null
-limit 10;
-
-select * from acordao where txt_parcial_flag = 'S' and txt_integral_flag = 'S'
-limit 2;
-
-alter table acordao add column html_txt_parcial varchar;
-
+insert into tribunal(id_name, long_name) values ('TRL', 'Tribunal da Relação de Lisboa');
+insert into tribunal(id_name, long_name) values ('TRP', 'Tribunal da Relação do Porto');
+insert into tribunal(id_name, long_name) values ('TRC', 'Tribunal da Relação de Coimbra');
+insert into tribunal(id_name, long_name) values ('TRE', 'Tribunal da Relação de Évora');
+insert into tribunal(id_name, long_name) values ('TRG', 'Tribunal da Relação de Guimarães');

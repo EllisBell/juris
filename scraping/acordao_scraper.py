@@ -79,6 +79,10 @@ def get_text_no_strip(row):
 def prepare_html_for_saving(html_to_prepare):
     if not html_to_prepare:
         return ""
+
+    if how_much_text_is_bold(html_to_prepare) > 0.95:
+        html_to_prepare = hp.remove_bold(html_to_prepare)
+
     new_html = hp.remove_font_tags(html_to_prepare)
     new_html = hp.close_p_tags(new_html)
     new_html = hp.replace_bold(new_html)
@@ -87,11 +91,19 @@ def prepare_html_for_saving(html_to_prepare):
     return new_html
 
 
-def get_tribunal_id():
-    return None
-    # get which tribunal this is
-    # make call to database to get the id number for it
-    # Or instead of using id numbers, have unique short name and then a long display name
+def how_much_text_is_bold(html_to_check):
+    if html_to_check:
+        soup = get_soup(html_to_check)
+        texts = soup.find_all(string=True)
+        if texts and len(texts) > 0:
+            texts = [text for text in texts if text != '\n']
+            bold_count = 0
+            for text in texts:
+                if text.find_parents('b'):
+                    bold_count += 1
+
+            return bold_count / len(texts)
+    return 0
 
 
 def get_acordao(case_url, trib_id):
@@ -103,6 +115,8 @@ def get_acordao(case_url, trib_id):
     seccao = get_content(get_row(rows, "Secção:"))
     num_convencional = get_content(get_row(rows, "Nº Convencional:"))
     relator = get_content(get_row(rows, "Relator:"))
+    print("got relator")
+    print(get_row(rows, "Descritores:"))
     descritores = get_list_content(get_row(rows, "Descritores:"))
     numero = get_content(get_row(rows, "Nº do Documento:"))
     data = get_content(get_row(rows, "Data do Acordão:"))
@@ -147,9 +161,13 @@ def get_acordao(case_url, trib_id):
 
     dec_texto_integral = get_text_no_strip(get_row(rows, "Decisão Texto Integral:"))
 
-    # now get html
-    html_parcial_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Parcial:")))
-    html_integral_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
+    # now get html but only if there is actually text there, not just empty tags
+    html_parcial_for_saving = ''
+    if dec_texto_parcial:
+        html_parcial_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Parcial:")))
+    html_integral_for_saving = ''
+    if dec_texto_integral:
+        html_integral_for_saving = prepare_html_for_saving(get_html(get_row(rows, "Decisão Texto Integral:")))
 
     ac = acordao.Acordao(processo, trib_id, seccao, num_convencional,
                          relator, descritores, numero, data, votacao, aditamento, trib_recurso,

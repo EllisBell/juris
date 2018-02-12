@@ -1,0 +1,57 @@
+select * from acordao where acordao_id = 9600;
+
+insert into acordao(processo, txt_integral, sumario, relator)
+values('555-XXX', 'As notícias não têm hora marcada, nós também não', 'As notícias não têm hora marcada.',
+        'José Cuervo');
+
+select max(acordao_id) from acordao;
+select * from acordao where acordao_id = 18237;
+update acordao set tribunal_id = 'TRP' where acordao_id = 18237;
+
+insert into acordao_descritor(acordao_id, descritor)
+values(18237, 'Observador');
+
+insert into acordao_descritor(acordao_id, descritor)
+values(18237, 'Notícias em Portugal');
+
+insert into acordao_descritor(acordao_id, descritor)
+values(18237, 'Jornal Online');
+
+select * from acordao_descritor where acordao_id = 18237;
+
+
+update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
+|| setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
+|| setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(relator, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
+from acordao_descritor as acd
+where acordao.acordao_id = acd.acordao_id
+and acordao.acordao_id = 18237;
+
+
+
+create function get_concatenated_descritores(p_acordao integer) returns varchar as $$
+declare
+    v_descritores varchar;
+begin
+    select string_agg(descritor, ' ')
+    into v_descritores
+    from acordao_descritor
+    where acordao_id = p_acordao;
+
+    return v_descritores;
+end
+$$ LANGUAGE plpgsql;
+
+select get_concatenated_descritores(18237);
+
+update acordao set searchable_idx_col =
+searchable_idx_col ||
+
+update acordao set searchable_idx_col = null
+where acordao_id = 18237;
+
+select string_agg(descritor, ' ')
+from acordao_descritor
+where acordao_id = 18237;

@@ -1,0 +1,50 @@
+
+-- Function to get all descritores for an acordao, concatenated
+create function get_concatenated_descritores(p_acordao integer) returns varchar as $$
+declare
+    v_descritores varchar;
+begin
+    select string_agg(descritor, ' ')
+    into v_descritores
+    from acordao_descritor
+    where acordao_id = p_acordao;
+
+    return v_descritores;
+end
+$$ LANGUAGE plpgsql;
+
+
+-- updating searchable_idx_col (using above function for descritores)
+update acordao set searchable_idx_col = setweight(to_tsvector('tuga', coalesce(txt_integral, '')), 'D')
+|| setweight(to_tsvector('tuga', coalesce(sumario, '')), 'C')
+|| setweight(to_tsvector('tuga', coalesce(processo, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(relator, '')), 'A')
+|| setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
+-- TODO do we need these lines? Don't need to join on to acd anymore
+from acordao_descritor as acd
+where acordao.acordao_id = acd.acordao_id;
+
+-- Create the index on searchable_idx_col; This will update automatically when new row inserted/updated;
+create index acordao_idx on acordao using gin(searchable_idx_col);
+
+-- TRIGGER for above (using PL/pgSQL)
+create function acordao_trigger() returns trigger as $$
+begin
+    new.searchable_idx_col :=
+        setweight(to_tsvector('tuga', coalesce(new.txt_integral, '')), 'D')
+        || setweight(to_tsvector('tuga', coalesce(new.sumario, '')), 'C')
+        || setweight(to_tsvector('tuga', coalesce(new.processo, '')), 'A')
+        || setweight(to_tsvector('tuga', coalesce(new.relator, '')), 'A')
+        || setweight(to_tsvector('tuga', coalesce(get_concatenated_descritores(acordao.acordao_id), '')), 'B')
+        from acordao_descritor as acd
+        where acordao_id = acd.acordao_id;
+     return new;
+end
+$$ LANGUAGE plpgsql;
+
+create trigger tsvectorupdate before insert or update
+on acordao for each row execute procedure acordao_trigger();
+
+-- For dropping
+drop trigger tsvectorupdate on acordao;
+drop function acordao_trigger();

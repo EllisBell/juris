@@ -45,6 +45,12 @@ def replace_bold(html_text):
     return html_text
 
 
+def remove_bold(html_text):
+    html_text = html_text.replace('<b>', '')
+    html_text = html_text.replace('</b>', '')
+    return html_text
+
+
 def replace_italics(html_text):
     html_text = html_text.replace('<i>', '<em>')
     html_text = html_text.replace('</i>', '</em>')
