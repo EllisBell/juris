@@ -41,7 +41,7 @@ class AcordaoSaver(object):
             acordao.texto_parcial_flag,
             acordao.meio_processual, acordao.decisao, acordao.sumario, acordao.dec_texto_parcial,
             acordao.html_txt_parcial, acordao.dec_texto_integral, acordao.html_texto_integral,
-            acordao.url, datetime.datetime.now().date()))
+            acordao.url, datetime.datetime.now()))
 
         # since we included "RETURNING id" in insert stmt, we can get the id from result
         acordao_id = cur.fetchone()[0]

@@ -47,12 +47,14 @@ def get_html(row):
 
 def get_list_content(row):
     list_cont = []
-    col = row.find_all('td')[1]
-    for string in col.strings:
-        list_cont.append(string)
+    if row is not None:
+        col = row.find_all('td')[1]
+        for string in col.strings:
+            list_cont.append(string)
 
-    # Get rid of whitespace elements and strip away whitespace from actual terms
-    list_cont = [term.strip() for term in list_cont if not term.isspace()]
+        # Get rid of whitespace elements and strip away whitespace from actual terms
+        list_cont = [term.strip() for term in list_cont if not term.isspace()]
+
     return list_cont
 
 
@@ -95,8 +97,8 @@ def how_much_text_is_bold(html_to_check):
     if html_to_check:
         soup = get_soup(html_to_check)
         texts = soup.find_all(string=True)
+        texts = [text for text in texts if text != '\n']
         if texts and len(texts) > 0:
-            texts = [text for text in texts if text != '\n']
             bold_count = 0
             for text in texts:
                 if text.find_parents('b'):
@@ -115,8 +117,6 @@ def get_acordao(case_url, trib_id):
     seccao = get_content(get_row(rows, "Secção:"))
     num_convencional = get_content(get_row(rows, "Nº Convencional:"))
     relator = get_content(get_row(rows, "Relator:"))
-    print("got relator")
-    print(get_row(rows, "Descritores:"))
     descritores = get_list_content(get_row(rows, "Descritores:"))
     numero = get_content(get_row(rows, "Nº do Documento:"))
     data = get_content(get_row(rows, "Data do Acordão:"))

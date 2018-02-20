@@ -35,7 +35,8 @@ txt_integral 	    varchar,
 html_txt_parcial    varchar,
 html_txt_integral   varchar,
 url                 varchar,
-date_loaded         date
+date_loaded         timestamp,
+searchable_idx_col  tsvector
 )
 
 CREATE TABLE acordao_descritor (
@@ -104,4 +105,11 @@ select * from acordao where txt_parcial_flag = 'S' and txt_integral_flag = 'S'
 limit 2;
 
 alter table acordao add column html_txt_parcial varchar;
+
+select count(*) from acordao;
+
+select max(date_loaded) from acordao;
+
+select * from acordao where acordao.processo = '336/16.9YHLSB.L1-7'
+
 

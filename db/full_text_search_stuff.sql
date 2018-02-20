@@ -59,6 +59,9 @@ from acordao where to_tsvector('tuga', coalesce(txt_integral, ''))
 ---- CREATING NEW COLUMN
 alter table acordao add column searchable_idx_col tsvector;
 
+alter table acordao drop column searchable_idx_col;
+
+
 update acordao set searchable_idx_col = null;
 
 -- TODO this gives us only one value from descritores... fix

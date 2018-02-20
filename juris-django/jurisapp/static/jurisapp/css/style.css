@@ -12,6 +12,7 @@ html {
 	height: 100%;
 	overflow-y: scroll;
 	font-size: 16px;
+	background-color: #eeeeee;
 }
 
 body {
@@ -69,6 +70,7 @@ header h1 {
 	border-bottom: 3px solid black;
 	border-radius: 0;
 	font-size: 2rem;
+	background-color: #eeeeee;
 }
 
 #searchbox:focus {
@@ -88,6 +90,7 @@ header h1 {
 	background-color: #9ff8cd;
 	display: inline-block;
 	margin-bottom: 2%;
+	padding: 8px;
 }
 
 
@@ -160,11 +163,13 @@ header h1 {
     /*background-color: #b5ffc5;*/
     background-color: #9ff8cd;
     /*background-color: #12e880;*/
+    padding: 5px;
 }
 
 .descritor-div {
 	margin-right:1%;
-	margin-top: 0.3%;
+	margin-bottom: 1%;
+	margin-top: 1%;
 	display: inline-block;
 }
 
@@ -351,12 +356,13 @@ header h1 {
 
 	.result-descritor {
 	    white-space: normal;
+	    font-size: 0.85rem;
 	}
 
 	.descritor-div {
 		display: block;
 		white-space: normal;
-		margin-top: 1%;
+		/*margin-top: 2%;*/
 	}
 
 	#ac-content {
