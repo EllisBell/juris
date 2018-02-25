@@ -106,10 +106,13 @@ limit 2;
 
 alter table acordao add column html_txt_parcial varchar;
 
-select count(*) from acordao;
+select count(*) from acordao
+where tribunal_id in ('TRL', 'TRP');
 
 select max(date_loaded) from acordao;
 
-select * from acordao where acordao.processo = '336/16.9YHLSB.L1-7'
+select * from acordao where acordao.processo = '336/16.9YHLSB.L1-7';
+
+select * from acordao order by acordao_id desc limit 1;
 
 

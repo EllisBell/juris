@@ -19,6 +19,8 @@ def search(request):
         page = 1
 
     acordao_results = acordao_search.get_acordaos(query, tribs)
+    print(acordao_results.query)
+
     paginator = Paginator(acordao_results, 25)
 
     try:

@@ -101,6 +101,8 @@ where acordao.acordao_id = acd.acordao_id;
 -- Create the index on searchable_idx_col; This will update automatically when new row inserted/updated;
 create index acordao_idx on acordao using gin(searchable_idx_col);
 
+drop index acordao_idx;
+
 -- TRIGGER for above (using PL/pgSQL)
 create function acordao_trigger() returns trigger as $$
 begin

@@ -29,7 +29,7 @@
 			{% endfor %}
 		</div>
 		<h3>Sumário</h3>
-		{{ acordao.sumario }}
+		{{ acordao.sumario|linebreaks }}
 		{% if acordao.txt_integral and acordao.txt_integral.strip %}
 			<h3>Texto Integral</h3>
 			<!-- autoescape off to render html as html -->
