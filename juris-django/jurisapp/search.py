@@ -17,10 +17,12 @@ def test_analyse(analyser, text):
 
 # indexing a doc using es.index would normally create index if didn't exist
 # but we want to specify analyzer for index so think I need to specifically create one with mappings etc.
-def create_acordao_index():
+def create_acordao_idx():
     es = get_es()
     index_client = es.indices
 
+    # Remember to specify analyzer to stem words correctly etc.
+    # By default, queries will use the analyzer defined in the index mapping for the field
     mappings = {"acordao": {
         "properties": {
             "processo": {"type": "keyword"},
@@ -33,18 +35,28 @@ def create_acordao_index():
     index_client.create(index="acordao_idx", body={"mappings": mappings})
 
 
-def bulk_index_acordaos():
+def delete_acordao_idx():
+    es = get_es()
+    index_client = es.indices
+
+    index_client.delete("acordao_idx")
+
+
+def bulk_index_acordaos(timeout):
+    print("changed", str(timeout))
     es = get_es()
     actions = get_bulk_actions()
-    helpers.bulk(es, actions)
+    helpers.bulk(es, actions, request_timeout=timeout)
 
 
 # Use generator
 def get_bulk_actions():
-    for ac in Acordao.objects.all()[:10]:
+    acordaos = Acordao.objects.all()
+    for ac in acordaos.iterator():
         doc = create_acordao_doc(ac)
         yield {"_index": "acordao_idx",
                "_type": "acordao",
+               "_id": ac.acordao_id,
                "_source": doc
                }
 

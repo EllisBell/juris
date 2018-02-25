@@ -107,7 +107,8 @@ limit 2;
 alter table acordao add column html_txt_parcial varchar;
 
 select count(*) from acordao
-where tribunal_id in ('TRL', 'TRP');
+
+--where tribunal_id in ('TRL', 'TRP');
 
 select max(date_loaded) from acordao;
 
