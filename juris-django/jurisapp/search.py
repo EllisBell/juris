@@ -115,18 +115,25 @@ def test_analyse(analyser, text):
 
 # interface
 # Main search, called from view
-def search(query):
-    # get just ids
-    res = search_all_fields(query, "best_fields", "and", False)
+def and_search(query, tribs, page_number, display_size):
+    return search_with_paging(query, tribs, "must", page_number, display_size)
+
+
+def or_search(query, tribs, page_number, display_size):
+    return search_with_paging(query, tribs, "should", page_number, display_size)
+
+
+def search(query, tribs, operator):
+    res = search_all_fields(query, "cross_fields", operator, tribs, False)
     return get_ids_from_res(res)
 
 
-def search_with_paging(query, page_number, display_size):
+def search_with_paging(query, tribs, operator, page_number, display_size):
     if not page_number:
         page_number = 1
 
     start = (page_number - 1) * display_size
-    res = search_all_fields(query, "best_fields", "and", False, start, display_size)
+    res = search_all_fields(query, "cross_fields", operator, tribs, False, start, display_size)
     return get_ids_from_res(res)
 
 
@@ -136,10 +143,12 @@ def get_ids_from_res(res):
     return ac_ids
 
 
-def search_all_fields(query, match_type, operator, return_source=True, start_at=0, res_size=10):
+def search_all_fields(query, match_type, operator, tribs=None, return_source=True, start_at=0, res_size=10):
     es = get_es()
     fields = get_searchable_fields()
     body = get_multi_match_query(query, fields, match_type, operator)
+    if tribs:
+        body = add_filter(body, "tribunal", tribs)
     res = es.search(index="acordao_idx", body=body, _source=return_source, from_=start_at, size=res_size)
     return res
 
@@ -148,7 +157,7 @@ def get_searchable_fields():
     return ["processo", "relator", "sumario", "txt_integral", "txt_parcial", "descritores"]
 
 
-def get_multi_match_query(query, fields, match_type, operator):
+def get_basic_multi_match_query(query, fields, match_type, operator):
     query = {
         "query": {
             "multi_match": {
@@ -159,11 +168,15 @@ def get_multi_match_query(query, fields, match_type, operator):
             }
         }
     }
-
     return query
 
 
-def get_multi_match_query_with_tribs(query, tribs, fields, match_type, operator):
+def get_multi_match_query(query, fields, match_type, operator):
+    if operator == "must":
+        bool_operator = "and"
+    else:
+        bool_operator = "or"
+
     query = {
         "query": {
             "bool": {
@@ -171,12 +184,10 @@ def get_multi_match_query_with_tribs(query, tribs, fields, match_type, operator)
                     "multi_match": {
                         "query": query,
                         "fields": fields,
-                        "type": match_type
-                    }
-                },
-                "filter": {
-                    "terms": {
-                        "tribunal": tribs
+                        "type": match_type,
+                        # n.b. we still need to include "and" here if we want ALL the terms in query
+                        # to be present
+                        "operator": bool_operator
                     }
                 }
             }
@@ -184,6 +195,18 @@ def get_multi_match_query_with_tribs(query, tribs, fields, match_type, operator)
     }
 
     return query
+
+
+def add_filter(query_dict, field, values):
+    query_dict["query"]["bool"]["filter"] = get_filter(field, values)
+    return query_dict
+
+
+def get_filter(field, values):
+    return {"terms": {
+        field: values
+    }
+    }
 
 
 # todo complete
