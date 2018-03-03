@@ -1,7 +1,7 @@
 import json
 from elasticsearch import Elasticsearch, helpers
 from .models import Acordao
-
+from datetime import datetime
 
 def get_es():
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -21,6 +21,7 @@ def create_acordao_idx():
             # Todo test these keywords out -send in capitalized, uncapitalized etc.
             "processo": {"type": "keyword"},
             "tribunal": {"type": "keyword"},
+            "tribunal_long": {"type": "keyword"},
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
             # todo e.g. just to remove accents or something
             "relator": {"type": "text", "analyzer": "portuguese"},
@@ -54,7 +55,7 @@ def bulk_index_acordaos(timeout):
 def get_bulk_actions():
     acordaos = Acordao.objects.all()
     for ac in acordaos.iterator():
-        doc = create_acordao_doc(ac)
+        doc = create_acordao_doc_with_desc(ac)
         yield {"_index": "acordao_idx",
                "_type": "acordao",
                "_id": ac.acordao_id,
@@ -62,11 +63,17 @@ def get_bulk_actions():
                }
 
 
+# TODO figure out how to update index rather than deleting and reindexing everything
+# todo as that takes quite a while
+
+#TODO try denormalizing acordao descritores to improve indexing performance? avoid loads of db calls
+
 # Todo add other properties, including descritores...
 # todo add descritores as array
 def create_acordao_doc(ac):
     doc = {"processo": ac.processo,
            "tribunal": ac.tribunal.id_name,
+           "tribunal_long": ac.tribunal.long_name,
            "relator": ac.relator,
            "sumario": ac.sumario,
            "txt_integral": ac.txt_integral,
@@ -78,9 +85,7 @@ def create_acordao_doc(ac):
 
 def create_acordao_doc_with_desc(ac):
     doc = create_acordao_doc(ac)
-    descritores = []
-    for desc in ac.acordaodescritor_set.all():
-        descritores.append(desc.descritor)
+    descritores = [desc.descritor for desc in ac.acordaodescritor_set.all()]
     doc["descritores"] = descritores
     return doc
 
@@ -106,6 +111,10 @@ def count_indexed_acordaos(es):
 
 ## Search Interface ##
 
+# TODO what to do with this
+query_type = "most_fields"
+
+
 # analyzes text
 def test_analyse(analyser, text):
     es = get_es()
@@ -116,15 +125,15 @@ def test_analyse(analyser, text):
 # interface
 # Main search, called from view
 def and_search(query, tribs, page_number, display_size):
-    return search_with_paging(query, tribs, "must", page_number, display_size)
+    return search_with_paging(query, tribs, "and", page_number, display_size)
 
 
 def or_search(query, tribs, page_number, display_size):
-    return search_with_paging(query, tribs, "should", page_number, display_size)
+    return search_with_paging(query, tribs, "or", page_number, display_size)
 
 
 def search(query, tribs, operator):
-    res = search_all_fields(query, "cross_fields", operator, tribs, False)
+    res = search_all_fields(query, query_type, operator, tribs)
     return get_ids_from_res(res)
 
 
@@ -133,8 +142,14 @@ def search_with_paging(query, tribs, operator, page_number, display_size):
         page_number = 1
 
     start = (page_number - 1) * display_size
-    res = search_all_fields(query, "cross_fields", operator, tribs, False, start, display_size)
-    return get_ids_from_res(res)
+    res = search_all_fields(query, query_type, operator, tribs, start, display_size)
+    results = get_results_dict_from_res(res)
+    total = results['total']
+    has_next = (page_number * display_size) < total
+    has_previous = (page_number is not 1) and (page_number - 1) * display_size < total
+    results['has_next'] = has_next
+    results['has_previous'] = has_previous
+    return results
 
 
 def get_ids_from_res(res):
@@ -143,18 +158,33 @@ def get_ids_from_res(res):
     return ac_ids
 
 
-def search_all_fields(query, match_type, operator, tribs=None, return_source=True, start_at=0, res_size=10):
+def get_results_dict_from_res(res):
+    results = {}
+    results['total'] = res['hits']['total']
+    results['acordaos'] = [d['_source'] for d in res['hits']['hits']]
+
+    for acordao, hit in zip(results['acordaos'], res['hits']['hits']):
+        acordao['id'] = hit['_id']
+
+    for acordao in results['acordaos']:
+        acordao['data'] = datetime.strptime(acordao['data'], "%Y-%m-%d")
+
+    return results
+
+
+def search_all_fields(query, match_type, operator, tribs=None, start_at=0, res_size=10):
     es = get_es()
     fields = get_searchable_fields()
     body = get_multi_match_query(query, fields, match_type, operator)
     if tribs:
         body = add_filter(body, "tribunal", tribs)
-    res = es.search(index="acordao_idx", body=body, _source=return_source, from_=start_at, size=res_size)
+    res = es.search(index="acordao_idx", body=body, _source_exclude=['tribunal', 'txt_integral', 'txt_parcial'],
+                    from_=start_at, size=res_size)
     return res
 
 
 def get_searchable_fields():
-    return ["processo", "relator", "sumario", "txt_integral", "txt_parcial", "descritores"]
+    return ["processo^2", "relator^2", "sumario", "txt_integral", "txt_parcial", "descritores^2"]
 
 
 def get_basic_multi_match_query(query, fields, match_type, operator):
@@ -172,22 +202,22 @@ def get_basic_multi_match_query(query, fields, match_type, operator):
 
 
 def get_multi_match_query(query, fields, match_type, operator):
-    if operator == "must":
-        bool_operator = "and"
+    if operator == "and":
+        bool_operator = "must"
     else:
-        bool_operator = "or"
+        bool_operator = "should"
 
     query = {
         "query": {
             "bool": {
-                operator: {
+                bool_operator: {
                     "multi_match": {
                         "query": query,
                         "fields": fields,
                         "type": match_type,
                         # n.b. we still need to include "and" here if we want ALL the terms in query
                         # to be present
-                        "operator": bool_operator
+                        "operator": operator
                     }
                 }
             }
@@ -203,10 +233,7 @@ def add_filter(query_dict, field, values):
 
 
 def get_filter(field, values):
-    return {"terms": {
-        field: values
-    }
-    }
+    return {"terms": {field: values}}
 
 
 # todo complete

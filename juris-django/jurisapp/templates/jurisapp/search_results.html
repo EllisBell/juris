@@ -1,34 +1,34 @@
+THIS IS ALT
 Procurou por "{{ query }}" <br><br>
 {{ total }} resultados <br><br>
 
 <div class="pagination">
     <span class="step-links">
-    {% if acordaos.has_previous %}
+    {% if has_previous %}
         <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}"
-        data-page="{{ acordaos.previous_page_number }}"></i>
+        data-page="{{ page|add:-1 }}"></i>
     {% endif %}
 
     <span class="current">
-        Página {{ acordaos.number }} de {{ acordaos.paginator.num_pages }}
+        Página {{ page }} de {{ total_pages }}
     </span>
 
-    {% if acordaos.has_next %}
+    {% if has_next %}
         <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}" 
-        data-page="{{ acordaos.next_page_number }}"></i>
+        data-page="{{ page|add:1 }}"></i>
     {% endif %}
 </span>
 </div>
 
 {% for acordao in acordaos %}
 <div class="acordao-result">
-<div class="result-link"><a href="/jurisapp/acordao/{{ acordao.acordao_id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
-<span class="result-field">Tribunal:</span> {{ acordao.tribunal.long_name }} <br>
+<div class="result-link"><a href="/jurisapp/acordao/{{ acordao.id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
+<span class="result-field">Tribunal:</span> {{ acordao.tribunal_long }} <br>
 <span class="result-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }} <br>
 <span class="result-field">Relator:</span> {{acordao.relator}}<br>
-<a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver acórdão dgsi</a> <br>
 <div class="result-descritores">
-{% for desc in acordao.acordaodescritor_set.all %}
-<div class="descritor-div"><span class="result-descritor">{{ desc.descritor}}</span></div> 
+{% for desc in acordao.descritores %}
+<div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
 {% endfor %}
 </div>
 <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
@@ -37,19 +37,18 @@ Procurou por "{{ query }}" <br><br>
 
 <div class="pagination">
     <span class="step-links">
-    {% if acordaos.has_previous %}
+    {% if has_previous %}
         <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}"
-        data-page="{{ acordaos.previous_page_number }}"></i>
+        data-page="{{ page|add:-1 }}"></i>
     {% endif %}
 
     <span class="current">
-        Página {{ acordaos.number }} de {{ acordaos.paginator.num_pages }}
+        Página {{ page }} de {{ total_pages }}
     </span>
 
-    {% if acordaos.has_next %}
+    {% if has_next %}
         <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}" 
-        data-page="{{ acordaos.next_page_number }}"></i>
+        data-page="{{ page|add:1 }}"></i>
     {% endif %}
 </span>
 </div>
-

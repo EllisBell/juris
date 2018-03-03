@@ -2,12 +2,17 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Acordao
 from . import acordao_search
+from . import search as s
+from django.db.models import Case, When
 
 
 def index(request):
     return render(request, 'jurisapp/index.html')
 
 
+# TODO clean this up
+# TODO allow for and search, or search, phrase search
+# TODO and sorting by date / relevance
 def search(request):
     query = request.GET['query']
 
@@ -18,27 +23,29 @@ def search(request):
     if page is None:
         page = 1
 
-    acordao_results = acordao_search.get_acordaos(query, tribs)
-    print(acordao_results.query)
-
-    paginator = Paginator(acordao_results, 25)
-
+    display = 10
     try:
-        # request may or may not have come with a page number
-        acordaos = paginator.page(page)
-    except PageNotAnInteger:
-        # if no page number, deliver the first page
-        acordaos = paginator.page(1)
-    except EmptyPage:
-        # if page out of range, deliver last page of results
-        acordaos = paginator.page(paginator.num_pages)
+        page = int(page)
+    except ValueError:
+        page = 1
 
-    context_dict = {'total': paginator.count, 'acordaos': acordaos, 'query': query, 'tribs': tribs}
+    results = s.and_search(query, tribs, page, display)
+    total = results['total']
+    acordaos = results['acordaos']
+    curr_page = page
+
+    total_pages = get_total_pages(total, display)
+
+    context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=curr_page,
+                        has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages)
     return render(request, 'jurisapp/search_results.html', context_dict)
 
-    # postgres full text search
-    # https://docs.djangoproject.com/en/1.11/ref/contrib/postgres/search/
-    # https://www.postgresql.org/docs/current/static/textsearch.html
+
+def get_total_pages(total, display):
+    total_pages = total // display
+    if total % display is not 0:
+        total_pages = total_pages + 1
+    return total_pages
 
 
 # individual acordao
