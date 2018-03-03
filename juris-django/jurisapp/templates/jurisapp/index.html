@@ -1,4 +1,10 @@
 {% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block scripts_block %}
+	<script src="{% static "jurisapp/js/jurisappjs.js" %}"></script>
+{% endblock %}
 
 {% block body_block %}
 
@@ -27,6 +33,13 @@
 				<input type="checkbox" class="tribCheck" id="treCheck" checked="true" data-trib="TRE">				
 			</label>
 		</div>
+
+		<div id="orderByButtons">
+  			<button class="orderByButton" id="recentBtn" data-selected="false">Mais Recente</button>
+			<button class="orderByButton" id="relevanceBtn" data-selected="true">Relevância</button>
+
+		</div>
+
 
 		<div class="loading">
 			  <div class="loading-bar"></div>

@@ -70,41 +70,30 @@ $(document).ready(function() {
     	}
     });
 
-
-    /****************** acordao page **********************/
-
-
-/*    loadResults = function(query, page) {
-     $.get('/jurisapp/search/', {query: query, page: page}, function(data) {
-				$('#searchResults').html(data);}
-    }*/
+    $(".orderByButton").click(function(event) {
+    	// TODO search by relevance / sort
+    	setOrderByButtonSelectedAndColours($(this));
+    }); 
 
 
-   function fixSidebarWhenScrollingOnWideScreen() {
-   	var sidebar = $('#ac-sidebar');
-   	if($(window).width() >= 900) {		
-		var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
+    function setOrderByButtonSelectedAndColours(selected) {
+     	var selectedId = selected.attr('id')
 
-		$(window).scroll(function (event) {
-	      var y = $(this).scrollTop();
-	      if (y >= top) {
-	        sidebar.css("position", "fixed");
-	        sidebar.css("top",  0);
-	      } else {
-	        sidebar.css("position", "static");
-	      }
-		});			
-	}
-	else {
-		sidebar.css("position", "static");
-		$(window).off('scroll');
-	}
-   }
+    	$(".orderByButton").each(function(index) {
+    		button = $(this);
+    		buttonId = button.attr('id');
+    		if(buttonId === selectedId) {
+    			button.data("selected", true);
+    			button.css("background-color", "#9ff8cd");
+    		}
+    		if(buttonId != selectedId) {
+    			button.data("selected", false);
+    			button.css("background-color", "#e3e5e4");
+    		}
+    	});
+    }
 
-   fixSidebarWhenScrollingOnWideScreen();
+    setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
-   $(window).resize(function() {
-   	fixSidebarWhenScrollingOnWideScreen();
-   });
 
 });
