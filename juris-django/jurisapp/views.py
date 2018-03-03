@@ -24,19 +24,13 @@ def search(request, sort_by=None):
     # n.b. the [] after tribs is apparently inserted by jQuery (even though we are passing 'tribs' it adds the '[]')
     tribs = request.GET.getlist('tribs[]')
 
-    page = request.GET.get('page')
-    if page is None:
-        page = 1
-
+    page = get_page(request)
     display = 10
-    try:
-        page = int(page)
-    except ValueError:
-        page = 1
 
-    results = s.and_search(query, tribs, page, display, sort_by)
+    results = get_search_results(query, tribs, page, display, sort_by)
 
     total = results['total']
+    print("total now is " + str(total))
     acordaos = results['acordaos']
 
     total_pages = get_total_pages(total, display)
@@ -44,6 +38,30 @@ def search(request, sort_by=None):
     context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
                         has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages)
     return render(request, 'jurisapp/search_results.html', context_dict)
+
+
+def get_page(request):
+    page = request.GET.get('page')
+    try:
+        page = int(page)
+    except (ValueError, TypeError):
+        page = 1
+    return page
+
+
+def get_search_results(query, tribs, page, display, sort_by):
+    if query[0] == "\"" and query[-1] == "\"":
+        query = query.replace("\"", "")
+        results = s.phrase_search(query, tribs, page, display, sort_by)
+    elif ' ou ' in query.lower():
+        query = query.replace(" ou ", " ")
+        print("in or search, query is " + query)
+        results = s.or_search(query, tribs, page, display, sort_by)
+        print("total is " + str(results['total']))
+    else:
+        results = s.and_search(query, tribs, page, display, sort_by)
+
+    return results
 
 
 def get_total_pages(total, display):

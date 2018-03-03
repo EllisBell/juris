@@ -113,7 +113,7 @@ def count_indexed_acordaos(es):
 ## Search Interface ##
 
 # TODO what to do with this
-query_type = "most_fields"
+default_query_type = "most_fields"
 
 
 # analyzes text
@@ -133,19 +133,25 @@ def or_search(query, tribs, page_number, display_size, sort_by=None):
     return search_with_paging(query, tribs, "or", page_number, display_size, sort_by)
 
 
+def phrase_search(query, tribs, page_number, display_size, sort_by=None):
+    return search_with_paging(query, tribs, "and", page_number, display_size, sort_by, "phrase")
+
+
 def search(query, tribs, operator):
-    res = search_all_fields(query, query_type, operator, tribs)
+    res = search_all_fields(query, default_query_type, operator, tribs)
     return get_ids_from_res(res)
 
 
-def search_with_paging(query, tribs, operator, page_number, display_size, sort_by):
+def search_with_paging(query, tribs, operator, page_number, display_size, sort_by, query_type="most_fields"):
     if not page_number:
         page_number = 1
 
+    print("in search with paging, query is " + query)
     start = (page_number - 1) * display_size
     res = search_all_fields(query, query_type, operator, sort_by, tribs, start, display_size)
     results = get_results_dict_from_res(res)
     total = results['total']
+    print("in search with paging, total is " + str(total))
     has_next = (page_number * display_size) < total
     has_previous = (page_number is not 1) and (page_number - 1) * display_size < total
     results['has_next'] = has_next
@@ -180,10 +186,11 @@ def search_all_fields(query, match_type, operator, sort_by, tribs=None, start_at
     body = add_sort(body, sort_by)
     if tribs:
         body = add_filter(body, "tribunal", tribs)
+    print("body is")
+    print(body)
     res = es.search(index="acordao_idx", body=body, _source_exclude=['tribunal', 'txt_integral', 'txt_parcial'],
                     from_=start_at, size=res_size)
     return res
-
 
 
 def get_searchable_fields():
@@ -205,15 +212,10 @@ def get_basic_multi_match_query(query, fields, match_type, operator):
 
 
 def get_multi_match_query(query, fields, match_type, operator):
-    if operator == "and":
-        bool_operator = "must"
-    else:
-        bool_operator = "should"
-
     query = {
         "query": {
             "bool": {
-                bool_operator: {
+                "must": {
                     "multi_match": {
                         "query": query,
                         "fields": fields,
