@@ -1,8 +1,5 @@
 <div id="currentSearch" data-query="{{ query }}" data-tribs="{{ tribs }}" data-page="{{ page }}"></div>
 
-Procurou por "{{ query }}" <br><br>
-{{ total }} resultados <br><br>
-
 <div class="pagination">
     <span class="step-links">
     {% if has_previous %}
@@ -10,7 +7,7 @@ Procurou por "{{ query }}" <br><br>
     {% endif %}
 
     <span class="current">
-        Página {{ page }} de {{ total_pages }}
+        {{ total }} resultados // Página {{ page }} de {{ total_pages }}
     </span>
 
     {% if has_next %}
@@ -41,7 +38,7 @@ Procurou por "{{ query }}" <br><br>
     {% endif %}
 
     <span class="current">
-        Página {{ page }} de {{ total_pages }}
+        {{ total }} resultados // Página {{ page }} de {{ total_pages }}
     </span>
 
     {% if has_next %}

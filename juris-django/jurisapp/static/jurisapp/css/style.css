@@ -254,13 +254,14 @@ header h1 {
   }
 }
 
-#container {
-	height: 100%;
-	position: relative;
-	top: -5%;
-}
 
 /* STYLE FOR ACORDAO PAGE */
+#container {
+	position: relative;
+	top: -5%;
+	margin-bottom: 2%;
+}
+
 #ac-sidebar {
 	float:left;
 	height:100%;
