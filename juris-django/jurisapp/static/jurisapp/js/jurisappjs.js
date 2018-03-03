@@ -14,11 +14,8 @@ $(document).ready(function() {
 			}
 
 			showLoadingBar();
-
-		 	$.get('/jurisapp/search/', {query: query, tribs: tribs}, function(data) {
-				$(".loading").css("visibility", "hidden");
-				$('#searchResults').html(data);
-			});
+            setOrderByButtonSelectedAndColours($("#relevanceBtn"));
+            getRelevant(query, tribs, 1);
 		}
 	});
 
@@ -32,28 +29,62 @@ $(document).ready(function() {
 		return tribs;
 	}
 
+	function showOrderByButtons() {
+		$("#orderByButtons").css("visibility", "visible");
+	}
+
     // this adds event to buttons loaded through ajax call
     $(document).on("click", '.pageBtn', function(event) {
-        var query = $(this).data("query");
-        var page = $(this).data("page");
-        // Get array of tribs as string and parse into array. Tribs passed from server so this search uses same set of tribs,
-        // rather than the ones currently checked (which may have changed)
-        // Comes from server as single quoted values so replace with double quotes for JSON parse to work
-        var tribs = $(this).data("tribs");
-        tribs = JSON.parse(tribs.replace(/'/g, "\""));
+        var searchData = getCurrentSearchData();
+        var pageToGoTo = $(this).hasClass("prevBtn") ? searchData.page-1 : searchData.page+1;
 
         // TODO look into improving pagination/search results UX e.g. when to clear, where to focus, progress bar etc.
         $(window).scrollTop(0);
  		showLoadingBar();
-
-        $.get('/jurisapp/search/', {query: query, tribs: tribs, page: page}, function(data) {
-				$(".loading").css("visibility", "hidden");
-				$('#searchResults').html(data);
-		 });
+        if($("#relevanceBtn").data("selected")) {
+            getRelevant(searchData.query, searchData.tribs, pageToGoTo);
+        }
+        else {
+            getRecent(searchData.query, searchData.tribs, pageToGoTo);
+        }
     });
 
+    function getCurrentSearchData() {
+        var query = $("#currentSearch").data("query");
+        var page = $("#currentSearch").data("page");
+        // Get array of tribs as string and parse into array. Tribs passed from server so this search uses same set of tribs,
+        // rather than the ones currently checked (which may have changed)
+        // Comes from server as single quoted values so replace with double quotes for JSON parse to work
+        var tribs = $("#currentSearch").data("tribs");
+        tribs = JSON.parse(tribs.replace(/'/g, "\""));
+
+        var searchData = {
+            query: query,
+            page: page,
+            tribs: tribs
+        }
+        return searchData;
+    }
+
+
+    function getRelevant(query, tribs, page) {
+         $.get('/jurisapp/search_relevant/', {query: query, tribs: tribs, page: page}, function(data) {
+                $(".loading").css("visibility", "hidden");
+                $('#searchResults').html(data);
+                showOrderByButtons();
+         });
+    }
+
+    function getRecent(query, tribs, page) {
+        $.get('/jurisapp/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
+                $(".loading").css("visibility", "hidden");
+                $('#searchResults').html(data);
+                showOrderByButtons();
+        });
+    }
+
     function showLoadingBar() {
-            $('#searchResults').html("")
+        $('#searchResults').html("")
  		$(".loading").css("visibility", "visible");
     }
 
@@ -71,8 +102,18 @@ $(document).ready(function() {
     });
 
     $(".orderByButton").click(function(event) {
-    	// TODO search by relevance / sort
-    	setOrderByButtonSelectedAndColours($(this));
+    	currentlyRelevant = $("#relevanceBtn").data("selected");
+        
+        setOrderByButtonSelectedAndColours($(this));
+
+        var searchData = getCurrentSearchData();
+
+        if($("#relevanceBtn").data("selected") && !currentlyRelevant) {
+            getRelevant(searchData.query, searchData.tribs, 1);
+        }
+        else if($("#recentBtn").data("selected") && currentlyRelevant) {
+            getRecent(searchData.query, searchData.tribs, 1);
+        }
     }); 
 
 

@@ -93,6 +93,10 @@ header h1 {
 	padding: 8px;
 }
 
+#orderByButtons {
+	visibility: hidden;
+}
+
 #orderByButtons button {
 	outline: none;
 	box-shadow: none;	
@@ -100,7 +104,9 @@ header h1 {
 	border: none;
 	float:right;
 	padding: 4px;
-	font-weight: bold;
+	font-family: inherit;
+	font-weight: normal;
+	font-size: inherit;
 }
 
 #orderByButtons button:not(:last-child) {

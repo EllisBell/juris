@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch, helpers
 from .models import Acordao
 from datetime import datetime
 
+
 def get_es():
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
     return es
@@ -66,7 +67,7 @@ def get_bulk_actions():
 # TODO figure out how to update index rather than deleting and reindexing everything
 # todo as that takes quite a while
 
-#TODO try denormalizing acordao descritores to improve indexing performance? avoid loads of db calls
+# TODO try denormalizing acordao descritores to improve indexing performance? avoid loads of db calls
 
 # Todo add other properties, including descritores...
 # todo add descritores as array
@@ -124,12 +125,12 @@ def test_analyse(analyser, text):
 
 # interface
 # Main search, called from view
-def and_search(query, tribs, page_number, display_size):
-    return search_with_paging(query, tribs, "and", page_number, display_size)
+def and_search(query, tribs, page_number, display_size, sort_by=None):
+    return search_with_paging(query, tribs, "and", page_number, display_size, sort_by)
 
 
-def or_search(query, tribs, page_number, display_size):
-    return search_with_paging(query, tribs, "or", page_number, display_size)
+def or_search(query, tribs, page_number, display_size, sort_by=None):
+    return search_with_paging(query, tribs, "or", page_number, display_size, sort_by)
 
 
 def search(query, tribs, operator):
@@ -137,12 +138,12 @@ def search(query, tribs, operator):
     return get_ids_from_res(res)
 
 
-def search_with_paging(query, tribs, operator, page_number, display_size):
+def search_with_paging(query, tribs, operator, page_number, display_size, sort_by):
     if not page_number:
         page_number = 1
 
     start = (page_number - 1) * display_size
-    res = search_all_fields(query, query_type, operator, tribs, start, display_size)
+    res = search_all_fields(query, query_type, operator, sort_by, tribs, start, display_size)
     results = get_results_dict_from_res(res)
     total = results['total']
     has_next = (page_number * display_size) < total
@@ -172,15 +173,17 @@ def get_results_dict_from_res(res):
     return results
 
 
-def search_all_fields(query, match_type, operator, tribs=None, start_at=0, res_size=10):
+def search_all_fields(query, match_type, operator, sort_by, tribs=None, start_at=0, res_size=10):
     es = get_es()
     fields = get_searchable_fields()
     body = get_multi_match_query(query, fields, match_type, operator)
+    body = add_sort(body, sort_by)
     if tribs:
         body = add_filter(body, "tribunal", tribs)
     res = es.search(index="acordao_idx", body=body, _source_exclude=['tribunal', 'txt_integral', 'txt_parcial'],
                     from_=start_at, size=res_size)
     return res
+
 
 
 def get_searchable_fields():
@@ -225,6 +228,13 @@ def get_multi_match_query(query, fields, match_type, operator):
     }
 
     return query
+
+
+def add_sort(query_dict, sort_field):
+    if not sort_field:
+        sort_field = "_score"
+    query_dict["sort"] = [{sort_field: "desc"}]
+    return query_dict
 
 
 def add_filter(query_dict, field, values):

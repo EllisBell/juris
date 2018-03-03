@@ -1,11 +1,12 @@
+<div id="currentSearch" data-query="{{ query }}" data-tribs="{{ tribs }}" data-page="{{ page }}"></div>
+
 Procurou por "{{ query }}" <br><br>
 {{ total }} resultados <br><br>
 
 <div class="pagination">
     <span class="step-links">
     {% if has_previous %}
-        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}"
-        data-page="{{ page|add:-1 }}"></i>
+        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true"></i>
     {% endif %}
 
     <span class="current">
@@ -13,8 +14,7 @@ Procurou por "{{ query }}" <br><br>
     </span>
 
     {% if has_next %}
-        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}" 
-        data-page="{{ page|add:1 }}"></i>
+        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true"></i>
     {% endif %}
 </span>
 </div>
@@ -37,8 +37,7 @@ Procurou por "{{ query }}" <br><br>
 <div class="pagination">
     <span class="step-links">
     {% if has_previous %}
-        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}"
-        data-page="{{ page|add:-1 }}"></i>
+        <i class="fa fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true"></i>
     {% endif %}
 
     <span class="current">
@@ -46,8 +45,7 @@ Procurou por "{{ query }}" <br><br>
     </span>
 
     {% if has_next %}
-        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true" data-query="{{ query }}" data-tribs="{{ tribs }}" 
-        data-page="{{ page|add:1 }}"></i>
+        <i class="fa fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true"></i>
     {% endif %}
 </span>
 </div>

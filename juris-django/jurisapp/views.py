@@ -1,19 +1,24 @@
 from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Acordao
-from . import acordao_search
 from . import search as s
-from django.db.models import Case, When
 
 
 def index(request):
     return render(request, 'jurisapp/index.html')
 
 
+def search_relevant(request):
+    return search(request)
+
+
+def search_recent(request):
+    return search(request, "data")
+
+
 # TODO clean this up
 # TODO allow for and search, or search, phrase search
 # TODO and sorting by date / relevance
-def search(request):
+def search(request, sort_by=None):
     query = request.GET['query']
 
     # n.b. the [] after tribs is apparently inserted by jQuery (even though we are passing 'tribs' it adds the '[]')
@@ -29,14 +34,14 @@ def search(request):
     except ValueError:
         page = 1
 
-    results = s.and_search(query, tribs, page, display)
+    results = s.and_search(query, tribs, page, display, sort_by)
+
     total = results['total']
     acordaos = results['acordaos']
-    curr_page = page
 
     total_pages = get_total_pages(total, display)
 
-    context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=curr_page,
+    context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
                         has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages)
     return render(request, 'jurisapp/search_results.html', context_dict)
 
