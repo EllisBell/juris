@@ -82,7 +82,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'gallowspole',
         'HOST': 'localhost',
-
+        'CONN_MAX_AGE': 600,
     }
 }
 

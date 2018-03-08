@@ -107,7 +107,7 @@ $(document).ready(function() {
         setOrderByButtonSelectedAndColours($(this));
 
         var searchData = getCurrentSearchData();
-
+        showLoadingBar();
         if($("#relevanceBtn").data("selected") && !currentlyRelevant) {
             getRelevant(searchData.query, searchData.tribs, 1);
         }

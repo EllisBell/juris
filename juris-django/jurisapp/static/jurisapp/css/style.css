@@ -12,7 +12,7 @@ html {
 	height: 100%;
 	overflow-y: scroll;
 	font-size: 16px;
-	background-color: #f7f7f7;
+	/*background-color: #f7f7f7;*/
 }
 
 body {
@@ -36,13 +36,14 @@ header h1 {
 }
 
 #logo {
-	font-family: 'Barlow', sans-serif;
+	font-family: inherit;
 	color: #3c434f;
+	font-size: 1rem;
 }
 
 #logo a {
 	text-decoration: none;
-	font-family: 'Barlow', sans-serif;
+	font-family: inherit;
 	color: #3c434f;
 }
 
@@ -63,14 +64,14 @@ header h1 {
 
 #searchbox {
 	display: block;
-	width: 50%;
-	margin: 0 auto;
+	width: 55%;
+	/*margin: 0 auto;*/
 	box-shadow: none;
 	border:none;
 	border-bottom: 3px solid black;
 	border-radius: 0;
 	font-size: 2rem;
-	background-color: #f7f7f7;
+	background-color: inherit;
 }
 
 #searchbox:focus {
@@ -84,7 +85,7 @@ header h1 {
 }
 
 .tribLabel {
-	margin-right: 5%;
+	margin-right: 0%;
 	white-space: nowrap;
 	/* default colour for checked */
 	background-color: #9ff8cd;
@@ -107,12 +108,8 @@ header h1 {
 	font-family: inherit;
 	font-weight: normal;
 	font-size: inherit;
+	cursor: pointer;
 }
-
-#orderByButtons button:not(:last-child) {
-    border-right: none; /* Prevent double borders */
-}
-
 
 #searchResults {
 	width:100%;
@@ -364,6 +361,10 @@ header h1 {
 @media only screen and (max-width: 524px) {
 	html {
 		font-size: 16px;
+	}
+
+	#logo {
+		font-size: 1rem;
 	}
 
 	#content {

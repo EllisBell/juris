@@ -7,7 +7,7 @@ base_url = "http://www.dgsi.pt"
 
 
 def get_page(url):
-    content = scraper.try_get_page_content(url, 5, 1)
+    content = scraper.try_get_page_content(url, 5, 0.2)
     return content
 
 

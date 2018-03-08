@@ -10,7 +10,7 @@ max_page_count = 1000
 # Return how many acordaos scraped
 # Here just scrape for acordao urls
 def scrape_page(page_url):
-    content = scraper.try_get_page_content(page_url, 5, 1)
+    content = scraper.try_get_page_content(page_url, 5, 0.2)
     soup = BeautifulSoup(content, 'html.parser')
     # Get links for the acordaos
     links = soup.find_all('a', href=re.compile('OpenDocument'))

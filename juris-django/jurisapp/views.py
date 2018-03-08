@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Acordao
-from . import search as s
+from . import acordao_search
 
 
 def index(request):
@@ -27,12 +27,10 @@ def search(request, sort_by=None):
     page = get_page(request)
     display = 10
 
-    results = get_search_results(query, tribs, page, display, sort_by)
+    results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
 
     total = results['total']
-    print("total now is " + str(total))
     acordaos = results['acordaos']
-
     total_pages = get_total_pages(total, display)
 
     context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
@@ -47,21 +45,6 @@ def get_page(request):
     except (ValueError, TypeError):
         page = 1
     return page
-
-
-def get_search_results(query, tribs, page, display, sort_by):
-    if query[0] == "\"" and query[-1] == "\"":
-        query = query.replace("\"", "")
-        results = s.phrase_search(query, tribs, page, display, sort_by)
-    elif ' ou ' in query.lower():
-        query = query.replace(" ou ", " ")
-        print("in or search, query is " + query)
-        results = s.or_search(query, tribs, page, display, sort_by)
-        print("total is " + str(results['total']))
-    else:
-        results = s.and_search(query, tribs, page, display, sort_by)
-
-    return results
 
 
 def get_total_pages(total, display):

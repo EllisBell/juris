@@ -36,7 +36,7 @@ html_txt_parcial    varchar,
 html_txt_integral   varchar,
 url                 varchar,
 date_loaded         timestamp,
-searchable_idx_col  tsvector
+descritores         varchar
 )
 
 CREATE TABLE acordao_descritor (

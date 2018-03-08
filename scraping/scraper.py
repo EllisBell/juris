@@ -20,7 +20,7 @@ def try_get_page_content(url, max_attempts, wait_time):
             content = get_page_content(url)
             return content
         except requests.exceptions.RequestException as e:
-            # log exception
+            # todo log exception
             print("exception requesting " + url + ": " + str(e))
             if attempts == max_attempts:
                 raise

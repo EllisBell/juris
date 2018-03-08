@@ -28,11 +28,14 @@ class AcordaoSaver(object):
 
     # TODO need to give this the tribunal to which it pertains (e.g. pass in tribunal id)
     def save(self, acordao):
+        # prepare descritores for saving
+        desc_string = "|".join(acordao.descritores)
+
         cur = self.conn.cursor()
 
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
                  txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, html_txt_parcial, 
-                 txt_integral, html_txt_integral, url, date_loaded)
+                 txt_integral, html_txt_integral, url, date_loaded, descritores)
                  VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING acordao_id"""
 
         cur.execute(sql, (
@@ -41,7 +44,7 @@ class AcordaoSaver(object):
             acordao.texto_parcial_flag,
             acordao.meio_processual, acordao.decisao, acordao.sumario, acordao.dec_texto_parcial,
             acordao.html_txt_parcial, acordao.dec_texto_integral, acordao.html_texto_integral,
-            acordao.url, datetime.datetime.now()))
+            acordao.url, datetime.datetime.now(), desc_string))
 
         # since we included "RETURNING id" in insert stmt, we can get the id from result
         acordao_id = cur.fetchone()[0]

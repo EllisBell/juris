@@ -1,10 +1,11 @@
+drop function get_concatenated_descritores(p_acordao integer);
 
 -- Function to get all descritores for an acordao, concatenated
 create function get_concatenated_descritores(p_acordao integer) returns varchar as $$
 declare
     v_descritores varchar;
 begin
-    select string_agg(descritor, ' ')
+    select string_agg(descritor, '|')
     into v_descritores
     from acordao_descritor
     where acordao_id = p_acordao;

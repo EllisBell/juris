@@ -46,7 +46,7 @@ class Acordao(models.Model):
     html_txt_integral = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)
     date_loaded = models.DateTimeField(blank=True, null=True)
-    searchable_idx_col = SearchVectorField(blank=True, null=True)
+    descritores = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.processo

@@ -2,8 +2,16 @@ import trib_scraper as ts
 import acordao_scraper as acs
 import acordao_saver
 
+default_trib_dict = {
+    "TRL": "/jtrl.nsf?OpenDatabase",
+    "TRP": "/jtrp.nsf?OpenDatabase",
+    "TRC": "/jtrc.nsf?OpenDatabase",
+    "TRE": "/jtre.nsf?OpenDatabase",
+    "TRG": "/jtrg.nsf?OpenDatabase"
+}
 
-def scrape_tribs(tribs):
+
+def scrape_tribs(tribs = default_trib_dict):
     for trib_id, url in tribs.items():
         scrape_and_save_all(url, trib_id)
 
