@@ -5,11 +5,12 @@ $(document).ready(function() {
    function fixSidebarWhenScrollingOnWideScreen() {
    	var sidebar = $('#ac-sidebar');
    	if($(window).width() >= 900) {		
-		var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
+		var topOfSidebar = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
 
 		$(window).scroll(function (event) {
 	      var y = $(this).scrollTop();
-	      if (y >= top) {
+          var scrollBelowTopOfSidebar = (y >= topOfSidebar);
+          if (scrollBelowTopOfSidebar) {
 	        sidebar.css("position", "fixed");
 	        sidebar.css("top",  0);
 	      } else {

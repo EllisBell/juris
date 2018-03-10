@@ -18,10 +18,10 @@
 			<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
     	</div>
     	<div id="acordao-other-info">
-    		<div><span class="ac-sidebar-field">Número:</span> {{ acordao.numero }}</div>
-    		<div><span class="ac-sidebar-field">Votação:</span> {{ acordao.votacao }}</div>
-    		<div><span class="ac-sidebar-field">Meio Processual:</span> {{ acordao.meio_processual }}</div>
-    		<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>
+    		{% if acordao.numero %}<div><span class="ac-sidebar-field">Número:</span> {{ acordao.numero }}</div>{% endif %}
+    		{% if acordao.votacao %}<div><span class="ac-sidebar-field">Votação:</span> {{ acordao.votacao }}</div>{% endif %}
+    		{% if acordao.meio_processual %}<div><span class="ac-sidebar-field">Meio Processual:</span> {{ acordao.meio_processual }}</div>{% endif %}
+    		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>{% endif %}
     		<div><span class="ac-sidebar-field"><a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver versão dgsi.pt</a></span></div>
     	</div>
     	<div id="acordao-icons">
@@ -30,7 +30,7 @@
 	</div>
 
 	<div id="ac-content">
-		<div class="result-descritores">
+		<div class="acordao-result-descritores">
 			{% for desc in acordao.acordaodescritor_set.all %}
 				<div class="descritor-div"><span class="result-descritor">{{ desc.descritor}}</span></div> 
 			{% endfor %}

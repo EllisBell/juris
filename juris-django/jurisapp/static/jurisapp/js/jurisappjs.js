@@ -39,7 +39,9 @@ $(document).ready(function() {
         var pageToGoTo = $(this).hasClass("prevBtn") ? searchData.page-1 : searchData.page+1;
 
         // TODO look into improving pagination/search results UX e.g. when to clear, where to focus, progress bar etc.
-        $(window).scrollTop(0);
+        if($(this).hasClass("bottomPageBtn")) {
+            $(window).scrollTop(0);
+        }
  		showLoadingBar();
         if($("#relevanceBtn").data("selected")) {
             getRelevant(searchData.query, searchData.tribs, pageToGoTo);
@@ -71,6 +73,7 @@ $(document).ready(function() {
          $.get('/jurisapp/search_relevant/', {query: query, tribs: tribs, page: page}, function(data) {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
+                $('#searchResults').css("visibility", "visible");
                 showOrderByButtons();
          });
     }
@@ -79,14 +82,19 @@ $(document).ready(function() {
         $.get('/jurisapp/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
+                $('#searchResults').css("visibility", "visible");
                 showOrderByButtons();
         });
     }
 
     function showLoadingBar() {
-        $('#searchResults').html("")
+        // TODO this is moving scroll bar up for some reason, fix
+        var currentPos = $(window).scrollTop();
+       // $('#searchResults').empty();
+        $('#searchResults').css("visibility", "hidden");
+        $('html,body').scrollTop(currentPos);
  		$(".loading").css("visibility", "visible");
-    }
+        }
 
     // Changing checkbox/label colour when checked/unchecked
     $("input[type='checkbox']").change(function() {
@@ -107,11 +115,13 @@ $(document).ready(function() {
         setOrderByButtonSelectedAndColours($(this));
 
         var searchData = getCurrentSearchData();
-        showLoadingBar();
+
         if($("#relevanceBtn").data("selected") && !currentlyRelevant) {
+            showLoadingBar();
             getRelevant(searchData.query, searchData.tribs, 1);
         }
         else if($("#recentBtn").data("selected") && currentlyRelevant) {
+            showLoadingBar();
             getRecent(searchData.query, searchData.tribs, 1);
         }
     }); 

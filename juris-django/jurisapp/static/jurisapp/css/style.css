@@ -21,14 +21,22 @@ body {
 	border:0px;
 	height: 100%;
 	font-family: 'Barlow', sans-serif;
-	color: black;
+	color: #0f1013;
+}
+
+#all-content {
+	margin: 0 auto;
+	height: 100%;
+	max-width: 80%;
 }
 
 header {
-	height: 10%;
+	/*height: 5%;*/
 	margin-top: 0px;
 	margin-bottom:15px;
-	padding:10px;
+	/*padding:10px;*/
+	padding-top: 10px;
+	position: relative;
 }
 
 header h1 {
@@ -38,7 +46,8 @@ header h1 {
 #logo {
 	font-family: inherit;
 	color: #3c434f;
-	font-size: 1rem;
+	font-size: 0.85rem;
+	display: inline-block;
 }
 
 #logo a {
@@ -54,21 +63,29 @@ header h1 {
 	/*color: #98ff98;*/
 }
 
+#header-info {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
 #content {
-	padding-top: 5px;	
-	margin: 0 auto;
-	max-width: 65%;
+	/*padding-top: 5%;	*/
+	/*margin: 0 auto;*/
+	margin-top: 8%;
+	/*max-width: 65%;*/
 	/* TODO fix this height issue; avoid whitespace at bottom */
 	height:80%;
+	width: inherit;
 }
 
 #searchbox {
 	display: block;
-	width: 55%;
+	width: 50%;
 	/*margin: 0 auto;*/
 	box-shadow: none;
 	border:none;
-	border-bottom: 3px solid black;
+	border-bottom: 3px solid #1E2127;
 	border-radius: 0;
 	font-size: 2rem;
 	background-color: inherit;
@@ -80,8 +97,8 @@ header h1 {
 }
 
 #tribCheckBoxes {
-	margin: 0 auto;
 	margin-top: 3%;
+	width: 90%;
 }
 
 .tribLabel {
@@ -90,7 +107,7 @@ header h1 {
 	/* default colour for checked */
 	background-color: #9ff8cd;
 	display: inline-block;
-	margin-bottom: 2%;
+	margin-bottom: 0.5%;
 	padding: 8px;
 }
 
@@ -109,10 +126,11 @@ header h1 {
 	font-weight: normal;
 	font-size: inherit;
 	cursor: pointer;
+	padding: 1%;
 }
 
 #searchResults {
-	width:100%;
+	width:85%;
 	padding-bottom: 2%
 }
 
@@ -139,7 +157,7 @@ header h1 {
 
 .acordao-result {
 	margin-top: 2%;
-	margin-bottom: 2%;
+	margin-bottom: 3%;
 	padding-bottom:1%;
 	font-size: 1.1rem;
 }
@@ -177,8 +195,8 @@ header h1 {
 .result-descritor {
 	font-weight: bold;
     white-space: nowrap;
-    /*background-color: #b5ffc5;*/
-    background-color: #9ff8cd;
+    background-color: #b5ffc5;
+    /*background-color: #9ff8cd;*/
     /*background-color: #12e880;*/
     padding: 5px;
 }
@@ -201,7 +219,7 @@ header h1 {
   display: block;
   margin: 0 auto;
   position: relative;
-  top:20%;
+  top:25%;
   visibility: hidden;
   text-align: center;
 }
@@ -254,8 +272,8 @@ header h1 {
 
 /* STYLE FOR ACORDAO PAGE */
 #container {
-	position: relative;
-	top: -5%;
+	position: static;
+	margin-top: 8%;
 	margin-bottom: 2%;
 }
 
@@ -263,13 +281,13 @@ header h1 {
 	float:left;
 	height:100%;
 	width: 28%;
-	padding-left: 10px;
-	padding-top: 18px;
+	/*padding-left: 10px;*/
 	padding-bottom: 5px;
+	font-size: 1.1rem;
 }
 
 #acordao-main-info {
-	font-size: 1.25rem;
+	font-size: 1.1rem;
 }
 
 #colortest {
@@ -290,7 +308,6 @@ header h1 {
 	max-width: 60%;
 	margin-left: 30%;
 	padding-left: 2%;
-	padding-top: 1%;
 	font-size: 1.1rem;
 	line-height: 1.5rem;
 	/*border: 1px solid blue;*/
