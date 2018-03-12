@@ -21,8 +21,8 @@ $(document).ready(function() {
 
 	function getCheckedTribs() {
 		var tribs = []
-		$(".tribCheck").each(function() {
-			if($(this).prop("checked")) {
+		$(".tribLabel").each(function() {
+			if($(this).data("selected")) {
 				tribs.push($(this).data("trib"));
 			}
 		});
@@ -97,7 +97,7 @@ $(document).ready(function() {
         }
 
     // Changing checkbox/label colour when checked/unchecked
-    $("input[type='checkbox']").change(function() {
+  /*  $("input[type='checkbox']").change(function() {
     	var chkBox = $(this);
      	var label = $(this).parent();
 
@@ -107,6 +107,34 @@ $(document).ready(function() {
     	else {
     		label.css("background-color", "#e3e5e4");
     	}
+    });*/
+
+    $(".tribLabel").click(function(e) {
+        var label = $(this);
+        var currentlySelected = label.data("selected");
+        if(!currentlySelected) {
+            label.css("background-color", "#b4dce0");
+            label.children(".ticked").css("display", "inline");
+            label.children(".not-ticked").css("display", "none");
+            label.data("selected", true);
+        }
+        else {
+            label.css("background-color", "#e3e5e4");
+            label.children(".ticked").css("display", "none");
+            label.children(".not-ticked").css("display", "inline");           
+            label.data("selected", false)
+        }
+    });
+
+    function setTribLabel(label) {
+        label.css("background-color", "#b4dce0");
+        label.children(".ticked").css("display", "inline");
+        label.children(".not-ticked").css("display", "none");
+        label.data("selected", true);
+    }
+
+    $(".tribLabel").each(function(index) {
+        setTribLabel($(this));
     });
 
     $(".orderByButton").click(function(event) {
@@ -135,8 +163,9 @@ $(document).ready(function() {
     		buttonId = button.attr('id');
     		if(buttonId === selectedId) {
     			button.data("selected", true);
-    			button.css("background-color", "#9ff8cd");
-    		}
+    			//button.css("background-color", "#9ff8cd");
+                button.css("background-color", "#b4dce0");
+            }
     		if(buttonId != selectedId) {
     			button.data("selected", false);
     			button.css("background-color", "#e3e5e4");

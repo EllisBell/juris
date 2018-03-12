@@ -59,8 +59,9 @@ header h1 {
 
 #ponto {
 	/*color: #2aed9c;*/
-	color: #12e880;
+	/*color: #12e|880;*/
 	/*color: #98ff98;*/
+	color: #81bbc0;
 }
 
 #header-info {
@@ -105,10 +106,20 @@ header h1 {
 	margin-right: 0%;
 	white-space: nowrap;
 	/* default colour for checked */
-	background-color: #9ff8cd;
+	/*background-color: #9ff8cd;*/
+	background-color: #b4dce0;
 	display: inline-block;
 	margin-bottom: 0.5%;
 	padding: 8px;
+	cursor: pointer;
+}
+
+.tick-icon {
+	color: #3c434f;
+}
+
+.not-ticked {
+	display: none;
 }
 
 #orderByButtons {
@@ -118,7 +129,8 @@ header h1 {
 #orderByButtons button {
 	outline: none;
 	box-shadow: none;	
-	background-color: #9ff8cd;
+	/*background-color: #9ff8cd;*/
+	background-color: #b4dce0;
 	border: none;
 	float:right;
 	padding: 4px;
@@ -134,8 +146,9 @@ header h1 {
 	padding-bottom: 2%
 }
 
-.pagination i {
-	color: #12e880;
+
+.pageBtn {
+	color: #81bbc0;
 	font-size: 1.5rem;
 }
 
@@ -179,7 +192,7 @@ header h1 {
 	font-size: 1.2rem;
 	color: black;
 	text-decoration: none;
-	border-bottom: 2px solid #12e880;
+	border-bottom: 2px solid #81bbc0;
 	font-weight: bold;
 }
 
@@ -195,9 +208,9 @@ header h1 {
 .result-descritor {
 	font-weight: bold;
     white-space: nowrap;
-    background-color: #b5ffc5;
+    /*background-color: #b5ffc5;*/
     /*background-color: #9ff8cd;*/
-    /*background-color: #12e880;*/
+    background-color: #e3f4f6;
     padding: 5px;
 }
 
@@ -241,7 +254,7 @@ header h1 {
 }
 
 .loading-bar:nth-child(1) {
-  background-color: #12e880;
+  background-color: #81bbc0;
   animation-delay: 0;
 }
 .loading-bar:nth-child(2) {
@@ -249,7 +262,7 @@ header h1 {
   animation-delay: 0.09s;
 }
 .loading-bar:nth-child(3) {
-  background-color: #12e880;
+  background-color: #81bbc0;
   animation-delay: .18s;
 }
 .loading-bar:nth-child(4) {
@@ -291,7 +304,7 @@ header h1 {
 }
 
 #colortest {
-	color: #12e880;
+	color: #81bbc0;
 	font-size: 2.5rem;
 }
 
