@@ -58,5 +58,9 @@ def get_total_pages(total, display):
 def acordao(request, acordao_id):
     print("got to acordao view")
     ac = Acordao.objects.get(pk=acordao_id)
+    # descritores are in a concatenated string, split them into list
+    descritores = ac.descritores
+    desc_list = descritores.split("|")
+    ac.descritores = desc_list
     context_dict = {'acordao': ac}
     return render(request, 'jurisapp/acordao.html', context_dict)

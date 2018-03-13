@@ -1,5 +1,6 @@
 import psycopg2 as ppg
 import datetime
+import os
 
 
 # Should I be using something like sqlalchemy (providing a layer of abstraction/ORM) rather than pyscopg2 directly?
@@ -9,12 +10,8 @@ import datetime
 class AcordaoSaver(object):
     def __init__(self):
         # TODO review when to connect, close etc... pooled connections?
-        self.conn = ppg.connect("dbname=jurisdb user=jurisuser password=intenserecovery")
-
-    # have function for checking whether acordao already in db before saving
-    def check_exists(self, processo, data):
-        # query db to check if acordao with this processo and date already saved
-        return False
+        password = os.environ.get('JURIS_DB_PW', '')
+        self.conn = ppg.connect("dbname=jurisdb user=jurisuser password=" + password)
 
     def get_currently_saved(self, trib_id):
         # query db to get urls of all currently saved acordaos

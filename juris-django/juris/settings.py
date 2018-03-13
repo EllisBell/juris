@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e7+7%^$#9@cq4+47697hdp%(p&*h%__*pv_ot7@214!hbat_q6'
+SECRET_KEY = os.environ.get('JURIS_SECRET', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jurisdb',
-        'USER': 'postgres',
-        'PASSWORD': 'gallowspole',
+        'USER': 'jurisuser',
+        'PASSWORD': os.environ.get('JURIS_DB_PW', ''),
         'HOST': 'localhost',
         'CONN_MAX_AGE': 600,
     }
