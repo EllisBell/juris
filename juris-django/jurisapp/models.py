@@ -55,18 +55,6 @@ class Acordao(models.Model):
         db_table = 'acordao'
 
 
-class AcordaoDescritor(models.Model):
-    acordao_desc_id = models.AutoField(primary_key=True)
-    acordao = models.ForeignKey(Acordao, models.DO_NOTHING, blank=True, null=True)
-    descritor = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.descritor + " (acordao " + str(self.acordao.acordao_id) + ")"
-
-    class Meta:
-        db_table = 'acordao_descritor'
-
-
 class AcordaoRecorrido(models.Model):
     acordao_recorrido_id = models.AutoField(primary_key=True)
     acordao = models.ForeignKey(Acordao, models.DO_NOTHING, blank=True, null=True)
