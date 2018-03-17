@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import Acordao
 from . import acordao_search
 
@@ -27,7 +28,12 @@ def search(request, sort_by=None):
     page = get_page(request)
     display = 10
 
-    results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
+    try:
+        results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
+
+    except Exception:
+        # TODO return error page
+        return HttpResponse("Ups... parece que os nossos servidores estão com problemas")
 
     total = results['total']
     acordaos = results['acordaos']

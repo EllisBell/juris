@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('JURIS_SECRET', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['188.166.101.76', 'jurisprudencia.pt']
+ALLOWED_HOSTS = ['188.166.101.76', 'jurisprudencia.pt', '127.0.0.1']
 
 
 # Application definition
