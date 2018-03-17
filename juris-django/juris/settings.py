@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('JURIS_SECRET', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['188.166.101.76', 'jurisprudencia.pt']
 
 
 # Application definition
