@@ -70,7 +70,8 @@ $(document).ready(function() {
 
 
     function getRelevant(query, tribs, page) {
-         $.get('/jurisapp/search_relevant/', {query: query, tribs: tribs, page: page}, function(data) {
+        // TODO this is sending date.now() as a way to get around IE caching results; bit of a hack, rework
+         $.get('/jurisapp/search_relevant/', {"_": Date.now(), query: query, tribs: tribs, page: page}, function(data) {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");
@@ -90,7 +91,6 @@ $(document).ready(function() {
     function showLoadingBar() {
         // TODO this is moving scroll bar up for some reason, fix
         var currentPos = $(window).scrollTop();
-       // $('#searchResults').empty();
         $('#searchResults').css("visibility", "hidden");
         $('html,body').scrollTop(currentPos);
  		$(".loading").css("visibility", "visible");
