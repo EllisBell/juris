@@ -38,7 +38,9 @@
     {% endif %}
 
     <span class="current">
+    {% if total > 0 %}   
         {{ total }} resultados // Página {{ page }} de {{ total_pages }}
+    {% endif %}
     </span>
 
     {% if has_next %}
