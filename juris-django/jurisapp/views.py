@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Acordao
 from . import acordao_search
-
+from raven.contrib.django.raven_compat.models import client
 
 def index(request):
     return render(request, 'jurisapp/index.html')
@@ -32,6 +32,8 @@ def search(request, sort_by=None):
         results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
 
     except Exception:
+        # Log error to Sentry
+        client.captureException()
         # TODO return error page
         return HttpResponse("Ups... parece que os nossos servidores estão com problemas")
 
