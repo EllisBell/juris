@@ -122,6 +122,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+# Celery config
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULE = {
+    'scheduled_print_task': {
+        'task': 'jurisapp.tasks.print_task',
+        'schedule': 60.0
+    }
+}
+
 # Raven/Sentry (error logging) config
 RAVEN_CONFIG = {
     'dsn': os.environ.get('SENTRY_KEY', ''),
