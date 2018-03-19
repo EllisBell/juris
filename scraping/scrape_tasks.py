@@ -16,7 +16,7 @@ app.conf.update(
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(30.0, test_scrape_task.s(''), name='print every 30')
+    sender.add_periodic_task(30.0, test_scrape_task.s(), name='print every 30')
 
 
 @app.task
