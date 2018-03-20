@@ -15,8 +15,8 @@ app.conf.update(
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(30.0, test_scrape_task.s(), name='print every 30')
+    # Scrapes everything at 23:00
+    sender.add_periodic_task(crontab(minute=0, hour=23), run_scrape.s(), name='nightly scrape')
 
 
 @app.task
@@ -25,7 +25,4 @@ def run_scrape():
     sc.scrape_tribs(time_limit=18000)
 
 
-@app.task
-def test_scrape_task():
-    # time limit is in seconds
-    print("I am a scrape task!")
+

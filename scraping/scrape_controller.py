@@ -18,8 +18,9 @@ start_time = None
 def scrape_tribs(tribs = default_trib_dict, time_limit=None):
     start_time = time.time()
     for trib_id, url in tribs.items():
+        print("SCRAPING " + trib_id)
         scrape_and_save_all(url, trib_id, time_limit)
-
+    print("FINISHED SCRAPING")
 
 # for scraping and saving everything unsaved
 # call this for each trib you want to scrape
@@ -43,11 +44,11 @@ def save_acordaos(acordao_urls, trib_id, time_limit=None):
     unsaved_urls = [url for url in acordao_urls if url not in currently_saved]
     for url in unsaved_urls:
         if time_limit and ((time.time() - start_time) > time_limit):
+            print("IT HAS BEEN TOO LONG")
             break
         ac = acs.get_acordao(url, trib_id)
         if ac:
             ac_saver.save(ac)
-            print("saved " + ac.processo)
 
     # TODO deal with this connection stuff
     ac_saver.close_connection()

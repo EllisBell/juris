@@ -64,7 +64,7 @@ def parallel_bulk(just_new, timeout):
 
 # Use generator
 def get_bulk_actions(just_new):
-    if just_new:
+    if just_new and count_indexed_acordaos() > 0:
         max_id_already_indexed = get_max_id()
         acordaos = Acordao.objects.filter(acordao_id__gt=max_id_already_indexed)
     else:
@@ -79,8 +79,6 @@ def get_bulk_actions(just_new):
 
 # TODO figure out how to update index rather than deleting and reindexing everything
 # todo as that takes quite a while
-
-# TODO try denormalizing acordao descritores to improve indexing performance? avoid loads of db calls
 
 def create_acordao_doc(ac):
     doc = {"id": ac.acordao_id,
@@ -120,8 +118,9 @@ def index_doc(doc):
 
 
 # interface
-def count_indexed_acordaos(es):
-    return es.count(index="acordao_idx", doc_type="acordao")
+def count_indexed_acordaos():
+    es = get_es()
+    return es.count(index="acordao_idx", doc_type="acordao")['count']
 
 
 def get_max_id():
@@ -138,16 +137,6 @@ def get_max_id():
 
 
 # Todo need something that will index on update of acordao table
-
-def db_test():
-    start = datetime.datetime.now()
-
-    acordaos = Acordao.objects.all()
-    for ac in acordaos:
-        print(ac.processo)
-
-    print("start at " + str(start))
-    print("end at " + str(datetime.datetime.now))
 
 
 # Search Interface #
