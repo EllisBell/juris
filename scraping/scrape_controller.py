@@ -3,6 +3,7 @@ import acordao_scraper as acs
 import acordao_saver
 import time
 
+
 default_trib_dict = {
     "TRL": "/jtrl.nsf?OpenDatabase",
     "TRP": "/jtrp.nsf?OpenDatabase",
