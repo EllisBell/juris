@@ -16,7 +16,7 @@ app.conf.update(
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Scrapes everything at 23:00
-    sender.add_periodic_task(crontab(minute=0, hour=23), run_scrape.s(), name='nightly scrape')
+    sender.add_periodic_task(crontab(minute=15, hour=20), run_scrape.s(), name='nightly scrape')
 
 
 @app.task
