@@ -16,13 +16,13 @@ app.conf.update(
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     # Scrapes everything at 23:00
-    sender.add_periodic_task(crontab(minute=15, hour=20), run_scrape.s(), name='nightly scrape')
+    sender.add_periodic_task(crontab(minute=45, hour=21), run_scrape.s(), name='nightly scrape')
 
 
 @app.task
 def run_scrape():
     # time limit is in seconds
-    sc.scrape_tribs(time_limit=18000)
+    sc.scrape_tribs(time_limit=28800)
 
 
 
