@@ -11,7 +11,7 @@ class AcordaoSaver(object):
     def __init__(self):
         # TODO review when to connect, close etc... pooled connections?
         password = os.environ.get('JURIS_DB_PW', '')
-        self.conn = ppg.connect("dbname=jurisdb user=jurisuser password=" + password)
+        self.conn = ppg.connect("host=localhost dbname=jurisdb user=jurisuser password=" + password)
 
     def get_currently_saved(self, trib_id):
         # query db to get urls of all currently saved acordaos
@@ -33,7 +33,7 @@ class AcordaoSaver(object):
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
                  txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, html_txt_parcial, 
                  txt_integral, html_txt_integral, url, date_loaded, descritores)
-                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING acordao_id"""
+                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING acordao_id"""
 
         cur.execute(sql, (
             acordao.processo, acordao.tribunal, acordao.relator, acordao.numero, acordao.data, acordao.votacao,
@@ -45,12 +45,6 @@ class AcordaoSaver(object):
 
         # since we included "RETURNING id" in insert stmt, we can get the id from result
         acordao_id = cur.fetchone()[0]
-
-        for desc in acordao.descritores:
-            desc_sql = """INSERT INTO acordao_descritor(acordao_id, descritor)
-            VALUES(%s, %s)"""
-
-            cur.execute(desc_sql, (acordao_id, desc))
 
         for rec in acordao.recorridos:
             rec_sql = """INSERT INTO acordao_reccorido(acordao_id, recorrido)
