@@ -12,21 +12,22 @@ class Tribunal(models.Model):
     class Meta:
         db_table = 'tribunal'
 
+
 # N.B. changing most fields from CharField to TextField (with no max length)
 # Hope this doesn't cause issues...
 class Acordao(models.Model):
     acordao_id = models.AutoField(primary_key=True)
-    processo = models.CharField(max_length=100, blank=True, null=True)
+    processo = models.TextField(blank=True, null=True)
     tribunal = models.ForeignKey('Tribunal', models.DO_NOTHING, blank=True, null=True)
-    seccao = models.CharField(max_length=100, blank=True, null=True)
-    num_convencional = models.CharField(max_length=100, blank=True, null=True)
-    relator = models.CharField(max_length=100, blank=True, null=True)
-    numero = models.CharField(max_length=50, blank=True, null=True)
+    seccao = models.TextField(blank=True, null=True)
+    num_convencional = models.TextField(blank=True, null=True)
+    relator = models.TextField(blank=True, null=True)
+    numero = models.TextField(blank=True, null=True)
     data = models.DateField(blank=True, null=True)
-    votacao = models.CharField(max_length=50, blank=True, null=True)
+    votacao = models.TextField(blank=True, null=True)
     aditamento = models.TextField(blank=True, null=True)
     trib_recorrido = models.TextField(blank=True, null=True)
-    proc_trib_recorrido = models.CharField(max_length=100, blank=True, null=True)
+    proc_trib_recorrido = models.TextField(blank=True, null=True)
     data_dec_recorrida = models.DateField(blank=True, null=True)
     txt_integral_flag = models.CharField(max_length=5, blank=True, null=True)
     txt_parcial_flag = models.CharField(max_length=5, blank=True, null=True)
@@ -62,6 +63,3 @@ class AcordaoRecorrido(models.Model):
 
     class Meta:
         db_table = 'acordao_recorrido'
-
-
-
