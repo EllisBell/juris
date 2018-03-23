@@ -152,9 +152,6 @@ header h1 {
 	font-size: 1.5rem;
 }
 
-/*.pagination .current {
-	margin:1%;
-}*/
 
 .pagination .pageBtn:hover {
 	cursor: pointer;
@@ -205,20 +202,19 @@ header h1 {
 	margin-bottom:1%;
 }
 
-.result-descritor {
-	font-weight: bold;
-    white-space: nowrap;
-    /*background-color: #b5ffc5;*/
-    /*background-color: #9ff8cd;*/
-    background-color: #e3f4f6;
-    padding: 5px;
-}
-
 .descritor-div {
 	margin-right:1%;
 	margin-bottom: 1%;
 	margin-top: 1%;
 	display: inline-block;
+}
+
+.result-descritor {
+	font-weight: bold;
+    white-space: normal;
+    background-color: #e3f4f6;
+    padding: 5px;
+    display: inline-block;
 }
 
 .long-text {
@@ -345,7 +341,7 @@ header h1 {
 		width: 100%;
 		height: auto;
 		margin-top: 3%;
-	    background-color: #d6fce9;
+	    background-color: #81bbc0;
 	}
 
 	#acordao-main-info {
@@ -356,6 +352,10 @@ header h1 {
 	#acordao-icons {
 		clear: left;
 	}
+
+	/*#acordao-descritores: {
+		margin-top: 50%;
+	}*/
 
 	#ac-content {
 		max-width: 70%;
@@ -379,10 +379,8 @@ header h1 {
 	#ac-content {
 		max-width: 75%;
 	}
-}
 
-@media only screen and (max-width: 700px) {
-  	#acordao-main-info {
+	#acordao-main-info {
 		float:none;
 	}
 }
@@ -393,12 +391,18 @@ header h1 {
 		font-size: 16px;
 	}
 
+	#all-content {
+		max-width: 100%;
+	}
+
 	#logo {
 		font-size: 1rem;
 	}
 
 	#content {
-		max-width: 85%;
+		max-width: 100%;
+		width: 100%;
+		padding: 2%;
 	}
 
 	#searchbox {
@@ -412,15 +416,26 @@ header h1 {
 	}
 
 	.descritor-div {
-		display: block;
-		white-space: normal;
-		/*margin-top: 2%;*/
+	/*	display: block;*/
+		margin-top: 1%;
+		margin-bottom: 1%;
+	}
+
+	#ac-sidebar {
+		margin-bottom: 5%;
+	}
+
+	#acordao-main-info {
+		float:none;
+		width: 100%;
 	}
 
 	#ac-content {
-		max-width: 85%;
+		margin: 0 auto;
+		max-width: 95%;
 		font-size: 1rem;
 	}
+
 }
 
 

@@ -24,13 +24,13 @@
     		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>{% endif %}
     		<div><span class="ac-sidebar-field"><a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver versão dgsi.pt</a></span></div>
     	</div>
-    	<div id="acordao-icons">
+   <!-- 	<div id="acordao-icons">
     		<i id="colortest" class="fas fa-file-pdf" aria-hidden="true"></i>
-    	</div>
+    	</div> -->
 	</div>
 
 	<div id="ac-content">
-		<div class="acordao-result-descritores">
+		<div class="acordao-descritores">
 			{% for desc in acordao.descritores %}
 				<div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
 			{% endfor %}
