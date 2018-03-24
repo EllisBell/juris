@@ -64,6 +64,18 @@ header h1 {
 	color: #81bbc0;
 }
 
+#beta {
+	background-color: #FFE4AA;
+	padding: 1px;
+	text-align: center;
+	font-size: 0.8rem;
+	font-style: italic;
+}
+
+#beta-beta {
+	font-style: italic;
+}
+
 #header-info {
 	position: absolute;
 	bottom: 0;
@@ -401,13 +413,17 @@ header h1 {
 
 	#content {
 		max-width: 100%;
-		width: 100%;
+		/*width: 100%;*/
 		padding: 2%;
 	}
 
 	#searchbox {
 		font-size: 1.5rem;
 		width:85%;
+	}
+
+	#searchResults {
+		width: 95%;
 	}
 
 	.result-descritor {
