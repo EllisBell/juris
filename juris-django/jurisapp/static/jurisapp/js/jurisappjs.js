@@ -71,7 +71,7 @@ $(document).ready(function() {
 
     function getRelevant(query, tribs, page) {
         // TODO this is sending date.now() as a way to get around IE caching results; bit of a hack, rework
-         $.get('/jurisapp/search_relevant/', {"_": Date.now(), query: query, tribs: tribs, page: page}, function(data) {
+         $.get('/search_relevant/', {"_": Date.now(), query: query, tribs: tribs, page: page}, function(data) {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");
@@ -80,7 +80,7 @@ $(document).ready(function() {
     }
 
     function getRecent(query, tribs, page) {
-        $.get('/jurisapp/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
+        $.get('/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");

@@ -17,6 +17,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^jurisapp/', include('jurisapp.urls')),
+    url(r'', include('jurisapp.urls')),
     url(r'^admin/', admin.site.urls),
 ]
