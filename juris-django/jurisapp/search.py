@@ -1,6 +1,5 @@
 from elasticsearch import Elasticsearch, helpers
 from .models import Acordao
-import datetime
 from collections import deque
 
 
@@ -47,19 +46,15 @@ def delete_acordao_idx():
 
 
 def bulk_index_acordaos(just_new, timeout):
-    print("started at " + str(datetime.datetime.now()))
     es = get_es()
     actions = get_bulk_actions(just_new)
     helpers.bulk(es, actions, request_timeout=timeout)
-    print("finished at " + str(datetime.datetime.now()))
 
 
 def parallel_bulk(just_new, timeout):
-    print("started at " + str(datetime.datetime.now()))
     es = get_es()
     actions = get_bulk_actions(just_new)
     deque(helpers.parallel_bulk(es, actions, request_timeout=timeout), maxlen=0)
-    print("finished at " + str(datetime.datetime.now()))
 
 
 # Use generator

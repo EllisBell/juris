@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import raven
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,9 +131,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
-    'scheduled_print_task': {
-        'task': 'jurisapp.tasks.print_task',
-        'schedule': 60.0
+    'scheduled_indexing_task': {
+        'task': 'jurisapp.tasks.bulk_index_task',
+        'schedule': crontab(hour=17, minute=30)
     }
 }
 
