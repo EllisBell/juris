@@ -30,7 +30,12 @@ $(document).ready(function() {
 	}
 
 	function showOrderByButtons() {
-		$("#orderByButtons").css("visibility", "visible");
+		if($("#currentSearch").data("total") > 0) {
+            $("#orderByButtons").css("visibility", "visible");
+        }
+        else {
+            $("#orderByButtons").css("visibility", "hidden");   
+        }
 	}
 
     // this adds event to buttons loaded through ajax call
@@ -75,7 +80,7 @@ $(document).ready(function() {
                 $(".loading").css("visibility", "hidden");
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");
-                showOrderByButtons();
+                showOrderByButtons();                
          });
     }
 

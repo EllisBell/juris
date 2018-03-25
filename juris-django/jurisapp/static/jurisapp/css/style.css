@@ -286,6 +286,17 @@ header h1 {
   }
 }
 
+#oops-container {
+	background-color: #e3e5e4;
+	padding: 2%;
+	width: 70%;
+	border-left: 10px solid #FFE4AA;
+}
+
+#wrench {
+	font-size: 3rem;
+}
+
 
 /* STYLE FOR ACORDAO PAGE */
 #container {

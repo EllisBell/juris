@@ -35,7 +35,7 @@ def search(request, sort_by=None):
         # Log error to Sentry
         client.captureException()
         # TODO return error page
-        return HttpResponse("Ups... parece que os nossos servidores estão com problemas")
+        return render(request, 'jurisapp/oops.html')
 
     total = results['total']
     acordaos = results['acordaos']
