@@ -22,7 +22,7 @@ def setup_periodic_tasks(sender, **kwargs):
 @app.task
 def run_scrape():
     # time limit is in seconds
-    sc.scrape_tribs(time_limit=18000)
+    sc.scrape_tribs(time_limit=14400)
 
 
 

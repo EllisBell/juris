@@ -133,7 +133,7 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'scheduled_indexing_task': {
         'task': 'jurisapp.tasks.bulk_index_task',
-        'schedule': crontab(hour=17, minute=30)
+        'schedule': crontab(hour=4, minute=0)
     }
 }
 
