@@ -13,8 +13,10 @@ $(document).ready(function() {
           if (scrollBelowTopOfSidebar) {
 	        sidebar.css("position", "fixed");
 	        sidebar.css("top",  0);
+            sidebar.css("width", "22.4%")
 	      } else {
 	        sidebar.css("position", "static");
+            sidebar.css("width", "28%");
 	      }
 		});			
 	}
