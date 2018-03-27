@@ -14,6 +14,31 @@
     <title>jurisprudência.pt - Pesquisa de jurisprudência Portuguesa</title>
     <meta name="description" content="Ferramenta de pesquisa de jurisprudência Portuguesa. Encontre os acórdãos mais 
     relevantes e mais recentes dos tribunais superiores em Portugal.">
+
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+	<script>
+	window.addEventListener("load", function(){
+	window.cookieconsent.initialise({
+	  "palette": {
+	    "popup": {
+	      "background": "#e3e5e4",
+	      "text": "#3c434f"
+	    },
+	    "button": {
+	      "background": "#81bbc0",
+	      "text": "#3c434f"
+	    }
+	  },
+	  "content": {
+	    "message": "Este website usa cookies para melhorar o site e a sua experiência",
+	    "dismiss": "OK",
+	    "link": "Saiba mais",
+	    "href": "www.jurisprudencia.pt/termos"
+	  }
+	})});
+	</script>
+
 </head>
 <body>
 	<div id="all-content">
@@ -24,6 +49,7 @@
 		    <span id="beta">versão beta</span>
 			<!-- use <nav>
 			</nav> -->
+			<div id="header-info"><a href="/termos">termos e condições</a>
 		</header>
 		{% block body_block %} {% endblock %}
 	</div>

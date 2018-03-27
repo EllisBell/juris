@@ -4,6 +4,7 @@ from .models import Acordao
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
 
+
 def index(request):
     return render(request, 'jurisapp/index.html')
 

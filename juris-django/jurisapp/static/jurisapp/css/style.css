@@ -30,6 +30,10 @@ body {
 	max-width: 80%;
 }
 
+#termos-container {
+	margin-bottom: 5%
+}
+
 header {
 	/*height: 5%;*/
 	margin-top: 0px;
@@ -76,6 +80,12 @@ header h1 {
 	position: absolute;
 	bottom: 0;
 	right: 0;
+	font-size: 0.8rem;
+}
+
+#header-info a {
+	text-decoration: none;
+	color: inherit;
 }
 
 #content {
