@@ -42,7 +42,7 @@
 	    "message": "Este website usa cookies para melhorar o site e a sua experiência",
 	    "dismiss": "OK",
 	    "link": "Saiba mais",
-	    "href": "www.jurisprudencia.pt/termos"
+	    "href": "/termos"
 	  }
 	})});
 	</script>
@@ -57,7 +57,11 @@
 		    <span id="beta">versão beta</span>
 			<!-- use <nav>
 			</nav> -->
-			<div id="header-info"><a href="/termos">termos e condições</a>
+			<nav>
+				<ul id="header-info">
+					<li><a href="/termos">termos e condições</a></li>
+				</ul>
+			</nav>
 		</header>
 		{% block body_block %} {% endblock %}
 	</div>
