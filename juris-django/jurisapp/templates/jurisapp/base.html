@@ -2,7 +2,9 @@
 {% load static %}
 <!-- TODO adding jquery and js and stuff but this needs to be looked at -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-{% block scripts_block %} {% endblock %}
+<script src="{% static "jurisapp/js/common.js" %}"></script>
+{% block scripts_block %}
+{% endblock %}
 <link rel="stylesheet" href="{% static "jurisapp/css/style.css" %}" />
 <link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
 <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -55,12 +57,14 @@
 				<h1><a href="/"> jurisprudência<span id="ponto">.</span>pt</a></h1>
 			</div>
 		    <span id="beta">versão beta</span>
-			<!-- use <nav>
-			</nav> -->
-			<nav>
-				<ul id="header-info">
+			<nav id="top-nav">
+				<div id="menu-icon"><i class="fas fa-bars"></i></div>
+				<div id="menu-close"><i class="fas fa-times"></i></div>
+				<div id="menu-div">
+					<ul id="top-list">
 					<li><a href="/termos">termos e condições</a></li>
-				</ul>
+					</ul>
+				</div>
 			</nav>
 		</header>
 		{% block body_block %} {% endblock %}

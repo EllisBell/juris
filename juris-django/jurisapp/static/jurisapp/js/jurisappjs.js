@@ -180,5 +180,4 @@ $(document).ready(function() {
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
-
 });
