@@ -157,15 +157,21 @@ header h1 {
 }
 
 .tribLabel {
-	margin-right: 0%;
+	margin-right: 5px;
 	white-space: nowrap;
-	/* default colour for checked */
-	/*background-color: #9ff8cd;*/
 	background-color: #b4dce0;
 	display: inline-block;
 	margin-bottom: 0.5%;
 	padding: 8px;
 	cursor: pointer;
+}
+
+.trib-long {
+	display: inline-block;
+}
+
+.trib-short {
+	display: none;
 }
 
 .tick-icon {
@@ -197,7 +203,9 @@ header h1 {
 
 #searchResults {
 	width:85%;
-	padding-bottom: 2%
+	padding-bottom: 2%;
+	margin-top: 5%;
+	clear: right;
 }
 
 
@@ -276,24 +284,12 @@ header h1 {
 }
 
 .loading {
- /* position: absolute;
-  top: 50%;
-  left: 50%;*/
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  top:25%;
-  visibility: hidden;
+  display: none; 
+  width: inherit;
+  margin: 10% auto 0 auto;
   text-align: center;
 }
 
-/*.loading-bar {
-  display: inline-block;
-  width: 4px;
-  height: 18px;
-  border-radius: 4px;
-  animation: loading 1s ease-in-out infinite;
-}*/
 
 .loading-bar {
   display: inline-block;
@@ -512,7 +508,7 @@ header h1 {
 
 	#content {
 		max-width: 95%;
-		margin: 8% auto 0 auto;
+		margin: 15% auto 0 auto;
 	}
 
 	#searchbox {
@@ -520,8 +516,35 @@ header h1 {
 		width:85%;
 	}
 
+	#tribCheckBoxes {
+		width: 95%;
+	}
+
+	.tribLabel {
+		margin-right: 1px;
+		margin-bottom: 6px;
+	}
+
+	.trib-long {
+		display: none;
+	}
+
+	.trib-short {
+		display: inline-block;
+	}
+
+	#orderByButtons {
+		margin-top: 5%;
+	}	
+
 	#searchResults {
 		width: 95%;
+		margin-top: 20%;
+	}
+
+	.acordao-result {
+		margin-top: 5%;
+		margin-bottom: 5%;
 	}
 
 	.result-descritor {
@@ -532,6 +555,11 @@ header h1 {
 	.descritor-div {
 		margin-top: 1%;
 		margin-bottom: 1%;
+	}
+
+	.loading {
+  		width: inherit;
+  		margin: 15% auto 0 auto;
 	}
 
 	#ac-sidebar {

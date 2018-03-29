@@ -13,6 +13,8 @@ $(document).ready(function() {
 				return;
 			}
 
+            $("#searchbox").blur();
+
 			showLoadingBar();
             setOrderByButtonSelectedAndColours($("#relevanceBtn"));
             getRelevant(query, tribs, 1);
@@ -77,7 +79,7 @@ $(document).ready(function() {
     function getRelevant(query, tribs, page) {
         // TODO this is sending date.now() as a way to get around IE caching results; bit of a hack, rework
          $.get('/search_relevant/', {"_": Date.now(), query: query, tribs: tribs, page: page}, function(data) {
-                $(".loading").css("visibility", "hidden");
+                hideLoadingBar();
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");
                 showOrderByButtons();                
@@ -86,7 +88,7 @@ $(document).ready(function() {
 
     function getRecent(query, tribs, page) {
         $.get('/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
-                $(".loading").css("visibility", "hidden");
+                hideLoadingBar();
                 $('#searchResults').html(data);
                 $('#searchResults').css("visibility", "visible");
                 showOrderByButtons();
@@ -98,8 +100,12 @@ $(document).ready(function() {
         var currentPos = $(window).scrollTop();
         $('#searchResults').css("visibility", "hidden");
         $('html,body').scrollTop(currentPos);
- 		$(".loading").css("visibility", "visible");
+        $(".loading").css("display", "inline-block");
         }
+
+    function hideLoadingBar() {
+        $(".loading").css("display", "none");
+    }
 
     // Changing checkbox/label colour when checked/unchecked
   /*  $("input[type='checkbox']").change(function() {
