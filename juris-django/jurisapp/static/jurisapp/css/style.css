@@ -328,7 +328,7 @@ header h1 {
   }
 }
 
-#oops-container {
+.emphasis-block {
 	background-color: #e3e5e4;
 	padding: 2%;
 	width: 70%;
@@ -339,6 +339,9 @@ header h1 {
 	font-size: 3rem;
 }
 
+.search-example {
+	color: #327a81;
+}
 
 /* STYLE FOR ACORDAO PAGE */
 #container {

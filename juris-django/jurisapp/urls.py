@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^search_recent/$', views.search_recent, name='search_recent'),
     url(r'^acordao/(?P<acordao_id>[0-9]+)/$', views.acordao, name='acordao'),
     url(r'^termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
+    url(r'^sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),
 ]

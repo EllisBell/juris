@@ -1,0 +1,45 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block body_block %}
+<div id="termos-container">
+	<h3>Sobre Nós</h3>
+	
+	<p>
+		O jurisprudencia.pt quer simplificar a pesquisa de jurisprudência portuguesa.
+	</p>
+
+	<p>
+		Pode enviar perguntas ou sugestões para o email <span class="search-example">info@jurisprudencia.pt</span>.
+	</p>
+
+	<h4>Dicas de Pesquisa</h4>
+	<p> 
+		O nosso motor de busca procura os termos da pesquisa em vários campos dos acórdãos. Por defeito, todos os termos têm de estar presentes para um dado acórdão ser identificado como um resultado válido.
+	</p>
+
+	<div class="emphasis-block">
+		A pesquisa <span class="search-example">despedimento ilícito</span> terá como resultados acórdãos que contenham a palavra despedimento e a palavra ilícito.
+	</div>
+
+	<p>
+		A utilização da palavra <span class="search-example">ou</span> numa pesquisa diz ao nosso motor de pesquisa que está à procura de acórdãos que contenham uma ou mais das restantes palavras da pesquisa.
+	</p>
+
+	<div class="emphasis-block">
+		A pesquisa <span class="search-example">despedimento ou ilícito</span> terá como resultados acórdãos que contenham a palavra despedimento ou a palavra ilícito (ou ambas).
+	</div>
+
+	<p>
+		Se a sua pesquisa tiver aspas começar e acabar com aspas, o nosso motor de busca perceberá que está à procura de acórdãos que contenham a expressão exata que está entre aspas.
+	</p>
+
+	<div class="emphasis-block">
+		A pesquisa <span class="search-example">"despedimento ilícito"</span> terá como resultados acórdãos que contenham a expressão despedimento ilícito.
+	</div>
+
+</div>
+
+
+{% endblock %}
