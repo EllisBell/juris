@@ -159,11 +159,11 @@ header h1 {
 
 .tribLabel {
 	margin-right: 5px;
+	margin-bottom: 10px;
+	padding: 8px;
 	white-space: nowrap;
 	background-color: #b4dce0;
 	display: inline-block;
-	margin-bottom: 0.5%;
-	padding: 8px;
 	cursor: pointer;
 }
 
