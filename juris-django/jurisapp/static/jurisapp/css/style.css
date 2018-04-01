@@ -36,7 +36,8 @@ body {
 }
 
 #termos-container {
-	margin-bottom: 5%
+	margin-bottom: 5%;
+	max-width: 90%;
 }
 
 header {
@@ -341,6 +342,12 @@ header h1 {
 
 .search-example {
 	color: #327a81;
+	font-weight: bold;
+}
+.acks {
+	float: right;
+	font-size: 0.6rem;
+	margin-bottom: 2%;
 }
 
 /* STYLE FOR ACORDAO PAGE */
@@ -445,7 +452,7 @@ header h1 {
 	#top-list {
 		/*visibility: hidden;*/
 		position: relative;
-		margin-top: 10%;
+		margin-top: 15%;
 	}
 
 	#top-list li {
