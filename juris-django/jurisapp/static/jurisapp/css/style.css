@@ -32,7 +32,8 @@ body {
 #all-content {
 	margin: 0 auto;
 	height: 100%;
-	max-width: 80%;
+	width: 80%;
+	max-width: 1200px;
 }
 
 #termos-container {
@@ -350,7 +351,10 @@ header h1 {
 	margin-bottom: 2%;
 }
 
+/**************************/
 /* STYLE FOR ACORDAO PAGE */
+/**************************/
+
 #container {
 	position: static;
 	margin-top: 8%;
