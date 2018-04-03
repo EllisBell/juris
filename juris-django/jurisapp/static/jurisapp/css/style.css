@@ -389,7 +389,7 @@ header h1 {
 
 
 #ac-content {
-	max-width: 60%;
+	width: 60%;
 	margin-left: 30%;
 	padding-left: 2%;
 	font-size: 1.1rem;
@@ -433,7 +433,7 @@ header h1 {
 	}*/
 
 	#ac-content {
-		max-width: 70%;
+		width: 70%;
 		margin: 0 auto;
 	}
 }
@@ -489,7 +489,7 @@ header h1 {
 	}
 
 	#ac-content {
-		max-width: 75%;
+		width: 75%;
 	}
 
 	#acordao-main-info {
@@ -508,11 +508,15 @@ header h1 {
 	}
 
 	#all-content {
-		max-width: 100%;
+		width: 100%;
+	}
+
+	#outer-container {
+		width: 100%;
 	}
 
 	header {
-		max-width: 95%;
+		width: 95%;
 		margin: 0 auto;
 	}
 
@@ -578,7 +582,7 @@ header h1 {
 
 	#ac-sidebar {
 		margin-bottom: 5%;
-		max-width: 100%;
+		width: 100%;
 		padding-left: 2%;
 	}
 
@@ -589,12 +593,12 @@ header h1 {
 
 	#ac-content {
 		margin: 0 auto;
-		max-width: 90%;
+		width: 90%;
 		font-size: 1rem;
 	}
 
 	#termos-container {
-		max-width: 95%;
+		width: 95%;
 		margin: 0 auto 5% auto;
 	}
 
