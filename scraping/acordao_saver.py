@@ -1,5 +1,6 @@
 import psycopg2 as ppg
 import datetime
+from datetime import timedelta
 import os
 
 
@@ -54,5 +55,17 @@ class AcordaoSaver(object):
 
         self.conn.commit()
 
+    # TODO Fix
+    def get_saved_since(self, hours_ago):
+        cur = self.conn.cursor()
+        sql = """select tribunal_id, count(*) from acordao 
+        where date_loaded > %s 
+        group by tribunal_id"""
+        cur.execute(sql, (datetime.datetime.now() - timedelta(hours=hours_ago),))
+        results = cur.fetchall()
+        return results
+
     def close_connection(self):
         self.conn.close()
+
+

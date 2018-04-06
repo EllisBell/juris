@@ -50,3 +50,10 @@ def save_acordaos(acordao_urls, trib_id, start_time, time_limit=None):
 
     # TODO deal with this connection stuff
     ac_saver.close_connection()
+
+
+def get_newly_saved():
+    ac_saver = acordao_saver.AcordaoSaver()
+    new = ac_saver.get_saved_since(12)
+    ac_saver.close_connection()
+    return new

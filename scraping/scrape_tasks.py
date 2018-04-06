@@ -1,6 +1,9 @@
 from celery import Celery
 from celery.schedules import crontab
 import scrape_controller as sc
+import smtplib
+from email.mime.text import MIMEText
+import os
 
 app = Celery('scrape_tasks', broker='redis://localhost:6379')
 
@@ -22,7 +25,49 @@ def setup_periodic_tasks(sender, **kwargs):
 @app.task
 def run_scrape():
     # time limit is in seconds
-    sc.scrape_tribs(time_limit=14400)
+    try:
+        sc.scrape_tribs(time_limit=14400)
+        new = sc.get_newly_saved()
+        send_scrape_report_email(new)
+    except Exception as e:
+        send_scrape_error_email(str(e))
 
 
+# TODO consider doing this in django instead?
+# todo or with sentry
+def send_scrape_report_email(new_counts):
+    subject = "The Daily Scrape"
+    report = "The Daily Scrape\n\n"
+    if new_counts:
+        for trib_count in new_counts:
+            report += trib_count[0] + ": " + str(trib_count[1]) + "\n"
+    else:
+        report += "Nothing new to report"
 
+    send_email(subject, report)
+
+
+# consider adding sentry to here, to log error and maybe to send email as well (even if goes well)
+def send_scrape_error_email(error_message):
+    send_email("Scrape Issues", error_message)
+
+
+def send_email(subject, body):
+    # Define to/from
+    sender = os.environ.get('JURIS_EMAIL')
+    recipient = os.environ.get('ADMIN_EMAIL')
+
+    # Create message
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = recipient
+
+    # Create server object with SSL option
+    server = smtplib.SMTP_SSL('smtp.zoho.eu', 465)
+
+    # Perform operations via server
+    # n.b. actually logging in as recipient as that's my username for this account lol
+    server.login(recipient, os.environ.get('JURIS_EMAIL_PW'))
+    server.sendmail(sender, [recipient], msg.as_string())
+    server.quit()
