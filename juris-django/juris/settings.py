@@ -26,8 +26,13 @@ SECRET_KEY = os.environ.get('JURIS_SECRET', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
 
-
 ALLOWED_HOSTS = ['188.166.101.76', 'jurisprudencia.pt', 'www.jurisprudencia.pt', '127.0.0.1']
+
+SITE_ID = 1
+
+MIGRATION_MODULES = {
+    'sites': 'juris.fixtures.sites_migrations',
+}
 
 # Application definition
 
@@ -40,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'raven.contrib.django.raven_compat',
 ]
 

@@ -15,8 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
+from .sitemap import AcordaoSiteMap, StaticViewSiteMap
+
+sitemaps = {
+    'acordaos': AcordaoSiteMap,
+    'static': StaticViewSiteMap,
+}
 
 urlpatterns = [
     url(r'', include('jurisapp.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap'),
 ]
