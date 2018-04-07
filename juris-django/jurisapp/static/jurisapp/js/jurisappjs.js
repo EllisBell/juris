@@ -13,8 +13,7 @@ $(document).ready(function() {
 				return;
 			}
 
-            $("#searchbox").blur();
-
+            handle_search_focus();
 			showLoadingBar();
             setOrderByButtonSelectedAndColours($("#relevanceBtn"));
             getRelevant(query, tribs, 1);
@@ -30,6 +29,13 @@ $(document).ready(function() {
 		});
 		return tribs;
 	}
+
+    function handle_search_focus() {
+        var mq = window.matchMedia("(max-width: 524px)");
+        if(mq.matches) {
+            $("#searchbox").blur();
+        }
+    }
 
 	function showOrderByButtons() {
 		if($("#currentSearch").data("total") > 0) {

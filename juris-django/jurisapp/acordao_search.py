@@ -43,6 +43,7 @@ def search_with_paging(query, tribs, operator, page_number, display_size, sort_b
                           filter_dict, exclude, start, display_size)
 
     results = get_results_dict_from_res(res)
+    results = format_dates(results)
     results = add_paging_info(results, page_number, display_size)
     return results
 
@@ -63,9 +64,15 @@ def get_results_dict_from_res(res):
     results['total'] = res['hits']['total']
     results['acordaos'] = [d['_source'] for d in res['hits']['hits']]
 
+    # for acordao in results['acordaos']:
+    #    acordao['data'] = datetime.strptime(acordao['data'], "%Y-%m-%d")
+
+    return results
+
+
+def format_dates(results):
     for acordao in results['acordaos']:
         acordao['data'] = datetime.strptime(acordao['data'], "%Y-%m-%d")
-
     return results
 
 
