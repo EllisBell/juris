@@ -20,7 +20,7 @@ def create_acordao_idx():
         "properties": {
             "id": {"type": "integer"},
             # Todo test these keywords out -send in capitalized, uncapitalized etc.
-            "processo": {"type": "keyword"},
+            "processo": {"type": "text"},
             "tribunal": {"type": "keyword"},
             "tribunal_long": {"type": "keyword"},
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
