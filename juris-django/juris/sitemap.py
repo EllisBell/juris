@@ -9,7 +9,7 @@ class AcordaoSiteMap(Sitemap):
     limit = 5000
 
     def items(self):
-        return Acordao.objects.all()
+        return Acordao.objects.only("acordao_id", "date_loaded")
 
     def lastmod(self, obj):
         return obj.date_loaded
