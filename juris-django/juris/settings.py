@@ -141,6 +141,10 @@ CELERY_BEAT_SCHEDULE = {
     'scheduled_indexing_task': {
         'task': 'jurisapp.tasks.bulk_index_task',
         'schedule': crontab(hour=4, minute=0)
+    },
+    'full_reindexing_task': {
+        'task': 'jurisapp.tasks.recreate_index_from_db',
+        'schedule': crontab(hour=9, minute=0, day_of_week=6)
     }
 }
 

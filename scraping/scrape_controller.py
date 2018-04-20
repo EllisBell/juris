@@ -57,3 +57,20 @@ def get_newly_saved():
     new = ac_saver.get_saved_since(12)
     ac_saver.close_connection()
     return new
+
+
+def delete_deprecated_dups(time_limit=None):
+    start_time = time.time()
+    ac_saver = acordao_saver.AcordaoSaver()
+    dups = ac_saver.get_duplicate_processos()
+    print("CHECKING DUPS")
+    for url in dups:
+        time.sleep(0.2)
+        if time_limit and ((time.time() - start_time) > time_limit):
+            print("CHECKING DUPS HAS TAKEN TOO LONG")
+            break
+        if acs.check_source_not_found(url):
+            ac_saver.delete_acordao_by_url(url)
+            print("not found: " + url)
+
+    ac_saver.close_connection()

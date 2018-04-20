@@ -65,6 +65,31 @@ class AcordaoSaver(object):
         results = cur.fetchall()
         return results
 
+    # Sometimes there is more than one acordao with same processo number
+    # Sometimes this is legitimate, they are different acordaos under same processo
+    # Other times there was a revision or something so the acordao was reposted, and the
+    # previous one was deleted. We want to get rid of the deleted urls so here we get
+    # all duplicate processos to check if their urls still exist
+    def get_duplicate_processos(self):
+        cur = self.conn.cursor()
+        # Get the duplicate processo urls
+        sql = """select url from acordao where processo in 
+        (select processo from acordao
+        group by processo 
+        having count(*) > 1)
+        order by data desc"""
+        cur.execute(sql)
+        results = cur.fetchall()
+        url_list = [result[0] for result in results]
+        return url_list
+
+    def delete_acordao_by_url(self, acordao_url):
+        cur = self.conn.cursor()
+        sql = """delete from acordao
+        where url = %s"""
+        cur.execute(sql, (acordao_url,))
+        self.conn.commit()
+
     def close_connection(self):
         self.conn.close()
 

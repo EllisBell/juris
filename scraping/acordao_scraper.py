@@ -178,6 +178,9 @@ def get_acordao(case_url, trib_id):
     return ac
 
 
+def check_source_not_found(acordao_url):
+    return scraper.check_page_not_found(base_url + acordao_url)
+
 if __name__ == "__main__":
     print("hello world")
     get_acordao("/jtrl.nsf/33182fc732316039802565fa00497eec/dfd77f12a75d13f2802581c80058e338?OpenDocument", "TRL")

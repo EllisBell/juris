@@ -20,6 +20,7 @@ app.conf.update(
 def setup_periodic_tasks(sender, **kwargs):
     # Scrapes everything at 23:00
     sender.add_periodic_task(crontab(minute=0, hour=23), run_scrape.s(), name='nightly scrape')
+    sender.add_periodic_task(crontab(hour=5, minute=0, day_of_week=6), run_dep_dups_del.s(), name='dups deletion')
 
 
 @app.task
@@ -31,6 +32,10 @@ def run_scrape():
         send_scrape_report_email(new)
     except Exception as e:
         send_scrape_error_email(str(e))
+
+@app.task
+def run_dep_dups_del():
+    sc.delete_deprecated_dups(10800)
 
 
 # TODO consider doing this in django instead?

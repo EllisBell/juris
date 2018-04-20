@@ -4,6 +4,12 @@ import time
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 
+def check_page_not_found(url):
+    req = requests.head(url, headers=headers)
+    # Only want to delete if page doesn't exist - 404 error
+    return req.status_code == 404
+
+
 def get_page_content(url):
     r = requests.get(url, headers=headers)
     return r.content
