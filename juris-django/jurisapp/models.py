@@ -67,3 +67,11 @@ class AcordaoRecorrido(models.Model):
 
     class Meta:
         db_table = 'acordao_recorrido'
+
+
+class SearchHistory(models.Model):
+    term = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'search_history'

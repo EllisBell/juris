@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Acordao
+from .models import Acordao, SearchHistory
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
+
 
 
 def index(request):
@@ -45,6 +46,13 @@ def search(request, sort_by=None):
     context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
                         has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages)
     return render(request, 'jurisapp/search_results.html', context_dict)
+
+
+def save_search(request):
+    query = request.GET['query']
+    acordao_search.save_search(query)
+    # status 204 is no content
+    return HttpResponse(status=204)
 
 
 def get_page(request):

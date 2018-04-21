@@ -1,5 +1,7 @@
 from . import search as s
 from datetime import datetime
+from .models import SearchHistory
+from django.utils import timezone
 
 
 # interface
@@ -84,3 +86,10 @@ def add_paging_info(results, page_number, display_size):
     results['has_previous'] = has_previous
 
     return results
+
+
+def save_search(query):
+    sh = SearchHistory()
+    sh.term = query
+    sh.date = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    sh.save()

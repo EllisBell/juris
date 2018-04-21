@@ -17,6 +17,7 @@ $(document).ready(function() {
 			showLoadingBar();
             setOrderByButtonSelectedAndColours($("#relevanceBtn"));
             getRelevant(query, tribs, 1);
+            save_search(query)
 		}
 	});
 
@@ -113,18 +114,9 @@ $(document).ready(function() {
         $(".loading").css("display", "none");
     }
 
-    // Changing checkbox/label colour when checked/unchecked
-  /*  $("input[type='checkbox']").change(function() {
-    	var chkBox = $(this);
-     	var label = $(this).parent();
-
-    	if(chkBox.is(':checked')) {
-    		label.css("background-color", "#9ff8cd");
-    	}
-    	else {
-    		label.css("background-color", "#e3e5e4");
-    	}
-    });*/
+    function save_search(query) {
+        $.get('/save_search/', {query: query});
+    }
 
     $(".tribLabel").click(function(e) {
         var label = $(this);
