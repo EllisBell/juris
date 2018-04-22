@@ -41,11 +41,11 @@ body {
 	margin-bottom: 1%;
 	margin-top: 1%;
 	display: inline-block;
+	max-width: 100%;
 }
 
 .result-descritor {
 	font-weight: bold;
-    white-space: normal;
     background-color: #e3f4f6;
     padding: 5px;
     display: inline-block;
