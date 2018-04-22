@@ -24,9 +24,9 @@
     		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>{% endif %}
     		<div><span class="ac-sidebar-field"><a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver versão dgsi.pt</a></span></div>
     	</div>
-   <!-- 	<div id="acordao-icons">
-    		include icons here
-    	</div> -->
+    	<div id="acordao-icons">
+    		<span class="ac-icon"><a href="/acordao/{{ acordao.acordao_id }}/pdf" target="_blank"><i class="far fa-file-pdf"></i></a></span>
+    	</div>
 	</div>
 
 	<div id="ac-content">

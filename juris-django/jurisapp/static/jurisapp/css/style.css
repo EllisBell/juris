@@ -380,10 +380,20 @@ header h1 {
 	font-size: 1.1rem;
 }
 
-#colortest {
-	color: #81bbc0;
-	font-size: 2.5rem;
+#acordao-icons {
+	color: #52949a;
+	font-size: 3rem;
 }
+
+#acordao-icons a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.ac-icon {
+	cursor: pointer;
+}
+
 
 #ac-sidebar div {
 	margin-bottom: 2%;
@@ -423,6 +433,7 @@ header h1 {
 		height: auto;
 		margin-top: 3%;
 	    background-color: #81bbc0;
+	    padding-top: 5px;
 	}
 
 	#acordao-main-info {
@@ -432,6 +443,8 @@ header h1 {
 
 	#acordao-icons {
 		clear: left;
+		color: #555555;
+		font-size: 3rem;
 	}
 
 	/*#acordao-descritores: {

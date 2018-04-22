@@ -51,6 +51,7 @@ body {
     display: inline-block;
 }
 
+/* page numbers on PDF */
 @page {
    @bottom-right {
     content: counter(page) " / " counter(pages);

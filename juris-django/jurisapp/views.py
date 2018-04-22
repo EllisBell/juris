@@ -91,7 +91,8 @@ def acordao_pdf(request, acordao_id):
     pdf_doc = pdf.get_acordao_pdf(ac, absolute_uri)
 
     response = HttpResponse(pdf_doc, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="acordao.pdf"'
+    filename = ac.tribunal_id + " - " + ac.processo + ".pdf"
+    response['Content-Disposition'] = 'filename="' + filename + '"'
     return response
 
 
