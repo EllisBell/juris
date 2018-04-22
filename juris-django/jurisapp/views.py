@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Acordao, SearchHistory
+from .models import Acordao
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
-
+from . import pdf
 
 
 def index(request):
@@ -76,8 +76,26 @@ def acordao(request, acordao_id):
     print("got to acordao view")
     ac = Acordao.objects.get(pk=acordao_id)
     # descritores are in a concatenated string, split them into list
+    convert_descritores_to_list(ac)
+
+    context_dict = {'acordao': ac}
+    return render(request, 'jurisapp/acordao.html', context_dict)
+
+
+def acordao_pdf(request, acordao_id):
+    ac = Acordao.objects.get(pk=acordao_id)
+    # todo make this a method and call from above too
+    convert_descritores_to_list(ac)
+
+    absolute_uri = request.build_absolute_uri()
+    pdf_doc = pdf.get_acordao_pdf(ac, absolute_uri)
+
+    response = HttpResponse(pdf_doc, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="acordao.pdf"'
+    return response
+
+
+def convert_descritores_to_list(ac):
     descritores = ac.descritores
     desc_list = descritores.split("|")
     ac.descritores = desc_list
-    context_dict = {'acordao': ac}
-    return render(request, 'jurisapp/acordao.html', context_dict)

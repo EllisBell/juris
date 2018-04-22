@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{% static "jurisapp/css/pdf_style.css" %}" />
+</head>
+<body>
+	<div id="contains-all">
+		
+		<!--<div id="logo">
+			<h1><a href="/">jurisprudência<span id="ponto">.</span>pt</a></h1>
+		</div>-->
+		<div>
+			<a href="/"><img id="logo-image" src="{% static "jurisapp/images/logo_barlow.png" %}"></a>
+		</div>
+		
+		<div id="ac-sidebar"> 
+			<div id="acordao-main-info">
+				<div id="top-level-info">
+					<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
+					<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
+				</div>
+				<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
+				<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
+	    	</div>
+	    	<div id="acordao-other-info">
+	    		{% if acordao.numero %}<div><span class="ac-sidebar-field">Número:</span> {{ acordao.numero }}</div>{% endif %}
+	    		{% if acordao.votacao %}<div><span class="ac-sidebar-field">Votação:</span> {{ acordao.votacao }}</div>{% endif %}
+	    		{% if acordao.meio_processual %}<div><span class="ac-sidebar-field">Meio Processual:</span> {{ acordao.meio_processual }}</div>{% endif %}
+	    		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>{% endif %}
+	    	</div>
+	   <!-- 	<div id="acordao-icons">
+	    		include icons here
+	    	</div> -->
+		</div>
+
+		<div id="ac-content">
+			<div class="acordao-descritores">
+				{% for desc in acordao.descritores %}
+					<div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
+				{% endfor %}
+			</div>
+			<h3>Sumário</h3>
+			{{ acordao.sumario|linebreaks }}
+			{% if acordao.txt_integral and acordao.txt_integral.strip %}
+				<h3>Texto Integral</h3>
+				<!-- autoescape off to render html as html -->
+				{% autoescape off %}
+					{{ acordao.html_txt_integral }}
+				{% endautoescape %}
+			{% elif acordao.txt_parcial and acordao.txt_parcial.strip %}
+				<h3>Texto Parcial</h3>
+				{% autoescape off %}
+					{{ acordao.html_txt_parcial }}
+				{% endautoescape %}
+			{% endif %}
+
+		</div>
+	</div>
+</body>
+
+</html>

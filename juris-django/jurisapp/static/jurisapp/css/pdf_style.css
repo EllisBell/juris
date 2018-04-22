@@ -1,0 +1,62 @@
+
+html {
+	font-size: 16px;
+}
+
+body {
+	margin: 0px;
+	padding:0px;
+	border:0px;
+	color: #222222;
+}
+
+
+#logo-image {
+	width: 250px;
+}
+
+#ac-sidebar {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#top-level-info {
+	padding-bottom: 8px;
+}
+
+#ac-sidebar div {
+	margin-bottom: 4px;
+}
+
+.ac-sidebar-field {
+	font-weight: bold;
+}
+
+#ac-content {
+	line-height: 1.5em;
+}
+
+.descritor-div {
+	margin-right:1%;
+	margin-bottom: 1%;
+	margin-top: 1%;
+	display: inline-block;
+}
+
+.result-descritor {
+	font-weight: bold;
+    white-space: normal;
+    background-color: #e3f4f6;
+    padding: 5px;
+    display: inline-block;
+}
+
+@page {
+   @bottom-right {
+    content: counter(page) " / " counter(pages);
+    color: #444444;
+   }
+}
+
+
+

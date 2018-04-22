@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 {% load static %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="{% static "jurisapp/js/common.js" %}"></script>
-{% block scripts_block %}
-{% endblock %}
-<link rel="stylesheet" href="{% static "jurisapp/css/style.css" %}" />
-<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
 <html lang="en">
 <head>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="{% static "jurisapp/js/common.js" %}"></script>
+	{% block scripts_block %}
+	{% endblock %}
+	<link rel="stylesheet" href="{% static "jurisapp/css/style.css" %}" />
+	<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116554949-1"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
