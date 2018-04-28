@@ -116,7 +116,7 @@ $(document).ready(function() {
         var firstDate = $("#currentSearch").data("from-date");; // todo get date
         var secondDate = $("#currentSearch").data("to-date");; // todo get date
 
-        return getSearchDataObj(query, tribs, processo, firstDate, secondDate, page)
+        return getSearchDataObj(query, tribs, processo, firstDate, secondDate, page)    
     }
 
     function getSearchDataObj(query, tribs, processo, fromDate, toDate, page) {
@@ -260,10 +260,25 @@ $(document).ready(function() {
                 monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
                             "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
                 changeYear: true,
-                yearRange: "1932:" + new Date().getFullYear()
+                yearRange: "1932:" + new Date().getFullYear(),
+               /* onSelect: function(dateText) {
+                    alert(dateText);
+                }*/
             }
         );
+
     });
+
+  
+    $("#fromDate").datepicker(
+        { dateFormat: "dd/mm/yy", // FOR SOME REASON HAVE TO SET DATE FORMAT HERE AS WELL
+          onSelect: function(dateText) {
+           //alert(dateText);
+           // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is 
+           $("#toDate").datepicker("setDate", dateText)
+          }
+        }
+    );  
 
   /*  $("#procSearch").bind("paste", function () {
         setTimeout(function () {
