@@ -25,10 +25,15 @@ $(document).ready(function() {
         var query = $('#searchbox').val();
         var tribs = getCheckedTribs();
         var processo = $('#procSearch').val();
-        var fromDate = getFromDateAsDate();
+        var fromDate = getSimpleFromDate();
         var page = 1;
 
         return getSearchDataObj(query, tribs, processo, fromDate, page);  
+    }
+
+    function getSimpleFromDate() {
+        var fromDate = $('#fromDate').val();
+        return fromDate;
     }
 
     function getFromDateAsDate() {
@@ -96,8 +101,8 @@ $(document).ready(function() {
         var tribs = $("#currentSearch").data("tribs");
         tribs = JSON.parse(tribs.replace(/'/g, "\""));
 
-        var processo; // todo get processo (have to add to currentsearch div)
-        var firstDate; // todo get date
+        var processo = $("#currentSearch").data("processo");; // todo get processo (have to add to currentsearch div)
+        var firstDate = $("#currentSearch").data("from-date");; // todo get date
 
         return getSearchDataObj(query, tribs, processo, firstDate, page)
     }
@@ -240,7 +245,9 @@ $(document).ready(function() {
             { dateFormat: "dd/mm/yy",
                 dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
                 monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
-                            "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ]
+                            "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
+                changeYear: true,
+                yearRange: "1932:" + new Date().getFullYear()
             }
 
         );

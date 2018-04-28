@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.conf import settings
 from .models import Acordao
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
@@ -28,18 +29,27 @@ def search(request, sort_by=None):
     # n.b. the [] after tribs is apparently inserted by jQuery (even though we are passing 'tribs' it adds the '[]')
     tribs = request.GET.getlist('tribs[]')
 
+    processo = request.GET['processo']
+    print("PROC " + processo)
+    from_date = request.GET['fromDate']
+    print(from_date)
+
     page = get_page(request)
     display = 10
 
-    asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, page_number=page)
+    asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, processo=processo,
+                                           from_date=from_date, page_number=page)
 
     try:
         # results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
         results = acordao_search.get_search_results(asd, display, sort_by)
 
-    except Exception:
-        # Log error to Sentry
-        client.captureException()
+    except Exception as e:
+        if settings.DEBUG:
+            raise e
+        else:
+            # Log error to Sentry
+            client.captureException()
         # TODO return error page
         return render(request, 'jurisapp/oops.html')
 
@@ -48,7 +58,8 @@ def search(request, sort_by=None):
     total_pages = get_total_pages(total, display)
 
     context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
-                        has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages)
+                        has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages,
+                        processo=processo, from_date=from_date)
     return render(request, 'jurisapp/search_results.html', context_dict)
 
 
@@ -69,9 +80,10 @@ def get_total_pages(total, display):
 
 
 def save_search(request):
-    query = request.GET['query']
-    acordao_search.save_search(query)
-    # status 204 is no content
+    if not settings.DEBUG:
+        query = request.GET['query']
+        acordao_search.save_search(query)
+        # status 204 is no content
     return HttpResponse(status=204)
 
 
@@ -112,7 +124,6 @@ def suggest_processo(request):
     # jquery autocomplete specific
     results = []
     for proc in suggestions:
-        print("proc: " + proc)
         proc_json = {'value': proc}
         results.append(proc_json)
     data = json.dumps(results)

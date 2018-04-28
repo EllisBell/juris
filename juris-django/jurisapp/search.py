@@ -168,6 +168,10 @@ def search_fields(sd):
     #es = get_es()
     body = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
     body = add_sort(body, sd.sort_by)
+
+    if sd.from_date:
+        body = add_date_range(body, sd.from_date, sd.from_date)
+
     if sd.filter_dict:
         body = add_filter(body, sd.filter_dict)
     #res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
@@ -201,7 +205,8 @@ def get_multi_match_query(query, fields, match_type, operator):
     query = {
         "query": {
             "bool": {
-                "must": {
+                # MUST has to be a list (of dicts) if it is going to have more than one dict
+                "must": [{
                     "multi_match": {
                         "query": query,
                         "fields": fields,
@@ -210,7 +215,7 @@ def get_multi_match_query(query, fields, match_type, operator):
                         # to be present
                         "operator": operator
                     }
-                }
+                }]
             }
         }
     }
@@ -238,9 +243,31 @@ def get_filter(filter_dict):
 
 
 def add_date_range(query_dict, date_from, date_to):
-    query_dict["query"]["bool"]["must"]["range"]["data"] = {"gte": date_from, "lte": date_to}
+    print("ADDING DATE RANGE, " + date_from)
+    # appending to must list
+    query_dict["query"]["bool"]["must"].append(
+        {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
+    )
+    print("QUERY DICT")
+    print(query_dict)
     return query_dict
 
 
 def search_field(query, field):
     return None
+
+# var query = {'query':
+#                  {'bool':
+#                       {'must':
+#                            {'multi_match':
+#                                 {'query': 'clara',
+#                                  'fields': ['processo^2', 'relator^2', 'sumario', 'txt_integral', 'txt_parcial', 'descritores^2'],
+#                                  'type': 'most_fields',
+#                                  'operator': 'and'},
+#                             'range':
+#                                 {'data': {'gte': 'Mon Apr 02 2018 00:00:00 GMT+0100 (GMT Summer Time)',
+#                                           'lte': 'Mon Apr 02 2018 00:00:00 GMT+0100 (GMT Summer Time)'}
+#                                  }
+#                             }
+#                        }
+#                   }, 'sort': [{'_score': 'desc'}]}
