@@ -15,11 +15,17 @@
 		<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus autocomplete="on">
 
 		<div id="advancedSearch">
-			<label for="procSearch">Processo nº:</label>
-			<input id="procSearch">
+			<div id="procSearchDiv">
+				<label for="procSearch">Processo nº:</label>
+				<input id="procSearch">
+			</div>
 
-			<label for="fromDate">Data do acórdão:</label>
-			<input id="fromDate">
+			<div id="dateSearchDiv">
+				<label for="fromDate">Data:</label>
+				<input class="datePicker" id="fromDate">
+				<label for="toDate">Até:</label>
+				<input class="datePicker" id="toDate">
+			</div>
 		</div>
 
 

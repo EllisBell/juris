@@ -59,7 +59,8 @@ def search_with_paging(asd, operator, display_size, sort_by, query_type="most_fi
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']
 
-    sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date, processo=asd.processo,
+    sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date, to_date=asd.to_date,
+                      processo=asd.processo,
                       searchable_fields=get_searchable_fields(), match_type=query_type,
                       operator=operator, sort_by=sort_by, filter_dict=filter_dict,
                       exclude=exclude, start_at=start, res_size=display_size)

@@ -170,7 +170,7 @@ def search_fields(sd):
     body = add_sort(body, sd.sort_by)
 
     if sd.from_date:
-        body = add_date_range(body, sd.from_date, sd.from_date)
+        body = add_date_range(body, sd.from_date, sd.to_date)
 
     if sd.filter_dict:
         body = add_filter(body, sd.filter_dict)
@@ -244,6 +244,9 @@ def get_filter(filter_dict):
 
 def add_date_range(query_dict, date_from, date_to):
     print("ADDING DATE RANGE, " + date_from)
+    # if no end date provided, range is from_date to from_date
+    if not date_to:
+        date_to = date_from
     # appending to must list
     query_dict["query"]["bool"]["must"].append(
         {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}

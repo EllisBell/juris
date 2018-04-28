@@ -33,12 +33,13 @@ def search(request, sort_by=None):
     print("PROC " + processo)
     from_date = request.GET['fromDate']
     print(from_date)
+    to_date = request.GET['toDate']
 
     page = get_page(request)
     display = 10
 
     asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, processo=processo,
-                                           from_date=from_date, page_number=page)
+                                           from_date=from_date, to_date=to_date, page_number=page)
 
     try:
         # results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
@@ -59,7 +60,7 @@ def search(request, sort_by=None):
 
     context_dict = dict(total=total, acordaos=acordaos, query=query, tribs=tribs, page=page,
                         has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages,
-                        processo=processo, from_date=from_date)
+                        processo=processo, from_date=from_date, to_date=to_date)
     return render(request, 'jurisapp/search_results.html', context_dict)
 
 

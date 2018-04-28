@@ -25,10 +25,21 @@ $(document).ready(function() {
         var query = $('#searchbox').val();
         var tribs = getCheckedTribs();
         var processo = $('#procSearch').val();
-        var fromDate = getSimpleFromDate();
+        var fromDate = getDateValue($('#fromDate'));
+        var toDate = getDateValue($('#toDate'));
         var page = 1;
 
-        return getSearchDataObj(query, tribs, processo, fromDate, page);  
+        return getSearchDataObj(query, tribs, processo, fromDate, toDate, page);  
+    }
+
+    // adding this function in case i wanna do some date formatting or something at some point
+    function getDateValue(element) {
+        return element.val();
+    }
+
+    function getSimpleFromDate() {
+        var fromDate = $('#fromDate').val();
+        return fromDate;
     }
 
     function getSimpleFromDate() {
@@ -103,16 +114,18 @@ $(document).ready(function() {
 
         var processo = $("#currentSearch").data("processo");; // todo get processo (have to add to currentsearch div)
         var firstDate = $("#currentSearch").data("from-date");; // todo get date
+        var secondDate = $("#currentSearch").data("to-date");; // todo get date
 
-        return getSearchDataObj(query, tribs, processo, firstDate, page)
+        return getSearchDataObj(query, tribs, processo, firstDate, secondDate, page)
     }
 
-    function getSearchDataObj(query, tribs, processo, fromDate, page) {
+    function getSearchDataObj(query, tribs, processo, fromDate, toDate, page) {
         var searchData = {
             query: query,
             tribs: tribs,
             processo: processo,
             fromDate: fromDate,
+            toDate: toDate,
             page: page
         }
         return searchData;
@@ -240,7 +253,7 @@ $(document).ready(function() {
     });
 
     $(function() {
-        $("#fromDate").datepicker(
+        $(".datePicker").datepicker(
             // configure datepicker
             { dateFormat: "dd/mm/yy",
                 dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
@@ -249,7 +262,6 @@ $(document).ready(function() {
                 changeYear: true,
                 yearRange: "1932:" + new Date().getFullYear()
             }
-
         );
     });
 
