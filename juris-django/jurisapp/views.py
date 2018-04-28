@@ -4,6 +4,7 @@ from .models import Acordao
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
 from . import pdf
+import json
 
 
 def index(request):
@@ -100,3 +101,25 @@ def convert_descritores_to_list(ac):
     descritores = ac.descritores
     desc_list = descritores.split("|")
     ac.descritores = desc_list
+
+
+def suggest_processo(request):
+    proc = request.GET.get('term', '')
+    suggestions = get_suggestions(proc)
+    # jquery autocomplete specific
+    results = []
+    for proc in suggestions:
+        print("proc: " + proc)
+        proc_json = {'value': proc}
+        results.append(proc_json)
+    data = json.dumps(results)
+
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
+def get_suggestions(proc):
+    suggs = Acordao.objects.filter(processo__istartswith=proc).only("processo")
+    just_procs = [sugg.processo for sugg in suggs]
+    return just_procs
+

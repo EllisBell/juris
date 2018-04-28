@@ -4,22 +4,42 @@ $(document).ready(function() {
 	$('#searchbox').keydown(function(event) {
 	//var code = event.
 		if(event.keyCode == 13) {
-			event.preventDefault();
-
-			var query = $(this).val();
-			var tribs = getCheckedTribs();			
+			event.preventDefault();			
 			
-			if(!query || tribs.length==0) {
+            var sd = getFreshSearchData();
+
+            // TODO write isValidSearch method
+			if(!sd.query || sd.tribs.length==0) {
 				return;
 			}
 
             handle_search_focus();
 			showLoadingBar();
             setOrderByButtonSelectedAndColours($("#relevanceBtn"));
-            getRelevant(query, tribs, 1);
-            save_search(query)
+            getRelevant(sd);
+            save_search(sd.query);
 		}
 	});
+
+    function getFreshSearchData() {
+        var query = $('#searchbox').val();
+        var tribs = getCheckedTribs();
+        var processo = $('#procSearch').val();
+        var fromDate = getFromDateAsDate();
+        var page = 1;
+
+        return getSearchDataObj(query, tribs, page);  
+    }
+
+    function getFromDateAsDate() {
+        var fromDate = $('#fromDate').val();
+        return parseDate(fromDate);
+    }
+
+    function parseDate(dateString) {
+        var parsedDate = $.datepicker.parseDate("dd/mm/yy", dateString);
+        return parsedDate;
+    }
 
 	function getCheckedTribs() {
 		var tribs = []
@@ -30,6 +50,7 @@ $(document).ready(function() {
 		});
 		return tribs;
 	}
+
 
     function handle_search_focus() {
         var mq = window.matchMedia("(max-width: 524px)");
@@ -74,6 +95,10 @@ $(document).ready(function() {
         var tribs = $("#currentSearch").data("tribs");
         tribs = JSON.parse(tribs.replace(/'/g, "\""));
 
+        return getSearchDataObj(query, tribs, page)
+    }
+
+    function getSearchDataObj(query, tribs, page) {
         var searchData = {
             query: query,
             page: page,
@@ -82,24 +107,28 @@ $(document).ready(function() {
         return searchData;
     }
 
-
-    function getRelevant(query, tribs, page) {
+    function getRelevant(searchData) {
         // TODO this is sending date.now() as a way to get around IE caching results; bit of a hack, rework
-         $.get('/search_relevant/', {"_": Date.now(), query: query, tribs: tribs, page: page}, function(data) {
-                hideLoadingBar();
-                $('#searchResults').html(data);
-                $('#searchResults').css("visibility", "visible");
-                showOrderByButtons();                
-         });
+         $.get('/search_relevant/', 
+                // data to go with request
+                {"_": Date.now(), query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
+                // callback function
+                function(data) { displaySearchResults(data); }
+            );
     }
 
-    function getRecent(query, tribs, page) {
-        $.get('/search_recent/', {query: query, tribs: tribs, page: page}, function(data) {
-                hideLoadingBar();
-                $('#searchResults').html(data);
-                $('#searchResults').css("visibility", "visible");
-                showOrderByButtons();
-        });
+    function getRecent(searchData) {
+        $.get('/search_recent/', 
+                {query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
+                function(data) { displaySearchResults(data); }
+        );
+    }
+
+    function displaySearchResults(searchResData) {
+        hideLoadingBar();
+        $('#searchResults').html(searchResData);
+        $('#searchResults').css("visibility", "visible");
+        showOrderByButtons();
     }
 
     function showLoadingBar() {
@@ -155,11 +184,11 @@ $(document).ready(function() {
 
         if($("#relevanceBtn").data("selected") && !currentlyRelevant) {
             showLoadingBar();
-            getRelevant(searchData.query, searchData.tribs, 1);
+            getRelevant(searchData);
         }
         else if($("#recentBtn").data("selected") && currentlyRelevant) {
             showLoadingBar();
-            getRecent(searchData.query, searchData.tribs, 1);
+            getRecent(searchData);
         }
     }); 
 
@@ -184,4 +213,46 @@ $(document).ready(function() {
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
+    /*var location_input=$('input[id="autocomplete-processo"]');
+    location_input.autocomplete({
+        source: "('/suggest_processo/'",
+        minLength: 4
+        });*/
+
+    $(function() {
+        $("#procSearch").autocomplete({
+            source: "/suggest_processo/",
+            minLength: 5,
+        });
+    });
+
+    $(function() {
+        $("#fromDate").datepicker(
+            // configure datepicker
+            { dateFormat: "dd/mm/yy",
+                dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+                monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
+                            "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ]
+            }
+
+        );
+    });
+
+  /*  $("#procSearch").bind("paste", function () {
+        setTimeout(function () {
+        $("#procSearch").autocomplete("search", $("#procSearch").val());
+        }, 0);
+    });*/
+
+    //   keeps same width as box
+    /*  jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+          var ul = this.menu.element;
+          ul.outerWidth(this.element.outerWidth());
+    }*/
+
 });
+
+      jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+          var ul = this.menu.element;
+          ul.outerWidth(this.element.outerWidth());
+        }
