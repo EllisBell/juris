@@ -102,6 +102,12 @@ def create_acordao_doc_with_desc(ac):
 
 
 # interface
+
+class SearchData:
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
 def index_acordao(ac):
     doc = create_acordao_doc_with_desc(ac)
     index_doc(doc)
@@ -147,14 +153,33 @@ def test_analyse(analyser, text):
     return index_client.analyze(body={"analyzer": analyser, "text": text})
 
 
-def search_fields(index, query, searchable_fields, match_type, operator, sort_by, filter_dict, exclude_from_res,
-                  start_at=0, res_size=10):
+# def search_fields(index, query, searchable_fields, match_type, operator, sort_by, filter_dict, exclude_from_res,
+#                   start_at=0, res_size=10):
+#     #es = get_es()
+#     body = get_multi_match_query(query, searchable_fields, match_type, operator)
+#     body = add_sort(body, sort_by)
+#     if filter_dict:
+#         body = add_filter(body, filter_dict)
+#     #res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
+#     res = do_search(index, body, exclude_from_res, start_at, res_size)
+#     return res
+
+def search_fields(sd):
+    #es = get_es()
+    body = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
+    body = add_sort(body, sd.sort_by)
+    if sd.filter_dict:
+        body = add_filter(body, sd.filter_dict)
+    #res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
+    res = do_search(sd.index, body, sd.exclude, sd.start_at, sd.res_size)
+    return res
+
+#def search_with_date_range()
+
+
+def do_search(index, body, exclude, start_at, res_size):
     es = get_es()
-    body = get_multi_match_query(query, searchable_fields, match_type, operator)
-    body = add_sort(body, sort_by)
-    if filter_dict:
-        body = add_filter(body, filter_dict)
-    res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
+    res = es.search(index=index, body=body, _source_exclude=exclude, from_=start_at, size=res_size)
     return res
 
 
@@ -210,6 +235,11 @@ def get_filter(filter_dict):
     for key, value in filter_dict.items():
         filters.append({"terms": {key: value}})
     return filters
+
+
+def add_date_range(query_dict, date_from, date_to):
+    query_dict["query"]["bool"]["must"]["range"]["data"] = {"gte": date_from, "lte": date_to}
+    return query_dict
 
 
 def search_field(query, field):

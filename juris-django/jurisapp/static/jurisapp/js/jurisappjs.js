@@ -28,7 +28,7 @@ $(document).ready(function() {
         var fromDate = getFromDateAsDate();
         var page = 1;
 
-        return getSearchDataObj(query, tribs, page);  
+        return getSearchDataObj(query, tribs, processo, fromDate, page);  
     }
 
     function getFromDateAsDate() {
@@ -72,6 +72,7 @@ $(document).ready(function() {
     $(document).on("click", '.pageBtn', function(event) {
         var searchData = getCurrentSearchData();
         var pageToGoTo = $(this).hasClass("prevBtn") ? searchData.page-1 : searchData.page+1;
+        searchData.page = pageToGoTo;
 
         // TODO look into improving pagination/search results UX e.g. when to clear, where to focus, progress bar etc.
         if($(this).hasClass("bottomPageBtn")) {
@@ -79,10 +80,10 @@ $(document).ready(function() {
         }
  		showLoadingBar();
         if($("#relevanceBtn").data("selected")) {
-            getRelevant(searchData.query, searchData.tribs, pageToGoTo);
+            getRelevant(searchData);
         }
         else {
-            getRecent(searchData.query, searchData.tribs, pageToGoTo);
+            getRecent(searchData);
         }
     });
 
@@ -95,23 +96,30 @@ $(document).ready(function() {
         var tribs = $("#currentSearch").data("tribs");
         tribs = JSON.parse(tribs.replace(/'/g, "\""));
 
-        return getSearchDataObj(query, tribs, page)
+        var processo; // todo get processo (have to add to currentsearch div)
+        var firstDate; // todo get date
+
+        return getSearchDataObj(query, tribs, processo, firstDate, page)
     }
 
-    function getSearchDataObj(query, tribs, page) {
+    function getSearchDataObj(query, tribs, processo, fromDate, page) {
         var searchData = {
             query: query,
-            page: page,
-            tribs: tribs
+            tribs: tribs,
+            processo: processo,
+            fromDate: fromDate,
+            page: page
         }
         return searchData;
     }
 
     function getRelevant(searchData) {
         // TODO this is sending date.now() as a way to get around IE caching results; bit of a hack, rework
+         searchData._ = Date.now();
          $.get('/search_relevant/', 
                 // data to go with request
-                {"_": Date.now(), query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
+                //{"_": Date.now(), query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
+                searchData, 
                 // callback function
                 function(data) { displaySearchResults(data); }
             );
@@ -119,7 +127,7 @@ $(document).ready(function() {
 
     function getRecent(searchData) {
         $.get('/search_recent/', 
-                {query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
+                searchData, 
                 function(data) { displaySearchResults(data); }
         );
     }

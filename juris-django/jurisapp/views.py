@@ -31,8 +31,11 @@ def search(request, sort_by=None):
     page = get_page(request)
     display = 10
 
+    asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, page_number=page)
+
     try:
-        results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
+        # results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
+        results = acordao_search.get_search_results(asd, display, sort_by)
 
     except Exception:
         # Log error to Sentry
@@ -49,13 +52,6 @@ def search(request, sort_by=None):
     return render(request, 'jurisapp/search_results.html', context_dict)
 
 
-def save_search(request):
-    query = request.GET['query']
-    acordao_search.save_search(query)
-    # status 204 is no content
-    return HttpResponse(status=204)
-
-
 def get_page(request):
     page = request.GET.get('page')
     try:
@@ -70,6 +66,13 @@ def get_total_pages(total, display):
     if total % display is not 0:
         total_pages = total_pages + 1
     return total_pages
+
+
+def save_search(request):
+    query = request.GET['query']
+    acordao_search.save_search(query)
+    # status 204 is no content
+    return HttpResponse(status=204)
 
 
 # individual acordao
@@ -122,4 +125,3 @@ def get_suggestions(proc):
     suggs = Acordao.objects.filter(processo__istartswith=proc).only("processo")
     just_procs = [sugg.processo for sugg in suggs]
     return just_procs
-
