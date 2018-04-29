@@ -121,10 +121,13 @@ def convert_descritores_to_list(ac):
 
 def suggest_processo(request):
     proc = request.GET.get('term', '')
+
+    print(proc)
     suggestions = get_suggestions(proc)
     # jquery autocomplete specific
     results = []
     for proc in suggestions:
+        print(proc)
         proc_json = {'value': proc}
         results.append(proc_json)
     data = json.dumps(results)

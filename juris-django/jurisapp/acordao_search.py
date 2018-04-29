@@ -25,7 +25,9 @@ class AcordaoSearchData:
 #     return results
 
 def get_search_results(asd, display, sort_by):
-    if asd.query[0] == "\"" and asd.query[-1] == "\"":
+    if not asd.query:
+        results = and_search(asd, display, sort_by)
+    elif asd.query[0] == "\"" and asd.query[-1] == "\"":
         asd.query = asd.query.replace("\"", "")
         results = phrase_search(asd, display, sort_by)
     elif ' ou ' in asd.query.lower():
@@ -49,19 +51,21 @@ def phrase_search(asd, display_size, sort_by=None):
     return search_with_paging(asd, "and", display_size, sort_by, "phrase")
 
 
-def search_with_paging(asd, operator, display_size, sort_by, query_type="most_fields"):
+def search_with_paging(asd, operator, display_size, sort_by, query_type="cross_fields"):
     if not asd.page_number:
         asd.page_number = 1
 
     # field to filter on and values to filter for
     filter_dict = {"tribunal": asd.tribs}
+    # add processo filter if there
+    if asd.processo:
+        filter_dict["processo.raw"] = [asd.processo,]
 
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']
 
     sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date, to_date=asd.to_date,
-                      processo=asd.processo,
-                      searchable_fields=get_searchable_fields(), match_type=query_type,
+                      processo=asd.processo, searchable_fields=get_searchable_fields(), match_type=query_type,
                       operator=operator, sort_by=sort_by, filter_dict=filter_dict,
                       exclude=exclude, start_at=start, res_size=display_size)
 
@@ -75,7 +79,7 @@ def search_with_paging(asd, operator, display_size, sort_by, query_type="most_fi
 
 def get_searchable_fields():
     # ^ syntax weights fields more
-    return ["processo^2", "relator^2", "sumario", "txt_integral", "txt_parcial", "descritores^2"]
+    return ["processo^4", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
 
 
 def get_ids_from_res(res):

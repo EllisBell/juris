@@ -8,11 +8,26 @@ def get_es():
     return es
 
 
+def test_analyzer(es, analyzer, text):
+    c = es.indices
+    res = c.analyze(index="acordao_idx", body={"analyzer": analyzer, "text": text}, format="text")
+    return res
+
+
 # indexing a doc using es.index would normally create index if didn't exist
 # but we want to specify analyzer for index so think I need to specifically create one with mappings etc.
 def create_acordao_idx():
     es = get_es()
     index_client = es.indices
+
+    settings = {"analysis": {
+        "normalizer": {
+            "lowercaser": {
+                "type": "custom",
+                "filter": "lowercase"
+            }
+        }
+    }}
 
     # Remember to specify analyzer to stem words correctly etc.
     # By default, queries will use the analyzer defined in the index mapping for the field
@@ -20,7 +35,11 @@ def create_acordao_idx():
         "properties": {
             "id": {"type": "integer"},
             # Todo test these keywords out -send in capitalized, uncapitalized etc.
-            "processo": {"type": "text"},
+            "processo": {"type": "text", "analyzer": "portuguese",
+                "fields": {
+                    "raw": {"type": "keyword", "normalizer": "lowercaser"}
+                }
+            },
             "tribunal": {"type": "keyword"},
             "tribunal_long": {"type": "keyword"},
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
@@ -35,7 +54,7 @@ def create_acordao_idx():
     }
     }
 
-    index_client.create(index="acordao_idx", body={"mappings": mappings})
+    index_client.create(index="acordao_idx", body={"settings": settings, "mappings": mappings})
 
 
 def delete_acordao_idx():
@@ -165,20 +184,29 @@ def test_analyse(analyser, text):
 #     return res
 
 def search_fields(sd):
-    #es = get_es()
-    body = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
-    body = add_sort(body, sd.sort_by)
+    print("GOT TO SEARCH FIELDS")
+
+    # body = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
+    body = get_bool_must_query_outline()
+    if sd.query:
+        body = add_multi_match(body, sd.query, sd.searchable_fields, sd.match_type, sd.operator)
+
+    # processo is just another multi_match (searching for processo in all fields)
+    # will be able to find where processo is referenced in other fields
+    # But always and by default
+    #if sd.processo:
+    #    body = add_multi_match(body, sd.processo, ["processo.raw"], sd.match_type, "and")
 
     if sd.from_date:
         body = add_date_range(body, sd.from_date, sd.to_date)
 
     if sd.filter_dict:
         body = add_filter(body, sd.filter_dict)
-    #res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
+
+    body = add_sort(body, sd.sort_by)
+
     res = do_search(sd.index, body, sd.exclude, sd.start_at, sd.res_size)
     return res
-
-#def search_with_date_range()
 
 
 def do_search(index, body, exclude, start_at, res_size):
@@ -187,40 +215,52 @@ def do_search(index, body, exclude, start_at, res_size):
     return res
 
 
-def get_basic_multi_match_query(query, fields, match_type, operator):
-    query = {
-        "query": {
-            "multi_match": {
-                "query": query,
-                "fields": fields,
-                "type": match_type,
-                "operator": operator
-            }
-        }
-    }
-    return query
-
-
-def get_multi_match_query(query, fields, match_type, operator):
+def get_bool_must_query_outline():
     query = {
         "query": {
             "bool": {
                 # MUST has to be a list (of dicts) if it is going to have more than one dict
-                "must": [{
-                    "multi_match": {
-                        "query": query,
-                        "fields": fields,
-                        "type": match_type,
-                        # n.b. we still need to include "and" here if we want ALL the terms in query
-                        # to be present
-                        "operator": operator
-                    }
-                }]
+                "must": []
             }
         }
     }
 
     return query
+
+
+# Add multi_match to query dict MUST
+def add_multi_match(query_dict, query, fields, match_type, operator, analyzer=None):
+    multi_match_dict = {"multi_match": {
+            "query": query,
+            "fields": fields,
+            "type": match_type,
+            # "analyzer": "portuguese",
+            # n.b. we still need to include "and" here if we want ALL the terms in query
+            # to be present
+            "operator": operator
+            }
+        }
+
+    if analyzer:
+        multi_match_dict["multi_match"]["analyzer"] = analyzer
+
+    query_dict["query"]["bool"]["must"].append(multi_match_dict)
+
+    return query_dict
+
+
+def add_date_range(query_dict, date_from, date_to):
+    print("ADDING DATE RANGE, " + date_from)
+    # if no end date provided, range is from_date to from_date
+    if not date_to:
+        date_to = date_from
+    # appending to must list
+    query_dict["query"]["bool"]["must"].append(
+        {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
+    )
+    print("QUERY DICT")
+    print(query_dict)
+    return query_dict
 
 
 def add_sort(query_dict, sort_field):
@@ -242,35 +282,19 @@ def get_filter(filter_dict):
     return filters
 
 
-def add_date_range(query_dict, date_from, date_to):
-    print("ADDING DATE RANGE, " + date_from)
-    # if no end date provided, range is from_date to from_date
-    if not date_to:
-        date_to = date_from
-    # appending to must list
-    query_dict["query"]["bool"]["must"].append(
-        {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
-    )
-    print("QUERY DICT")
-    print(query_dict)
-    return query_dict
+def get_basic_multi_match_query(query, fields, match_type, operator):
+    query = {
+        "query": {
+            "multi_match": {
+                "query": query,
+                "fields": fields,
+                "type": match_type,
+                "operator": operator
+            }
+        }
+    }
+    return query
 
 
 def search_field(query, field):
     return None
-
-# var query = {'query':
-#                  {'bool':
-#                       {'must':
-#                            {'multi_match':
-#                                 {'query': 'clara',
-#                                  'fields': ['processo^2', 'relator^2', 'sumario', 'txt_integral', 'txt_parcial', 'descritores^2'],
-#                                  'type': 'most_fields',
-#                                  'operator': 'and'},
-#                             'range':
-#                                 {'data': {'gte': 'Mon Apr 02 2018 00:00:00 GMT+0100 (GMT Summer Time)',
-#                                           'lte': 'Mon Apr 02 2018 00:00:00 GMT+0100 (GMT Summer Time)'}
-#                                  }
-#                             }
-#                        }
-#                   }, 'sort': [{'_score': 'desc'}]}

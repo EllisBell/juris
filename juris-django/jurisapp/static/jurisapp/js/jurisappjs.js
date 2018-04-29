@@ -11,9 +11,12 @@ $(document).ready(function() {
             var validSearch = isValidSearch(sd);
 
             // TODO write isValidSearch method
-			if(!sd.query || sd.tribs.length==0) {
+			/*if(!sd.query || sd.tribs.length==0) {
 				return;
-			}
+			}*/
+            if(!validSearch) {
+                return;
+            }
 
             handle_search_focus();
 			showLoadingBar();
