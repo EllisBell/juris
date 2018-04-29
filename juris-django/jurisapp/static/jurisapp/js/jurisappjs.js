@@ -10,10 +10,6 @@ $(document).ready(function() {
 
             var validSearch = isValidSearch(sd);
 
-            // TODO write isValidSearch method
-			/*if(!sd.query || sd.tribs.length==0) {
-				return;
-			}*/
             if(!validSearch) {
                 return;
             }
@@ -254,28 +250,34 @@ $(document).ready(function() {
     $("#clearFromDate").click(function(e) {
         $("#fromDate").datepicker("setDate", null);
         $("#toDate").datepicker("setDate", null);
+        $(".dateClear").css("visibility", "hidden");
     });
 
     $("#clearToDate").click(function(e) {
         $("#toDate").datepicker("setDate", null);
+        $("#clearToDate").css("visibility", "hidden");
     });
 
 
 
     $("#fromDate").datepicker("option", "onSelect", function(dateText) { 
         // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is
+        $("#clearFromDate").css("visibility", "visible");
         var newFromDate = $(this).datepicker("getDate");
         var currentToDate = $("#toDate").datepicker("getDate");
         if(currentToDate && currentToDate < newFromDate) {
             $("#toDate").datepicker("setDate", dateText);
+            $("#clearToDate").css("visibility", "visible");
         }
         $("#toDate").datepicker("option", "minDate", newFromDate);
     }); 
 
     $("#toDate").datepicker("option", "onSelect", function(dateText) {  
+        $("#clearToDate").css("visibility", "visible");
         var currentFromDate = $("#fromDate").datepicker("getDate");
-        if(!currentFromDate ) {
+        if(!currentFromDate) {
             $("#fromDate").datepicker("setDate", dateText);
+            $("#clearFromDate").css("visibility", "visible");
         }
     }); 
 

@@ -159,16 +159,45 @@ header h1 {
 	box-shadow: none;
 }
 
+#advancedSearch {
+	margin-top: 2%;
+}
+
 #procSearch {
+	margin-bottom: 2%;
 	font-style: inherit;
 	color: inherit;
 	width: 20%;
 	font-size: inherit;
+	box-shadow: none;
+	border:none;
+	border-bottom: 1px solid #1E2127;
+}
+
+#procSearch:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+#dateSearchDiv div {
+	display: inline-block;
+}
+
+#toDateDiv {
+	margin-left: 2%;
+}
+
+.datePicker {
+	box-shadow: none;
+	border:none;
+	border-bottom: 1px solid #1E2127;
 }
 
 .dateClear {
 	cursor: pointer;
 	font-size: 0.6rem;
+	visibility: hidden;
+	color: #FD8B85;
 }
 
 #tribCheckBoxes {
