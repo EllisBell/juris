@@ -8,6 +8,8 @@ $(document).ready(function() {
 			
             var sd = getFreshSearchData();
 
+            var validSearch = isValidSearch(sd);
+
             // TODO write isValidSearch method
 			if(!sd.query || sd.tribs.length==0) {
 				return;
@@ -37,26 +39,6 @@ $(document).ready(function() {
         return element.val();
     }
 
-    function getSimpleFromDate() {
-        var fromDate = $('#fromDate').val();
-        return fromDate;
-    }
-
-    function getSimpleFromDate() {
-        var fromDate = $('#fromDate').val();
-        return fromDate;
-    }
-
-    function getFromDateAsDate() {
-        var fromDate = $('#fromDate').val();
-        return parseDate(fromDate);
-    }
-
-    function parseDate(dateString) {
-        var parsedDate = $.datepicker.parseDate("dd/mm/yy", dateString);
-        return parsedDate;
-    }
-
 	function getCheckedTribs() {
 		var tribs = []
 		$(".tribLabel").each(function() {
@@ -66,6 +48,10 @@ $(document).ready(function() {
 		});
 		return tribs;
 	}
+    function isValidSearch(sd) {
+        // todo if any of the things are there AND there is at least one trib selected, search
+        return (sd.query || sd.processo || sd.fromDate) && sd.tribs.length > 0
+    }
 
 
     function handle_search_focus() {
@@ -239,46 +225,58 @@ $(document).ready(function() {
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
-    /*var location_input=$('input[id="autocomplete-processo"]');
-    location_input.autocomplete({
-        source: "('/suggest_processo/'",
-        minLength: 4
-        });*/
 
-    $(function() {
-        $("#procSearch").autocomplete({
-            source: "/suggest_processo/",
-            minLength: 5,
-        });
+    $("#procSearch").autocomplete({
+        source: "/suggest_processo/",
+        minLength: 5,
     });
 
-    $(function() {
-        $(".datePicker").datepicker(
-            // configure datepicker
-            { dateFormat: "dd/mm/yy",
-                dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
-                monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
-                            "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
-                changeYear: true,
-                yearRange: "1932:" + new Date().getFullYear(),
-               /* onSelect: function(dateText) {
-                    alert(dateText);
-                }*/
-            }
-        );
-
-    });
-
-  
-    $("#fromDate").datepicker(
-        { dateFormat: "dd/mm/yy", // FOR SOME REASON HAVE TO SET DATE FORMAT HERE AS WELL
-          onSelect: function(dateText) {
-           //alert(dateText);
-           // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is 
-           $("#toDate").datepicker("setDate", dateText)
-          }
+    $(".datePicker").datepicker(
+        // configure datepicker
+        { dateFormat: "dd/mm/yy",
+            dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+            monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
+                        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
+            changeYear: true,
+            yearRange: "1932:" + new Date().getFullYear()
         }
-    );  
+    );
+
+    $(".datePicker").keyup(function(e) {
+    if(e.keyCode == 8 || e.keyCode == 46) {
+        $.datepicker._clearDate($(this));
+    }
+    });
+
+    $("#clearFromDate").click(function(e) {
+        $("#fromDate").datepicker("setDate", null);
+        $("#toDate").datepicker("setDate", null);
+    });
+
+    $("#clearToDate").click(function(e) {
+        $("#toDate").datepicker("setDate", null);
+    });
+
+
+
+    $("#fromDate").datepicker("option", "onSelect", function(dateText) { 
+        // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is
+        var newFromDate = $(this).datepicker("getDate");
+        var currentToDate = $("#toDate").datepicker("getDate");
+        if(currentToDate && currentToDate < newFromDate) {
+            $("#toDate").datepicker("setDate", dateText);
+        }
+        $("#toDate").datepicker("option", "minDate", newFromDate);
+    }); 
+
+    $("#toDate").datepicker("option", "onSelect", function(dateText) {  
+        var currentFromDate = $("#fromDate").datepicker("getDate");
+        if(!currentFromDate ) {
+            $("#fromDate").datepicker("setDate", dateText);
+        }
+    }); 
+
+
 
   /*  $("#procSearch").bind("paste", function () {
         setTimeout(function () {
@@ -286,15 +284,9 @@ $(document).ready(function() {
         }, 0);
     });*/
 
-    //   keeps same width as box
-    /*  jQuery.ui.autocomplete.prototype._resizeMenu = function () {
-          var ul = this.menu.element;
-          ul.outerWidth(this.element.outerWidth());
-    }*/
-
 });
 
-      jQuery.ui.autocomplete.prototype._resizeMenu = function () {
-          var ul = this.menu.element;
-          ul.outerWidth(this.element.outerWidth());
-        }
+    jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+        var ul = this.menu.element;
+        ul.outerWidth(this.element.outerWidth());
+    }
