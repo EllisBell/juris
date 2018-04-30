@@ -56,7 +56,7 @@ header h1 {
 
 #logo {
 	font-family: inherit;
-	color: #3c434f;
+	color: #333333;
 	font-size: 0.85rem;
 	display: inline-block;
 }
@@ -64,7 +64,7 @@ header h1 {
 #logo a {
 	text-decoration: none;
 	font-family: inherit;
-	color: #3c434f;
+	color: #333333;
 }
 
 #ponto {
@@ -136,7 +136,6 @@ header h1 {
 	/*margin: 0 auto;*/
 	margin-top: 8%;
 	/*max-width: 65%;*/
-	/* TODO fix this height issue; avoid whitespace at bottom */
 	height:80%;
 	width: inherit;
 }
@@ -145,13 +144,14 @@ header h1 {
 	display: inline-block;
 	width: 50%;
 	/*margin: 0 auto;*/
+	font-family: inherit;
 	box-shadow: none;
 	border:none;
-	border-bottom: 3px solid #1E2127;
+	border-bottom: 3px solid #222222;
 	border-radius: 0;
 	font-size: 2rem;
 	background-color: inherit;
-	color: inherit;
+	color: #333333;
 }
 
 #searchbox:focus {
@@ -161,21 +161,24 @@ header h1 {
 
 .searchButtons {
   height: 40px;
-  width: 40px;
-  border-radius: 50%;
- /* border-radius: 1.5px;*/
+  width: 60px;
+  /*border-radius: 50%;*/
+  border-radius: 1.5px;
   box-shadow: none;
   outline: none;
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
-  /*box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
+  box-shadow: 0 1px 3px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.23);
   position: relative;
-  bottom: 5px;
+  bottom: 6px;
+  background-color: #e3e5e4;
+  color: #333333;
+  margin-left: 5px;
 }
 
-#showAdv {
-	margin-left: 5px;
+.searchButtons:hover {
+	background-color: #B9C3BE;
 }
 
 #advancedSearch {
@@ -183,15 +186,20 @@ header h1 {
 	display: none;
 }
 
-#procSearch {
-	margin-bottom: 2%;
+.advInput {
+	font-family: inherit;
 	font-style: inherit;
+	font-weight: bold;
 	color: inherit;
-	width: 20%;
-	font-size: inherit;
+	font-size: 1.1rem;
 	box-shadow: none;
 	border:none;
 	border-bottom: 1px solid #1E2127;
+}
+
+#procSearch {
+	margin-bottom: 2%;	
+	width: 20%;	
 }
 
 #procSearch:focus {
@@ -218,6 +226,11 @@ header h1 {
 	font-size: 0.6rem;
 	visibility: hidden;
 	color: #FD8B85;
+}
+
+.advLabel {
+	font-weight: bolder;
+	color: #444444;
 }
 
 #tribCheckBoxes {
@@ -301,18 +314,35 @@ header h1 {
 .acordao-result {
 	margin-top: 2%;
 	margin-bottom: 3%;
-	padding-bottom:1%;
 	font-size: 1.1rem;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-.acordao-result::after {
+.acordao-result-content {
+	background-color: inherit;
+	padding-bottom:1%;
+	padding:1%;
+}
+
+.result-bottom {
+	position: relative;
+	padding-top: 15px;
+}
+
+.bottom-link {
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+}
+
+/*.acordao-result::after {
   content: "";
   display: block;
   border-bottom: 2px solid #3c434f;
   width: 40%;
   position: relative;
   padding-bottom:1%;
-}
+}*/
 
 .acordao-result .result-link {
 	margin-bottom: 2%;

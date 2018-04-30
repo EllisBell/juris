@@ -75,7 +75,7 @@ def get_page(request):
 
 def get_total_pages(total, display):
     total_pages = total // display
-    if total % display is not 0:
+    if total % display is not 0 or total == 0:
         total_pages = total_pages + 1
     return total_pages
 

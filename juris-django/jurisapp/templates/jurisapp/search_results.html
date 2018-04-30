@@ -19,16 +19,21 @@
 
 {% for acordao in acordaos %}
 <div class="acordao-result">
-<div class="result-link"><a href="/acordao/{{ acordao.id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
-<span class="result-field">Tribunal:</span> {{ acordao.tribunal_long }} <br>
-<span class="result-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }} <br>
-<span class="result-field">Relator:</span> {{acordao.relator}}<br>
-<div class="result-descritores">
-{% for desc in acordao.descritores %}
-<div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
-{% endfor %}
-</div>
-<div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
+    <div class="acordao-result-content">
+        <div class="result-link"><a href="/acordao/{{ acordao.id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
+        <span class="result-field">Tribunal:</span> {{ acordao.tribunal_long }} <br>
+        <span class="result-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }} <br>
+        <span class="result-field">Relator:</span> {{acordao.relator}}<br>
+        <div class="result-descritores">
+        {% for desc in acordao.descritores %}
+        <div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
+        {% endfor %}
+        </div>
+        <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
+    </div>
+    <div class="result-bottom">
+        <span class="bottom-link">ver acórdão</span>
+    </div>
 </div>
 {% endfor %}
 

@@ -235,6 +235,7 @@ $(document).ready(function() {
         var adv = $("#advancedSearch");
         if(adv.is(':visible')) {
             adv.hide(200);
+            clearAdvancedSearch();
         }
         else {
             adv.show(200);
@@ -244,7 +245,7 @@ $(document).ready(function() {
 
     $("#procSearch").autocomplete({
         source: "/suggest_processo/",
-        minLength: 5,
+        minLength: 4,
     });
 
     $(".datePicker").datepicker(
@@ -275,8 +276,6 @@ $(document).ready(function() {
         $("#clearToDate").css("visibility", "hidden");
     });
 
-
-
     $("#fromDate").datepicker("option", "onSelect", function(dateText) { 
         // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is
         $("#clearFromDate").css("visibility", "visible");
@@ -297,6 +296,12 @@ $(document).ready(function() {
             $("#clearFromDate").css("visibility", "visible");
         }
     }); 
+
+    function clearAdvancedSearch() {
+        $("#procSearch").val("")
+        $("#fromDate").datepicker("setDate", null);
+        $("#toDate").datepicker("setDate", null);
+    }
 
 
 
