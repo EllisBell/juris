@@ -5,22 +5,29 @@ $(document).ready(function() {
 	//var code = event.
 		if(event.keyCode == 13) {
 			event.preventDefault();			
-			
-            var sd = getFreshSearchData();
-
-            var validSearch = isValidSearch(sd);
-
-            if(!validSearch) {
-                return;
-            }
-
-            handle_search_focus();
-			showLoadingBar();
-            setOrderByButtonSelectedAndColours($("#relevanceBtn"));
-            getRelevant(sd);
-            save_search(sd.query);
+            doFreshSearch();
 		}
 	});
+
+    $("#searchBtn").click(function() {
+        doFreshSearch();
+    })
+
+    function doFreshSearch() {
+         var sd = getFreshSearchData();
+
+        var validSearch = isValidSearch(sd);
+
+        if(!validSearch) {
+            return;
+        }
+
+        handle_search_focus();
+        showLoadingBar();
+        setOrderByButtonSelectedAndColours($("#relevanceBtn"));
+        getRelevant(sd);
+        save_search(sd.query);
+    }
 
     function getFreshSearchData() {
         var query = $('#searchbox').val();
@@ -223,6 +230,16 @@ $(document).ready(function() {
     }
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
+
+    $("#showAdv").click(function() {
+        var adv = $("#advancedSearch");
+        if(adv.is(':visible')) {
+            adv.hide(200);
+        }
+        else {
+            adv.show(200);
+        }
+    });
 
 
     $("#procSearch").autocomplete({
