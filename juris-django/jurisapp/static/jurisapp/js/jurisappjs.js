@@ -9,9 +9,9 @@ $(document).ready(function() {
 		}
 	});
 
-    $("#searchBtn").click(function() {
+   $(".searchBtn").click(function() {
         doFreshSearch();
-    })
+    });
 
     function doFreshSearch() {
          var sd = getFreshSearchData();
@@ -231,7 +231,7 @@ $(document).ready(function() {
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
-    $("#showAdv").click(function() {
+    $(".showAdv").click(function() {
         var adv = $("#advancedSearch");
         if(adv.is(':visible')) {
             adv.hide(200);

@@ -169,7 +169,7 @@ header h1 {
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.23);
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.23);*/
   position: relative;
   bottom: 6px;
   background-color: #e3e5e4;
@@ -179,6 +179,25 @@ header h1 {
 
 .searchButtons:hover {
 	background-color: #B9C3BE;
+}
+
+.searchSpan {
+	font-size: 1.3rem;
+	color: #444444;
+	cursor: pointer;
+	display: none;
+}
+
+.searchSpan:hover {
+	color: #222222;
+}
+
+.showAdv {
+	margin-left: 8px;
+}
+
+.searchButtons {
+	margin-left: 5px;
 }
 
 #advancedSearch {
@@ -197,8 +216,11 @@ header h1 {
 	border-bottom: 1px solid #1E2127;
 }
 
+#procSearchDiv {
+	margin-bottom: 2%;
+}
+
 #procSearch {
-	margin-bottom: 2%;	
 	width: 20%;	
 }
 
@@ -516,7 +538,6 @@ header h1 {
 	padding-left: 2%;
 	font-size: 1.1rem;
 	line-height: 1.5rem;
-	/*border: 1px solid blue;*/
 }
 
 .clearfix::after {
@@ -564,6 +585,10 @@ header h1 {
 }
 
 @media only screen and (max-width: 700px) {
+	#all-content {
+		width: 95%;
+	}
+
 	#top-nav {
 		height:100%;
 	}
@@ -579,7 +604,6 @@ header h1 {
 	}
 
 	#top-list {
-		/*visibility: hidden;*/
 		position: relative;
 		margin-top: 15%;
 	}
@@ -601,12 +625,68 @@ header h1 {
 		font-size: 1.5rem;		
 	}
 
-	#searchbox {
-		width:65%;
+	#content {
+		max-width: 95%;
+		margin: 15% auto 0 auto;
 	}
 
-	#content {
-		max-width: 80%;
+	#searchbox {
+		width:75%;
+	}
+
+	.searchButtons {
+		display: none;
+	}
+
+	.searchSpan {
+		display: inline-block;
+		font-size: 1.5rem;
+	}
+
+	.showAdv{
+		margin-left: 4%;
+	}
+
+	#advancedSearch {
+		margin-top: 4%;
+		margin-bottom: 4%;
+	}
+
+	#procSearch {
+		width: 40%;	
+		font-size: 1rem;
+	}
+
+	#dateSearchiv{
+		font-size: 1rem;
+	}
+
+	#dateSearchDiv div {
+		display: block;
+		margin-left: 0;
+		margin-bottom: 2%;
+	}
+
+	.dateClear {
+		font-size: 0.8rem;
+	}
+
+	.trib-long {
+		display: none;
+	}
+
+	.trib-short {
+		display: inline-block;
+	}
+
+	#searchResults {
+		width: 98%;
+		margin: 10% auto 0 auto;
+	}
+
+	.acordao-result {
+		width: 100%;
+		margin: 5% auto 5% auto;
 	}
 
 	#acordao-main-info {
@@ -655,8 +735,8 @@ header h1 {
 	}
 
 	#searchbox {
-		font-size: 1.5rem;
-		width:85%;
+		font-size: 1.2rem;
+		width:75%;
 	}
 
 	#tribCheckBoxes {
@@ -668,31 +748,16 @@ header h1 {
 		margin-bottom: 6px;
 	}
 
-	.trib-long {
-		display: none;
-	}
-
-	.trib-short {
-		display: inline-block;
-	}
-
 	#orderByButtons {
 		margin-top: 5%;
 	}	
 
 	#searchResults {
 		width: 98%;
-		/*margin-top: 20%;
-		margin left: auto;
-		margin right: auto;*/
 		margin: 20% auto 0 auto;
 	}
 
 	.acordao-result {
-		/*margin-top: 5%;
-		margin-bottom: 5%;
-		margin-left: auto;
-		margin-right: auto;*/
 		width: 100%;
 		margin: 5% auto 5% auto;
 	}
@@ -707,9 +772,9 @@ header h1 {
 		margin-bottom: 1%;
 	}
 
-.result-bottom {
-	margin-top: 8%;
-}
+	.result-bottom {
+		margin-top: 8%;
+	}
 
 
 	.loading {
