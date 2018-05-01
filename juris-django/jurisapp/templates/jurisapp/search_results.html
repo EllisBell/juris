@@ -32,7 +32,7 @@
         <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
     </div>
     <div class="result-bottom">
-        <span class="bottom-link">ver acórdão</span>
+        <a href="/acordao/{{ acordao.id }}" target="_blank" class="bottom-link">ver acórdão</a>
     </div>
 </div>
 {% endfor %}
