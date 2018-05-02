@@ -13,6 +13,84 @@ $(document).ready(function() {
         doFreshSearch();
     });
 
+       $(".showAdv").click(function() {
+        var adv = $("#advancedSearch");
+        if(adv.is(':visible')) {
+            adv.hide(200);
+            clearAdvancedSearch();
+        }
+        else {
+            adv.show(200);
+        }
+    });
+
+    $("#procSearch").autocomplete({
+        source: "/suggest_processo/",
+        minLength: 4,
+    });
+
+    $("#procSearch").keydown(function(event) {
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            doFreshSearch();
+        }
+    });
+
+    $(".datePicker").datepicker(
+        // configure datepicker
+        { dateFormat: "dd/mm/yy",
+            dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+            monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
+                        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
+            changeYear: true,
+            yearRange: "1932:" + new Date().getFullYear()
+        }
+    );
+
+    $(".datePicker").keyup(function(e) {
+    if(e.keyCode == 8 || e.keyCode == 46) {
+        $.datepicker._clearDate($(this));
+    }
+    });
+
+    $("#clearFromDate").click(function(e) {
+        $("#fromDate").datepicker("setDate", null);
+        $("#toDate").datepicker("setDate", null);
+        $(".dateClear").css("visibility", "hidden");
+    });
+
+    $("#clearToDate").click(function(e) {
+        $("#toDate").datepicker("setDate", null);
+        $("#clearToDate").css("visibility", "hidden");
+    });
+
+    $("#fromDate").datepicker("option", "onSelect", function(dateText) { 
+        // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is
+        $("#clearFromDate").css("visibility", "visible");
+        var newFromDate = $(this).datepicker("getDate");
+        var currentToDate = $("#toDate").datepicker("getDate");
+        if(currentToDate && currentToDate < newFromDate) {
+            $("#toDate").datepicker("setDate", dateText);
+            $("#clearToDate").css("visibility", "visible");
+        }
+        $("#toDate").datepicker("option", "minDate", newFromDate);
+    }); 
+
+    $("#toDate").datepicker("option", "onSelect", function(dateText) {  
+        $("#clearToDate").css("visibility", "visible");
+        var currentFromDate = $("#fromDate").datepicker("getDate");
+        if(!currentFromDate) {
+            $("#fromDate").datepicker("setDate", dateText);
+            $("#clearFromDate").css("visibility", "visible");
+        }
+    }); 
+
+    function clearAdvancedSearch() {
+        $("#procSearch").val("")
+        $("#fromDate").datepicker("setDate", null);
+        $("#toDate").datepicker("setDate", null);
+    }
+
     function doFreshSearch() {
          var sd = getFreshSearchData();
 
@@ -66,15 +144,6 @@ $(document).ready(function() {
             $("#searchbox").blur();
         }
     }
-
-	function showOrderByButtons() {
-		if($("#currentSearch").data("total") > 0) {
-            $("#orderByButtons").css("visibility", "visible");
-        }
-        else {
-            $("#orderByButtons").css("visibility", "hidden");   
-        }
-	}
 
     // this adds event to buttons loaded through ajax call
     $(document).on("click", '.pageBtn', function(event) {
@@ -161,6 +230,15 @@ $(document).ready(function() {
         $(".loading").css("display", "none");
     }
 
+    function showOrderByButtons() {
+        if($("#currentSearch").data("total") > 0) {
+            $("#orderByButtons").css("visibility", "visible");
+        }
+        else {
+            $("#orderByButtons").css("visibility", "hidden");   
+        }
+    }
+
     function save_search(query) {
         $.get('/save_search/', {query: query});
     }
@@ -230,86 +308,6 @@ $(document).ready(function() {
     }
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
-
-    $(".showAdv").click(function() {
-        var adv = $("#advancedSearch");
-        if(adv.is(':visible')) {
-            adv.hide(200);
-            clearAdvancedSearch();
-        }
-        else {
-            adv.show(200);
-        }
-    });
-
-
-    $("#procSearch").autocomplete({
-        source: "/suggest_processo/",
-        minLength: 4,
-    });
-
-    $(".datePicker").datepicker(
-        // configure datepicker
-        { dateFormat: "dd/mm/yy",
-            dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
-            monthNames: [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
-                        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ],
-            changeYear: true,
-            yearRange: "1932:" + new Date().getFullYear()
-        }
-    );
-
-    $(".datePicker").keyup(function(e) {
-    if(e.keyCode == 8 || e.keyCode == 46) {
-        $.datepicker._clearDate($(this));
-    }
-    });
-
-    $("#clearFromDate").click(function(e) {
-        $("#fromDate").datepicker("setDate", null);
-        $("#toDate").datepicker("setDate", null);
-        $(".dateClear").css("visibility", "hidden");
-    });
-
-    $("#clearToDate").click(function(e) {
-        $("#toDate").datepicker("setDate", null);
-        $("#clearToDate").css("visibility", "hidden");
-    });
-
-    $("#fromDate").datepicker("option", "onSelect", function(dateText) { 
-        // TODO check if todate is null or before new from date, if it is, change it to new from date otherwise leave as is
-        $("#clearFromDate").css("visibility", "visible");
-        var newFromDate = $(this).datepicker("getDate");
-        var currentToDate = $("#toDate").datepicker("getDate");
-        if(currentToDate && currentToDate < newFromDate) {
-            $("#toDate").datepicker("setDate", dateText);
-            $("#clearToDate").css("visibility", "visible");
-        }
-        $("#toDate").datepicker("option", "minDate", newFromDate);
-    }); 
-
-    $("#toDate").datepicker("option", "onSelect", function(dateText) {  
-        $("#clearToDate").css("visibility", "visible");
-        var currentFromDate = $("#fromDate").datepicker("getDate");
-        if(!currentFromDate) {
-            $("#fromDate").datepicker("setDate", dateText);
-            $("#clearFromDate").css("visibility", "visible");
-        }
-    }); 
-
-    function clearAdvancedSearch() {
-        $("#procSearch").val("")
-        $("#fromDate").datepicker("setDate", null);
-        $("#toDate").datepicker("setDate", null);
-    }
-
-
-
-  /*  $("#procSearch").bind("paste", function () {
-        setTimeout(function () {
-        $("#procSearch").autocomplete("search", $("#procSearch").val());
-        }, 0);
-    });*/
 
 });
 
