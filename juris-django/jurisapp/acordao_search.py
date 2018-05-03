@@ -3,11 +3,13 @@ from datetime import datetime
 from dateutil import parser
 from .models import SearchHistory
 from django.utils import timezone
+import shlex
 
 
 class AcordaoSearchData:
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+        self.Phrases = None
 
 
 # interface
@@ -27,9 +29,16 @@ class AcordaoSearchData:
 def get_search_results(asd, display, sort_by):
     if not asd.query:
         results = and_search(asd, display, sort_by)
-    elif asd.query[0] == "\"" and asd.query[-1] == "\"":
-        asd.query = asd.query.replace("\"", "")
-        results = phrase_search(asd, display, sort_by)
+    #elif asd.query[0] == "\"" and asd.query[-1] == "\"":
+    #    asd.query = asd.query.replace("\"", "")
+    #    results = phrase_search(asd, display, sort_by)
+    elif asd.query.count('"') > 0 and asd.query.count('"') % 2 == 0:
+        res_dict = get_phrases(asd.query)
+        normal_query = res_dict["normal"]
+        phrase_list = res_dict["phrases"]
+        asd.query = normal_query
+        asd.Phrases = phrase_list
+    # TODO return some warning if unclosed quotes (odd number of quotes)
     elif ' ou ' in asd.query.lower():
         asd.query = asd.query.replace(" ou ", " ")
         results = or_search(asd, display, sort_by)
@@ -37,6 +46,22 @@ def get_search_results(asd, display, sort_by):
         results = and_search(asd, display, sort_by)
 
     return results
+
+
+# todo only call this if even number of double quotes
+def get_phrases(query):
+    normal = ""
+    phrases = []
+    parts = shlex.split(query)
+    for part in parts:
+        # if longer than one word, it is a phrase
+        if len(part.split()) > 1:
+            phrases.append(part)
+        else:
+            normal = normal + " " + part
+
+    normal = normal.strip()
+    return {"normal": normal, "phrases": phrases}
 
 
 def and_search(asd, display_size, sort_by=None):
@@ -51,6 +76,7 @@ def phrase_search(asd, display_size, sort_by=None):
     return search_with_paging(asd, "and", display_size, sort_by, "phrase")
 
 
+# This is where we interact with elasticsearch
 def search_with_paging(asd, operator, display_size, sort_by, query_type="cross_fields"):
     if not asd.page_number:
         asd.page_number = 1
@@ -59,14 +85,14 @@ def search_with_paging(asd, operator, display_size, sort_by, query_type="cross_f
     filter_dict = {"tribunal": asd.tribs}
     # add processo filter if there
     if asd.processo:
-        filter_dict["processo.raw"] = [asd.processo,]
+        filter_dict["processo.raw"] = [asd.processo, ]
 
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']
 
-    sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date, to_date=asd.to_date,
-                      processo=asd.processo, searchable_fields=get_searchable_fields(), match_type=query_type,
-                      operator=operator, sort_by=sort_by, filter_dict=filter_dict,
+    sd = s.SearchData(index='acordao_idx', query=asd.query, phrases=asd.Phrases, from_date=asd.from_date,
+                      to_date=asd.to_date, processo=asd.processo, searchable_fields=get_searchable_fields(),
+                      match_type=query_type, operator=operator, sort_by=sort_by, filter_dict=filter_dict,
                       exclude=exclude, start_at=start, res_size=display_size)
 
     res = s.search_fields(sd)
