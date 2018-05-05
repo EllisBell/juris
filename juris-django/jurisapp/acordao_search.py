@@ -18,9 +18,6 @@ def get_search_results(asd, display, sort_by):
     # for when there is no query but there is processo/dates
     if not asd.query:
         results = and_search(asd, display, sort_by)
-    # elif asd.query[0] == "\"" and asd.query[-1] == "\"":
-    #    asd.query = asd.query.replace("\"", "")
-    #    results = phrase_search(asd, display, sort_by)
     elif is_valid_phrase_search(asd.query):
         res_dict = get_phrases(asd.query)
         normal_query = res_dict["normal"]

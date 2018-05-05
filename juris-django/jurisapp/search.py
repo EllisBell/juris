@@ -173,11 +173,12 @@ def search_fields(sd):
     if sd.query:
         body = append_multi_match(body, sd.query, sd.searchable_fields, sd.match_type, sd.operator, "must")
     if sd.from_date:
-        body = add_date_range(body, sd.from_date, sd.to_date)
+        body = add_date_range_filter(body, sd.from_date, sd.to_date)
     if sd.filter_dict:
-        body = add_filter(body, sd.filter_dict)
+        body = add_terms_filter(body, sd.filter_dict)
     if sd.phrases:
-        body = append_multi_match(body, sd.phrases[0], sd.searchable_fields, "phrase", sd.operator)
+        for phrase in sd.phrases:
+            body = append_multi_match(body, phrase, sd.searchable_fields, "phrase", sd.operator, "must")
 
     body = add_sort(body, sd.sort_by)
     print("BODY")
@@ -221,27 +222,31 @@ def append_multi_match(query_dict, query, fields, match_type, operator, bool_val
     }
 
     # check if bool_val is in bool dict
-    if "must" in query_dict["query"]["bool"]:
-        query_dict["query"]["bool"]["must"].append(multi_match_dict)
+    # todo extract this into method
+    if bool_val in query_dict["query"]["bool"]:
+        query_dict["query"]["bool"][bool_val].append(multi_match_dict)
     else:
-        query_dict["query"]["bool"]["must"] = [multi_match_dict,]
+        query_dict["query"]["bool"][bool_val] = [multi_match_dict, ]
 
     return query_dict
 
 
-# TODO
-# pass it a bool value (must or should)
-# if value already in dict, add to its list
-# If it doesn't, add to bool dict, and add this to list
-def add_date_range(query_dict, date_from, date_to):
+# date range is always must (when there)
+# check if "must" in bool dict, if not, add it
+def add_date_range_filter(query_dict, date_from, date_to):
     print("ADDING DATE RANGE, " + date_from)
     # if no end date provided, range is from_date to from_date
     if not date_to:
         date_to = date_from
     # appending to must list
-    query_dict["query"]["bool"]["must"].append(
-        {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
-    )
+
+    date_dict = {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
+
+    if "filter" in query_dict["query"]["bool"]:
+        query_dict["query"]["bool"]["filter"].append(date_dict)
+    else:
+        query_dict["query"]["bool"]["filter"] = [date_dict, ]
+
     return query_dict
 
 
@@ -252,12 +257,17 @@ def add_sort(query_dict, sort_field):
     return query_dict
 
 
-def add_filter(query_dict, filter_dict):
-    query_dict["query"]["bool"]["filter"] = get_filter(filter_dict)
+def add_terms_filter(query_dict, filter_dict):
+    terms_filter_list = get_terms_filter_list(filter_dict)
+    if "filter" in query_dict["query"]["bool"]:
+        query_dict["query"]["bool"]["filter"].extend(terms_filter_list)
+    else:
+        query_dict["query"]["bool"]["filter"] = get_terms_filter_list(filter_dict)
+
     return query_dict
 
 
-def get_filter(filter_dict):
+def get_terms_filter_list(filter_dict):
     filters = []
     for key, value in filter_dict.items():
         filters.append({"terms": {key: value}})
