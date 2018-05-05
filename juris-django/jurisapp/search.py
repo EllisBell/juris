@@ -8,12 +8,6 @@ def get_es():
     return es
 
 
-def test_analyzer(es, analyzer, text):
-    c = es.indices
-    res = c.analyze(index="acordao_idx", body={"analyzer": analyzer, "text": text}, format="text")
-    return res
-
-
 # indexing a doc using es.index would normally create index if didn't exist
 # but we want to specify analyzer for index so think I need to specifically create one with mappings etc.
 def create_acordao_idx():
@@ -36,10 +30,10 @@ def create_acordao_idx():
             "id": {"type": "integer"},
             # Todo test these keywords out -send in capitalized, uncapitalized etc.
             "processo": {"type": "text", "analyzer": "portuguese",
-                "fields": {
-                    "raw": {"type": "keyword", "normalizer": "lowercaser"}
-                }
-            },
+                         "fields": {
+                             "raw": {"type": "keyword", "normalizer": "lowercaser"}
+                         }
+                         },
             "tribunal": {"type": "keyword"},
             "tribunal_long": {"type": "keyword"},
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
@@ -172,38 +166,22 @@ def test_analyse(analyser, text):
     return index_client.analyze(body={"analyzer": analyser, "text": text})
 
 
-# def search_fields(index, query, searchable_fields, match_type, operator, sort_by, filter_dict, exclude_from_res,
-#                   start_at=0, res_size=10):
-#     #es = get_es()
-#     body = get_multi_match_query(query, searchable_fields, match_type, operator)
-#     body = add_sort(body, sort_by)
-#     if filter_dict:
-#         body = add_filter(body, filter_dict)
-#     #res = es.search(index=index, body=body, _source_exclude=exclude_from_res, from_=start_at, size=res_size)
-#     res = do_search(index, body, exclude_from_res, start_at, res_size)
-#     return res
-
 def search_fields(sd):
     print("GOT TO SEARCH FIELDS")
 
-    # body = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
-    body = get_bool_must_query_outline()
+    body = get_bool_query_outline()
     if sd.query:
-        body = add_multi_match(body, sd.query, sd.searchable_fields, sd.match_type, sd.operator)
-
-    # processo is just another multi_match (searching for processo in all fields)
-    # will be able to find where processo is referenced in other fields
-    # But always and by default
-    #if sd.processo:
-    #    body = add_multi_match(body, sd.processo, ["processo.raw"], sd.match_type, "and")
-
+        body = append_multi_match(body, sd.query, sd.searchable_fields, sd.match_type, sd.operator, "must")
     if sd.from_date:
         body = add_date_range(body, sd.from_date, sd.to_date)
-
     if sd.filter_dict:
         body = add_filter(body, sd.filter_dict)
+    if sd.phrases:
+        body = append_multi_match(body, sd.phrases[0], sd.searchable_fields, "phrase", sd.operator)
 
     body = add_sort(body, sd.sort_by)
+    print("BODY")
+    print(body)
 
     res = do_search(sd.index, body, sd.exclude, sd.start_at, sd.res_size)
     return res
@@ -215,12 +193,11 @@ def do_search(index, body, exclude, start_at, res_size):
     return res
 
 
-def get_bool_must_query_outline():
+def get_bool_query_outline():
     query = {
         "query": {
             "bool": {
-                # MUST has to be a list (of dicts) if it is going to have more than one dict
-                "must": []
+
             }
         }
     }
@@ -229,26 +206,33 @@ def get_bool_must_query_outline():
 
 
 # Add multi_match to query dict MUST
-def add_multi_match(query_dict, query, fields, match_type, operator, analyzer=None):
+# pass it a bool value (must or should)
+# if value already in dict, add to its list
+# If it doesn't, add to bool dict, and add this to list
+def append_multi_match(query_dict, query, fields, match_type, operator, bool_val):
     multi_match_dict = {"multi_match": {
-            "query": query,
-            "fields": fields,
-            "type": match_type,
-            # "analyzer": "portuguese",
-            # n.b. we still need to include "and" here if we want ALL the terms in query
-            # to be present
-            "operator": operator
-            }
-        }
+        "query": query,
+        "fields": fields,
+        "type": match_type,
+        # n.b. we still need to include "and" here if we want ALL the terms in query
+        # to be present
+        "operator": operator
+    }
+    }
 
-    if analyzer:
-        multi_match_dict["multi_match"]["analyzer"] = analyzer
-
-    query_dict["query"]["bool"]["must"].append(multi_match_dict)
+    # check if bool_val is in bool dict
+    if "must" in query_dict["query"]["bool"]:
+        query_dict["query"]["bool"]["must"].append(multi_match_dict)
+    else:
+        query_dict["query"]["bool"]["must"] = [multi_match_dict,]
 
     return query_dict
 
 
+# TODO
+# pass it a bool value (must or should)
+# if value already in dict, add to its list
+# If it doesn't, add to bool dict, and add this to list
 def add_date_range(query_dict, date_from, date_to):
     print("ADDING DATE RANGE, " + date_from)
     # if no end date provided, range is from_date to from_date
@@ -258,8 +242,6 @@ def add_date_range(query_dict, date_from, date_to):
     query_dict["query"]["bool"]["must"].append(
         {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
     )
-    print("QUERY DICT")
-    print(query_dict)
     return query_dict
 
 

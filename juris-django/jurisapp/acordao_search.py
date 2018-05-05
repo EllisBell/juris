@@ -14,30 +14,20 @@ class AcordaoSearchData:
 
 # interface
 # Main search, called from view
-# def get_search_results(query, tribs, page, display, sort_by):
-#     if query[0] == "\"" and query[-1] == "\"":
-#         query = query.replace("\"", "")
-#         results = phrase_search(query, tribs, page, display, sort_by)
-#     elif ' ou ' in query.lower():
-#         query = query.replace(" ou ", " ")
-#         results = or_search(query, tribs, page, display, sort_by)
-#     else:
-#         results = and_search(query, tribs, page, display, sort_by)
-#
-#     return results
-
 def get_search_results(asd, display, sort_by):
+    # for when there is no query but there is processo/dates
     if not asd.query:
         results = and_search(asd, display, sort_by)
-    #elif asd.query[0] == "\"" and asd.query[-1] == "\"":
+    # elif asd.query[0] == "\"" and asd.query[-1] == "\"":
     #    asd.query = asd.query.replace("\"", "")
     #    results = phrase_search(asd, display, sort_by)
-    elif asd.query.count('"') > 0 and asd.query.count('"') % 2 == 0:
+    elif is_valid_phrase_search(asd.query):
         res_dict = get_phrases(asd.query)
         normal_query = res_dict["normal"]
         phrase_list = res_dict["phrases"]
         asd.query = normal_query
         asd.Phrases = phrase_list
+        results = phrase_search(asd, display, sort_by)
     # TODO return some warning if unclosed quotes (odd number of quotes)
     elif ' ou ' in asd.query.lower():
         asd.query = asd.query.replace(" ou ", " ")
@@ -46,6 +36,10 @@ def get_search_results(asd, display, sort_by):
         results = and_search(asd, display, sort_by)
 
     return results
+
+
+def is_valid_phrase_search(query):
+    return query.count('"') > 0 and query.count('"') % 2 == 0
 
 
 # todo only call this if even number of double quotes
@@ -72,8 +66,9 @@ def or_search(asd, display_size, sort_by=None):
     return search_with_paging(asd, "or", display_size, sort_by)
 
 
+# TODO removing "phrase" query type argument
 def phrase_search(asd, display_size, sort_by=None):
-    return search_with_paging(asd, "and", display_size, sort_by, "phrase")
+    return search_with_paging(asd, "and", display_size, sort_by)
 
 
 # This is where we interact with elasticsearch

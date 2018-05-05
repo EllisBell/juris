@@ -21,6 +21,8 @@ body {
 	border:0px;
 	/*height: 100%;*/
 	font-family: 'Barlow', sans-serif;
+	/*font-family: Helvetica;*/
+	/*font-family: Times;*/
 	/*color: #0f1013;*/
 	color: #222222;
 }
@@ -56,7 +58,6 @@ header h1 {
 
 #logo {
 	font-family: inherit;
-	color: #333333;
 	font-size: 0.85rem;
 	display: inline-block;
 }
@@ -64,7 +65,7 @@ header h1 {
 #logo a {
 	text-decoration: none;
 	font-family: inherit;
-	color: #333333;
+	color: #3c434f;
 }
 
 #ponto {
@@ -83,7 +84,6 @@ header h1 {
 }
 
 #top-nav {
-	/*float: right;*/
 	margin: 0;
 	padding: 0;
 	position: absolute;
@@ -347,16 +347,6 @@ header h1 {
 	padding:1%;
 }
 
-
-/*.acordao-result::after {
-  content: "";
-  display: block;
-  border-bottom: 2px solid #3c434f;
-  width: 40%;
-  position: relative;
-  padding-bottom:1%;
-}*/
-
 .acordao-result .result-link {
 	margin-bottom: 2%;
 }
@@ -403,6 +393,7 @@ header h1 {
 .result-bottom {
 	position: relative;
 	margin-top: 4%;
+	border-top: 1px solid white;
 }
 
 .bottom-link {
