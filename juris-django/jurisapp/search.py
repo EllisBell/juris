@@ -172,21 +172,34 @@ def search_fields(sd):
     body = get_query_outline()
     outer_bool_dict = {'bool': {}}
     body["query"] = outer_bool_dict
+
+    populate_outer_bool_dict(outer_bool_dict, sd)
+
+    # query_components = sd.query_components
+    # # query components is a list of lists of dicts
+    # for query_comp in query_components:
+    #     # query_comp is a list of dicts
+    #     inner_bool_dict = {'bool': {}}
+    #     for query_dict in query_comp:
+    #         multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
+    #                                                  query_dict["type"], "and")
+    #         add_to_bool(inner_bool_dict, "must", multi_match_dict)
+    #     add_to_bool(outer_bool_dict, "should", inner_bool_dict)
+
     if sd.query:
         multi_match_dict = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
         bool_dict = body["query"]
         add_to_bool(bool_dict, "must", multi_match_dict)
-        # bool_dict = append_multi_match(outer_bool_dict, sd.query, sd.searchable_fields, sd.match_type, sd.operator, "must")
-        # body["query"] = bool_dict
+    if sd.phrases:
+        bool_dict = body["query"]
+        for phrase in sd.phrases:
+            multi_match_dict = get_multi_match_query(phrase, sd.searchable_fields, "phrase", sd.operator)
+            add_to_bool(bool_dict, "must", multi_match_dict)
+    # Adding filters to outer bool
     if sd.from_date:
         body = add_date_range_filter(body, sd.from_date, sd.to_date)
     if sd.filter_dict:
         body = add_terms_filter_new(body, sd.filter_dict)
-    if sd.phrases:
-        bool_dict = body["query"]
-        for phrase in sd.phrases:
-            bool_dict = append_multi_match(bool_dict, phrase, sd.searchable_fields, "phrase", sd.operator, "must")
-        body["query"] = bool_dict
 
     body = add_sort(body, sd.sort_by)
     print("BODY")
@@ -194,6 +207,22 @@ def search_fields(sd):
 
     res = do_search(sd.index, body, sd.exclude, sd.start_at, sd.res_size)
     return res
+
+
+def populate_outer_bool_dict(outer_bool_dict, sd):
+    query_components = sd.query_components
+    # query components is a list of lists of dicts
+    for query_comp in query_components:
+        # query_comp is a list of dicts
+        inner_bool_dict = {'bool': {}}
+        for query_dict in query_comp:
+            multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
+                                                     query_dict["type"], "and")
+            add_to_bool(inner_bool_dict, "must", multi_match_dict)
+
+        add_to_bool(outer_bool_dict, "should", inner_bool_dict)
+
+    return outer_bool_dict
 
 
 def do_search(index, body, exclude, start_at, res_size):
@@ -292,13 +321,13 @@ def get_terms_filter_list(filter_dict):
 
 def get_multi_match_query(query, fields, match_type, operator):
     multi_match_dict = {
-            "multi_match": {
-                "query": query,
-                "fields": fields,
-                "type": match_type,
-                "operator": operator
-            }
+        "multi_match": {
+            "query": query,
+            "fields": fields,
+            "type": match_type,
+            "operator": operator
         }
+    }
 
     return multi_match_dict
 
@@ -312,8 +341,6 @@ def add_to_bool(dict_with_bool, bool_type, dict_to_add):
         dict_with_bool["bool"][bool_type].append(dict_to_add)
     else:
         dict_with_bool["bool"][bool_type] = [dict_to_add, ]
-
-
 
 
 def search_field(query, field):

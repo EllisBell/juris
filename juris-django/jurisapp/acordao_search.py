@@ -15,24 +15,67 @@ class AcordaoSearchData:
 # interface
 # Main search, called from view
 def get_search_results(asd, display, sort_by):
+    results = []
     # for when there is no query but there is processo/dates
     if not asd.query:
-        results = and_search(asd, display, sort_by)
-    elif is_valid_phrase_search(asd.query):
-        res_dict = get_phrases(asd.query)
-        normal_query = res_dict["normal"]
-        phrase_list = res_dict["phrases"]
-        asd.query = normal_query
-        asd.Phrases = phrase_list
-        results = phrase_search(asd, display, sort_by)
-    # TODO return some warning if unclosed quotes (odd number of quotes)
-    elif ' ou ' in asd.query.lower():
-        asd.query = asd.query.replace(" ou ", " ")
-        results = or_search(asd, display, sort_by)
+        # results = and_search(asd, display, sort_by)
+        results = search_with_paging(asd, display, sort_by)
     else:
-        results = and_search(asd, display, sort_by)
+        or_components = get_or_components(asd.query)
+        results = search_with_paging(asd, display, sort_by, or_components)
+
+    # elif is_valid_phrase_search(asd.query):
+    #     res_dict = get_phrases(asd.query)
+    #     normal_query = res_dict["normal"]
+    #     phrase_list = res_dict["phrases"]
+    #     asd.query = normal_query
+    #     asd.Phrases = phrase_list
+    #     results = phrase_search(asd, display, sort_by)
+    # # TODO return some warning if unclosed quotes (odd number of quotes)
+    # elif ' ou ' in asd.query.lower():
+    #     asd.query = asd.query.replace(" ou ", " ")
+    #     results = or_search(asd, display, sort_by)
+    # else:
+    #     results = and_search(asd, display, sort_by)
 
     return results
+
+
+def get_or_components(query):
+    or_parts = split_on_or(query)
+    or_components = []
+    for part in or_parts:
+        component = get_or_component(part)
+        or_components.append(component)
+
+    return or_components
+
+
+def split_on_or(query):
+    or_parts = query.lower().split(" ou ")
+    return or_parts
+
+
+# get sublist for or_components
+def get_or_component(or_part):
+    or_component = []
+    if is_valid_phrase_search(or_part):
+        phrase_dict = get_phrases(or_part)
+        for phrase in phrase_dict["phrases"]:
+            or_dict = make_query_component(phrase, "phrase")
+            or_component.append(or_dict)
+        normal_part = phrase_dict["normal"]
+        normal_dict = make_query_component(normal_part, "cross_fields")
+        or_component.append(normal_dict)
+    else:
+        query_dict = make_query_component(or_part, "cross_fields")
+        or_component.append(query_dict)
+
+    return or_component
+
+
+def make_query_component(query, type):
+    return {"query": query, "type": type}
 
 
 def is_valid_phrase_search(query):
@@ -55,21 +98,21 @@ def get_phrases(query):
     return {"normal": normal, "phrases": phrases}
 
 
-def and_search(asd, display_size, sort_by=None):
-    return search_with_paging(asd, "and", display_size, sort_by)
-
-
-def or_search(asd, display_size, sort_by=None):
-    return search_with_paging(asd, "or", display_size, sort_by)
-
-
-# TODO removing "phrase" query type argument
-def phrase_search(asd, display_size, sort_by=None):
-    return search_with_paging(asd, "and", display_size, sort_by)
+# def and_search(asd, display_size, sort_by=None):
+#     return search_with_paging(asd, "and", display_size, sort_by)
+#
+#
+# def or_search(asd, display_size, sort_by=None):
+#     return search_with_paging(asd, "or", display_size, sort_by)
+#
+#
+# # TODO removing "phrase" query type argument
+# def phrase_search(asd, display_size, sort_by=None):
+#     return search_with_paging(asd, "and", display_size, sort_by)
 
 
 # This is where we interact with elasticsearch
-def search_with_paging(asd, operator, display_size, sort_by, query_type="cross_fields"):
+def search_with_paging(asd, display_size, sort_by, query_components=[]):
     if not asd.page_number:
         asd.page_number = 1
 
@@ -82,10 +125,10 @@ def search_with_paging(asd, operator, display_size, sort_by, query_type="cross_f
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']
 
-    sd = s.SearchData(index='acordao_idx', query=asd.query, phrases=asd.Phrases, from_date=asd.from_date,
+    sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date,
                       to_date=asd.to_date, processo=asd.processo, searchable_fields=get_searchable_fields(),
-                      match_type=query_type, operator=operator, sort_by=sort_by, filter_dict=filter_dict,
-                      exclude=exclude, start_at=start, res_size=display_size)
+                      sort_by=sort_by, filter_dict=filter_dict,
+                      exclude=exclude, start_at=start, res_size=display_size, query_components=query_components)
 
     res = s.search_fields(sd)
 
