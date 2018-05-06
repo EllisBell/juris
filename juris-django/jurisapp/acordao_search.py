@@ -4,6 +4,7 @@ from dateutil import parser
 from .models import SearchHistory
 from django.utils import timezone
 import shlex
+import re
 
 
 class AcordaoSearchData:
@@ -51,9 +52,45 @@ def get_or_components(query):
     return or_components
 
 
+# TODO only split if ou not within phrase!!!!
 def split_on_or(query):
+    # TODO only do this if valid phrase search
+    query = get_query_without_or_in_phrases(query)
+
     or_parts = query.lower().split(" ou ")
     return or_parts
+
+
+def get_query_without_or_in_phrases(query):
+    terms = shlex.split(query)
+    corrected = []
+    for term in terms:
+        # if it is a phrase within quotes, replace the ou so won't split on it
+        if is_multiterm_phrase(term):
+            term = replace_or_with_pipe(term)
+
+        corrected.append(term)
+
+    query = " ".join(corrected)
+    return query
+
+
+def replace_or_with_pipe(term):
+    # regex finds string that matches (start of string or whitespace)(ou)(end of string or whitespace)
+    # then it does a substitution, passing in a lambda
+    # which for each match object x, produces a string composed of:
+    # group 1 (start or whitespace) + | + group 3 (end or whitespace)
+    # This preserves any whitespace around the "ou" as necessary
+    # so for e.g. "isto ou aquilo" - would find " ou "
+    # it would then replace that with group 1 (" ") + | + group 3 (" ").
+    # n.b. group 2 is the "ou", which is actually replaced by the | (pipe)
+    r = re.compile(r"(^|\s)(ou)($|\s)")
+    term = r.sub(lambda x: '%s|%s' % (x.group(1), x.group(3)), term)
+    return term
+
+
+def is_multiterm_phrase(term):
+    return len(term.split()) > 1
 
 
 # get sublist for or_components
@@ -91,7 +128,7 @@ def get_phrases(query):
     parts = shlex.split(query)
     for part in parts:
         # if longer than one word, it is a phrase
-        if len(part.split()) > 1:
+        if is_multiterm_phrase(part):
             phrases.append(part)
         else:
             normal = normal + " " + part
