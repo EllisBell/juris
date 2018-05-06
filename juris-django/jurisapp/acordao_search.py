@@ -64,9 +64,11 @@ def get_or_component(or_part):
         for phrase in phrase_dict["phrases"]:
             or_dict = make_query_component(phrase, "phrase")
             or_component.append(or_dict)
+
         normal_part = phrase_dict["normal"]
-        normal_dict = make_query_component(normal_part, "cross_fields")
-        or_component.append(normal_dict)
+        if normal_part:
+            normal_dict = make_query_component(normal_part, "cross_fields")
+            or_component.append(normal_dict)
     else:
         query_dict = make_query_component(or_part, "cross_fields")
         or_component.append(query_dict)
@@ -112,7 +114,7 @@ def get_phrases(query):
 
 
 # This is where we interact with elasticsearch
-def search_with_paging(asd, display_size, sort_by, query_components=[]):
+def search_with_paging(asd, display_size, sort_by, query_components=None):
     if not asd.page_number:
         asd.page_number = 1
 
