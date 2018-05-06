@@ -470,10 +470,15 @@ header h1 {
 	color: #327a81;
 	font-weight: bold;
 }
+
 .acks {
 	float: right;
 	font-size: 0.6rem;
 	margin-bottom: 2%;
+}
+
+.help-img {
+	width: 50%;
 }
 
 /**************************/
@@ -691,6 +696,15 @@ header h1 {
 	#acordao-main-info {
 		float:none;
 	}
+
+	.emphasis-block {
+		width: 90%;
+	}
+
+	.help-img {
+		width: 90%;
+	}
+
 }
 
 

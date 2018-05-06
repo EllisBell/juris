@@ -55,6 +55,11 @@ def search(request, sort_by=None):
         return render(request, 'jurisapp/oops.html')
 
     total = results['total']
+
+    if total == 0:
+        return render(request, 'jurisapp/no_results.html')
+
+
     acordaos = results['acordaos']
     total_pages = get_total_pages(total, display)
 

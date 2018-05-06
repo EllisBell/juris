@@ -11,39 +11,73 @@
 	</p>
 
 	<p>
-		Pode enviar perguntas ou sugestões para o email <span class="search-example">info@jurisprudencia.pt</span>. O site está em fase de desenvolvimento ativo e  o seu feedback é muito importante. 
+		Pode enviar perguntas ou sugestões para o email <span class="search-example">info@jurisprudencia.pt</span>. O site está em fase de desenvolvimento ativo e o seu feedback é muito importante 😊
 	</p>
-
-	<h4>Dicas de Pesquisa</h4>
+	<a name="dicas">
+	<h3>Dicas de Pesquisa</h3>
 	<p> 
-		O nosso motor de busca procura os termos da pesquisa em vários campos dos acórdãos. Por defeito, todos os termos têm de estar presentes para um dado acórdão ser identificado como um resultado válido.
+		O nosso motor de busca procura os termos da pesquisa em vários campos dos acórdãos (nº de processo, relator, descritores, sumario, texto integral, texto parcial). Por defeito, todos os termos têm de estar presentes em algum campo para um dado acórdão ser identificado como um resultado válido.
 	</p>
 
 	<div class="emphasis-block">
-		A pesquisa <span class="search-example">despedimento ilícito</span> terá como resultados acórdãos que contenham a palavra despedimento e a palavra ilícito.
+		A pesquisa <span class="search-example">cenoura ervilha</span> terá como resultados acórdãos que contenham a palavra cenoura <em>e</em> a palavra ervilha.
 	</div>
 
 	<p>
-		A utilização da palavra <span class="search-example">ou</span> numa pesquisa diz ao nosso motor de busca que está à procura de acórdãos que contenham uma ou mais das restantes palavras da pesquisa.
+		A utilização da palavra <span class="search-example">ou</span> numa pesquisa diz ao nosso motor de busca que está à procura de acórdãos que contenham uma ou mais das palavras da pesquisa separadas pela palavra <span class="search-example">ou</span>.
 	</p>
 
 	<div class="emphasis-block">
-		A pesquisa <span class="search-example">despedimento ou ilícito</span> terá como resultados acórdãos que contenham a palavra despedimento ou a palavra ilícito (ou ambas).
+		A pesquisa <span class="search-example">laranja ou uva</span> terá como resultados acórdãos que contenham a palavra laranja ou a palavra uva (ou ambas).
+		<br><br>	
+		A pesquisa <span class="search-example">maçã laranja ou uva</span> terá como resultado acórdãos que contenham as palavras maçã <em>e</em> laranja <em>ou</em> que contenham a palavra uva (ou que contenham as três).
+
 	</div>
 
 	<p>
-		Se a sua pesquisa começar e acabar com aspas, o nosso motor de busca perceberá que está à procura de acórdãos que contenham a expressão exata que está entre aspas.
+		Para procurar uma expressão, use aspas. O nosso motor de busca perceberá que está à procura de acórdãos que contenham a expressão que está entre aspas.
 	</p>
 
 	<div class="emphasis-block">
-		A pesquisa <span class="search-example">"despedimento ilícito"</span> terá como resultados acórdãos que contenham a expressão despedimento ilícito.
+		A pesquisa <span class="search-example">"maçã verde"</span> terá como resultados acórdãos que contenham a expressão maçã verde.
+	</div>
+
+	<p>
+		Pode combinar todos estes tipos de pesquisa.
+	</p>
+
+	<div class="emphasis-block">
+		A pesquisa <span class="search-example">melancia "maçã verde" ou framboesa</span> terá como resultados acórdãos que contenham a palavra melancia <em>e</em> a expressão maçã verde <em>ou</em> que contenham a palavra framboesa (ou as duas palavras mais a expressão).
 	</div>
 
 	<p>
 		Para ajudar a encontrar os acórdãos que realmente interessam, os resultados são apresentados por ordem de relevância. Pode optar ainda por ver os mais recentes primeiro.
 	</p>
 
+	<h4>Filtros</h4>
+	<p>
+		Pode ainda filtrar por nº de processo ou data. Para usar os filtros, clique no símbolo <span><i class="fas fa-plus"></i></span> na página de pesquisa.
+	</p>
+	
+	<img class="help-img" src="{% static "jurisapp/images/with_adv.PNG" %}">
+	
+	<p>
+		Ao inserir o nº de processo, serão sugeridos processos que temos na base de dados.
+	</p>
+	
+	<img class="help-img" src="{% static "jurisapp/images/with_autocomplete.PNG" %}">
+	
+	<p>
+		<em>n.b. A pesquisa/filtro por nº de processo procura acórdãos que tenham como número de processo o número inserido. Se estiver também à procura de acórdãos que fazem referência a um processo com certo número, pesquise esse número utilizando a pesquisa principal, sem filtrar por nº de processo.</em>
+	</p>
+
+	<p>
+		Se tiver qualquer pergunta ou sugestão sobre a pesquisa ou sobre estas dicas, envie-nos um email para <span class="search-example">info@jurisprudencia.pt</span>.
+	</p>
+	</a>
+
 </div>
+	
 	<div class="acks">
 		favicon: <a href="https://thenounproject.com/term/courthouse/394245/">courthouse por Creative Stall do The Noun Project</a>
 	</div>

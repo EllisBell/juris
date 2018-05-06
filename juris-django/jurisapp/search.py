@@ -157,6 +157,7 @@ def get_max_id():
 # TODO what to do with this
 default_query_type = "most_fields"
 
+
 # analyzes text
 def test_analyse(analyser, text):
     es = get_es()

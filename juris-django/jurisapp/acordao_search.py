@@ -136,19 +136,6 @@ def get_phrases(query):
     return {"normal": normal, "phrases": phrases}
 
 
-# def and_search(asd, display_size, sort_by=None):
-#     return search_with_paging(asd, "and", display_size, sort_by)
-#
-#
-# def or_search(asd, display_size, sort_by=None):
-#     return search_with_paging(asd, "or", display_size, sort_by)
-#
-#
-# # TODO removing "phrase" query type argument
-# def phrase_search(asd, display_size, sort_by=None):
-#     return search_with_paging(asd, "and", display_size, sort_by)
-
-
 # This is where we interact with elasticsearch
 def search_with_paging(asd, display_size, sort_by, query_components=None):
     if not asd.page_number:
