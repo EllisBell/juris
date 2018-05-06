@@ -25,6 +25,7 @@ def get_search_results(asd, display, sort_by):
         # results = and_search(asd, display, sort_by)
         results = search_with_paging(asd, display, sort_by)
     else:
+        asd.query = asd.query.lower()
         or_components = get_or_components(asd.query)
         results = search_with_paging(asd, display, sort_by, or_components)
 
