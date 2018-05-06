@@ -1,5 +1,7 @@
 {% extends 'jurisapp/base.html' %}
 {% load static %}
+{% load i18n %}
+
 
 
 {% block scripts_block %}
@@ -15,7 +17,9 @@
 			<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
 			<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
 			<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
-			<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d/m/Y' }}</div>
+			 {% language 'pt' %}
+			<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d F Y' }}</div>
+	        {% endlanguage %}
     	</div>
     	<div id="acordao-other-info">
     		{% if acordao.numero %}<div><span class="ac-sidebar-field">Número:</span> {{ acordao.numero }}</div>{% endif %}

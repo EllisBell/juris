@@ -169,16 +169,24 @@ def test_analyse(analyser, text):
 def search_fields(sd):
     print("GOT TO SEARCH FIELDS")
 
-    body = get_bool_query_outline()
+    body = get_query_outline()
+    outer_bool_dict = {'bool': {}}
+    body["query"] = outer_bool_dict
     if sd.query:
-        body = append_multi_match(body, sd.query, sd.searchable_fields, sd.match_type, sd.operator, "must")
+        multi_match_dict = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
+        bool_dict = body["query"]
+        add_to_bool(bool_dict, "must", multi_match_dict)
+        # bool_dict = append_multi_match(outer_bool_dict, sd.query, sd.searchable_fields, sd.match_type, sd.operator, "must")
+        # body["query"] = bool_dict
     if sd.from_date:
         body = add_date_range_filter(body, sd.from_date, sd.to_date)
     if sd.filter_dict:
-        body = add_terms_filter(body, sd.filter_dict)
+        body = add_terms_filter_new(body, sd.filter_dict)
     if sd.phrases:
+        bool_dict = body["query"]
         for phrase in sd.phrases:
-            body = append_multi_match(body, phrase, sd.searchable_fields, "phrase", sd.operator, "must")
+            bool_dict = append_multi_match(bool_dict, phrase, sd.searchable_fields, "phrase", sd.operator, "must")
+        body["query"] = bool_dict
 
     body = add_sort(body, sd.sort_by)
     print("BODY")
@@ -194,12 +202,10 @@ def do_search(index, body, exclude, start_at, res_size):
     return res
 
 
-def get_bool_query_outline():
+def get_query_outline():
     query = {
         "query": {
-            "bool": {
 
-            }
         }
     }
 
@@ -210,7 +216,7 @@ def get_bool_query_outline():
 # pass it a bool value (must or should)
 # if value already in dict, add to its list
 # If it doesn't, add to bool dict, and add this to list
-def append_multi_match(query_dict, query, fields, match_type, operator, bool_val):
+def append_multi_match(dict_with_bool, query, fields, match_type, operator, bool_val):
     multi_match_dict = {"multi_match": {
         "query": query,
         "fields": fields,
@@ -223,12 +229,15 @@ def append_multi_match(query_dict, query, fields, match_type, operator, bool_val
 
     # check if bool_val is in bool dict
     # todo extract this into method
-    if bool_val in query_dict["query"]["bool"]:
-        query_dict["query"]["bool"][bool_val].append(multi_match_dict)
-    else:
-        query_dict["query"]["bool"][bool_val] = [multi_match_dict, ]
+    # if bool_val in query_dict["query"]["bool"]:
+    #     query_dict["query"]["bool"][bool_val].append(multi_match_dict)
+    # else:
+    #     query_dict["query"]["bool"][bool_val] = [multi_match_dict, ]
 
-    return query_dict
+    # TODO pass in the target dict to this method
+    add_to_bool(dict_with_bool, bool_val, multi_match_dict)
+
+    return dict_with_bool
 
 
 # date range is always must (when there)
@@ -238,14 +247,11 @@ def add_date_range_filter(query_dict, date_from, date_to):
     # if no end date provided, range is from_date to from_date
     if not date_to:
         date_to = date_from
-    # appending to must list
 
     date_dict = {"range": {"data": {"gte": date_from, "lte": date_to, "format": "dd/MM/yyyy"}}}
-
-    if "filter" in query_dict["query"]["bool"]:
-        query_dict["query"]["bool"]["filter"].append(date_dict)
-    else:
-        query_dict["query"]["bool"]["filter"] = [date_dict, ]
+    # Add as filter to outer bool
+    add_to_bool(query_dict["query"], "filter", date_dict)
+    print("HERE")
 
     return query_dict
 
@@ -257,16 +263,26 @@ def add_sort(query_dict, sort_field):
     return query_dict
 
 
-def add_terms_filter(query_dict, filter_dict):
+# def add_terms_filter(query_dict, filter_dict):
+#     terms_filter_list = get_terms_filter_list(filter_dict)
+#     if "filter" in query_dict["query"]["bool"]:
+#         query_dict["query"]["bool"]["filter"].extend(terms_filter_list)
+#     else:
+#         query_dict["query"]["bool"]["filter"] = get_terms_filter_list(filter_dict)
+#
+#     return query_dict
+
+
+def add_terms_filter_new(query_dict, filter_dict):
     terms_filter_list = get_terms_filter_list(filter_dict)
-    if "filter" in query_dict["query"]["bool"]:
-        query_dict["query"]["bool"]["filter"].extend(terms_filter_list)
-    else:
-        query_dict["query"]["bool"]["filter"] = get_terms_filter_list(filter_dict)
+    bool_dict = query_dict["query"]
+    for filter_d in terms_filter_list:
+        add_to_bool(bool_dict, "filter", filter_d)
 
     return query_dict
 
 
+# filter_dict is like e.g. {"tribs":["trl", "trp", "trc"], "processo": ["abc/123.p1", ]}
 def get_terms_filter_list(filter_dict):
     filters = []
     for key, value in filter_dict.items():
@@ -274,9 +290,8 @@ def get_terms_filter_list(filter_dict):
     return filters
 
 
-def get_basic_multi_match_query(query, fields, match_type, operator):
-    query = {
-        "query": {
+def get_multi_match_query(query, fields, match_type, operator):
+    multi_match_dict = {
             "multi_match": {
                 "query": query,
                 "fields": fields,
@@ -284,8 +299,21 @@ def get_basic_multi_match_query(query, fields, match_type, operator):
                 "operator": operator
             }
         }
-    }
-    return query
+
+    return multi_match_dict
+
+
+def add_to_bool(dict_with_bool, bool_type, dict_to_add):
+    # takes a dict with bool key
+    # bool type should be must, should, filter or something
+    # checks if must, should, filter already exists, if does, add to list
+    # if not, add and add list
+    if bool_type in dict_with_bool["bool"]:
+        dict_with_bool["bool"][bool_type].append(dict_to_add)
+    else:
+        dict_with_bool["bool"][bool_type] = [dict_to_add, ]
+
+
 
 
 def search_field(query, field):
