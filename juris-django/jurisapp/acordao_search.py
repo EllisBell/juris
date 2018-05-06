@@ -14,9 +14,12 @@ class AcordaoSearchData:
 
 
 # interface
+
+or_symbol = "ou"
+
+
 # Main search, called from view
 def get_search_results(asd, display, sort_by):
-    results = []
     # for when there is no query but there is processo/dates
     if not asd.query:
         # results = and_search(asd, display, sort_by)
@@ -25,23 +28,10 @@ def get_search_results(asd, display, sort_by):
         or_components = get_or_components(asd.query)
         results = search_with_paging(asd, display, sort_by, or_components)
 
-    # elif is_valid_phrase_search(asd.query):
-    #     res_dict = get_phrases(asd.query)
-    #     normal_query = res_dict["normal"]
-    #     phrase_list = res_dict["phrases"]
-    #     asd.query = normal_query
-    #     asd.Phrases = phrase_list
-    #     results = phrase_search(asd, display, sort_by)
-    # # TODO return some warning if unclosed quotes (odd number of quotes)
-    # elif ' ou ' in asd.query.lower():
-    #     asd.query = asd.query.replace(" ou ", " ")
-    #     results = or_search(asd, display, sort_by)
-    # else:
-    #     results = and_search(asd, display, sort_by)
-
     return results
 
 
+# or_components is list of lists
 def get_or_components(query):
     or_parts = split_on_or(query)
     or_components = []
@@ -52,12 +42,14 @@ def get_or_components(query):
     return or_components
 
 
-# TODO only split if ou not within phrase!!!!
 def split_on_or(query):
-    # TODO only do this if valid phrase search
-    query = get_query_without_or_in_phrases(query)
+    if is_valid_phrase_search(query):
+        # if ou is within a phrase don't want to split on it
+        query = get_query_without_or_in_phrases(query)
 
-    or_parts = query.lower().split(" ou ")
+    or_parts = query.lower().split(" " + or_symbol + " ")
+    # put ou back into phrases
+    or_parts = [replace_pipe_with_or(part) for part in or_parts]
     return or_parts
 
 
@@ -66,8 +58,9 @@ def get_query_without_or_in_phrases(query):
     corrected = []
     for term in terms:
         # if it is a phrase within quotes, replace the ou so won't split on it
-        if is_multiterm_phrase(term):
-            term = replace_or_with_pipe(term)
+        # and also give it the quotes again
+        if is_multiword_phrase(term):
+            term = '"' + replace_or_with_pipe(term) + '"'
 
         corrected.append(term)
 
@@ -82,14 +75,20 @@ def replace_or_with_pipe(term):
     # group 1 (start or whitespace) + | + group 3 (end or whitespace)
     # This preserves any whitespace around the "ou" as necessary
     # so for e.g. "isto ou aquilo" - would find " ou "
-    # it would then replace that with group 1 (" ") + | + group 3 (" ").
+    # it would then replace that with group 1 (" ") + "|" + group 3 (" ").
     # n.b. group 2 is the "ou", which is actually replaced by the | (pipe)
-    r = re.compile(r"(^|\s)(ou)($|\s)")
+    r = re.compile(r"(^|\s)(%s)($|\s)" % or_symbol)
     term = r.sub(lambda x: '%s|%s' % (x.group(1), x.group(3)), term)
     return term
 
 
-def is_multiterm_phrase(term):
+def replace_pipe_with_or(term):
+    r = re.compile(r"(^|\s)(\|)($|\s)")
+    term = r.sub(lambda x: '%s%s%s' % (x.group(1), or_symbol, x.group(3)), term)
+    return term
+
+
+def is_multiword_phrase(term):
     return len(term.split()) > 1
 
 
@@ -97,6 +96,7 @@ def is_multiterm_phrase(term):
 def get_or_component(or_part):
     or_component = []
     if is_valid_phrase_search(or_part):
+        # part contains phrase within quotes
         phrase_dict = get_phrases(or_part)
         for phrase in phrase_dict["phrases"]:
             or_dict = make_query_component(phrase, "phrase")
@@ -127,8 +127,7 @@ def get_phrases(query):
     phrases = []
     parts = shlex.split(query)
     for part in parts:
-        # if longer than one word, it is a phrase
-        if is_multiterm_phrase(part):
+        if is_multiword_phrase(part):
             phrases.append(part)
         else:
             normal = normal + " " + part

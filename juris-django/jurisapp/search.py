@@ -152,12 +152,10 @@ def get_max_id():
 
 # Todo need something that will index on update of acordao table
 
-
 # Search Interface #
 
 # TODO what to do with this
 default_query_type = "most_fields"
-
 
 # analyzes text
 def test_analyse(analyser, text):
@@ -166,27 +164,32 @@ def test_analyse(analyser, text):
     return index_client.analyze(body={"analyzer": analyser, "text": text})
 
 
+# what we're going for when creating the query is something like this:
+# e.g. query is 'orange grape "red onion" OR apple banana'
+# {query :
+#   {bool:
+#     {must:
+#       {bool:[
+#         {should: - at least one of these bools has to match
+#           {bool:     (for each component of or)
+#             {must: [{multi_match query (many fields / phrase)} orange & grape
+#                    {multi_match query (many fields / phrase)} "red onion" (phrase)]
+#           {bool:
+#             {must: [{multi_match query (many fields / phrase)} apple & banana]
+#           ]
+#     {filter: {filter dict}
+#     {sort: {sort dict}
+#
 def search_fields(sd):
-    print("GOT TO SEARCH FIELDS")
-
     body = get_query_outline()
     outer_bool_dict = {'bool': {}}
     body["query"] = outer_bool_dict
 
-    middle_bool_dict = {'bool': {}}
-    middle_bool_dict = get_should_bool_dict(middle_bool_dict, sd)
-    # then add that tou outer bool dict
-    add_to_bool(outer_bool_dict, "must", middle_bool_dict)
-
-    # if sd.query:
-    #     multi_match_dict = get_multi_match_query(sd.query, sd.searchable_fields, sd.match_type, sd.operator)
-    #     bool_dict = body["query"]
-    #     add_to_bool(bool_dict, "must", multi_match_dict)
-    # if sd.phrases:
-    #     bool_dict = body["query"]
-    #     for phrase in sd.phrases:
-    #         multi_match_dict = get_multi_match_query(phrase, sd.searchable_fields, "phrase", sd.operator)
-    #         add_to_bool(bool_dict, "must", multi_match_dict)
+    if sd.query_components:
+        middle_bool_dict = {'bool': {}}
+        middle_bool_dict = get_should_bool_dict(middle_bool_dict, sd)
+        # then add that to outer bool dict
+        add_to_bool(outer_bool_dict, "must", middle_bool_dict)
 
     # Adding filters to outer bool
     if sd.from_date:
@@ -239,34 +242,6 @@ def get_query_outline():
     return query
 
 
-# Add multi_match to query dict MUST
-# pass it a bool value (must or should)
-# if value already in dict, add to its list
-# If it doesn't, add to bool dict, and add this to list
-def append_multi_match(dict_with_bool, query, fields, match_type, operator, bool_val):
-    multi_match_dict = {"multi_match": {
-        "query": query,
-        "fields": fields,
-        "type": match_type,
-        # n.b. we still need to include "and" here if we want ALL the terms in query
-        # to be present
-        "operator": operator
-    }
-    }
-
-    # check if bool_val is in bool dict
-    # todo extract this into method
-    # if bool_val in query_dict["query"]["bool"]:
-    #     query_dict["query"]["bool"][bool_val].append(multi_match_dict)
-    # else:
-    #     query_dict["query"]["bool"][bool_val] = [multi_match_dict, ]
-
-    # TODO pass in the target dict to this method
-    add_to_bool(dict_with_bool, bool_val, multi_match_dict)
-
-    return dict_with_bool
-
-
 # date range is always must (when there)
 # check if "must" in bool dict, if not, add it
 def add_date_range_filter(query_dict, date_from, date_to):
@@ -313,7 +288,7 @@ def get_multi_match_query(query, fields, match_type, operator):
             "query": query,
             "fields": fields,
             "type": match_type,
-            "operator": operator
+            "operator": operator,
         }
     }
 
