@@ -8,21 +8,6 @@ $(document).ready(function() {
             doFreshSearch();
 		}
         else {
-           /* var text = $('#searchbox').val();
-            var lastChar = text.substr(text.length-1);
-            if(lastChar == 'y') {
-                // remove last char, as we want to start textbox before it (to include it)
-                var withoutLast = text.substr(0, text.length-1);
-                var cheatWidth = getWidth(withoutLast);
-                
-                var target = $(e.target);
-                var x = target.offset().left;
-                var y = target.offset().top;
-                x = x + cheatWidth;
-
-                var procSearchExp = appendProcSearchExp(x, y);
-                setUpTextForTypingInProcSearchExp(lastChar, withoutLast);
-            }*/
             setUpMainSearchAutoComplete();
         }
 	});
@@ -30,10 +15,10 @@ $(document).ready(function() {
     function setUpMainSearchAutoComplete() {
         var searchBox = $("#searchbox");
         var text = searchBox.val();
-        var tokens = text.split(" ");
+        var tokens = text.split(/\s+/);  
         var lastToken = tokens[tokens.length-1];
         firstCharOfLastToken = lastToken.substr(0, 1);
-        
+
         if(isNumber(firstCharOfLastToken) && lastToken.length > 3) {
             var withoutLast = text.substr(0, text.length-lastToken.length);
             var cheatWidth = getWidth(withoutLast);
@@ -60,7 +45,7 @@ $(document).ready(function() {
     function appendProcSearchExp(x, y) {
         $("#content").append('<span contenteditable="true" id="procSearchExp"></span>');
         var procSearchExp = $("#procSearchExp");
-        procSearchExp.css({"left": x + "px", "top": y + "px"});
+        procSearchExp.css({"left": x + "px", "top": y+1 + "px"});
         return procSearchExp;
     }
 
@@ -135,18 +120,53 @@ $(document).ready(function() {
                 source: "/suggest_processo/",
                 minLength: 4,
                 select: function (event, ui) {        
-                    var searchBox = $("#searchbox");
+                  /*  var searchBox = $("#searchbox");
                     currentSearch = searchBox.val();
                     newSearch = currentSearch + ui.item.value;
                     $("#procSearchExp").remove();
                     searchBox.focus();
                     searchBox.val('');
                     searchBox.val(newSearch);
-                    //alert(ui.item.label);
+                    //alert(ui.item.label);*/
+                    switchEmUp(ui.item.value);
                     return false;
                 },
         });
     });
+
+    $(document).on('keyup', "#procSearchExp", function(e) {
+        if(e.keyCode == 32) {
+            e.preventDefault();
+            var autoText = $(this).text();
+            switchEmUp(autoText);
+        }
+        else if(e.keyCode == 8 && $(this).text().length == 0) {
+            var autoText = $(this).text();
+            switchEmUp(autoText);
+        }
+    });
+
+    $(document).on('keypress', "#procSearchExp", function(e) {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+            var autoText = $(this).text();
+            switchEmUp(autoText);
+            doFreshSearch();
+        }
+    });
+
+    function switchEmUp(autoText) {
+        var searchBox = $("#searchbox");
+        currentSearch = searchBox.val();
+        newSearch = currentSearch + autoText;
+        newSearch = newSearch.replace(/&nbsp;/gi," ");
+        $("#procSearchExp").remove();
+      //  searchBox.focus();
+        searchBox.val('');
+        searchBox.val(newSearch);
+        //alert(ui.item.label);
+        searchBox.focus();
+    }
 
     $(".datePicker").datepicker(
         // configure datepicker

@@ -172,13 +172,13 @@ header h1 {
 	position:absolute;
 	font-family: inherit;
 	font-size: 2rem;	
-	color: blue;
+	color: #333333;
 	display: inline-block;
 	background-color: inherit;
 	min-width: 20%;
 	border: none;
-	margin-bottom: 0;
-	padding-bottom: 0;
+	margin:0;
+	padding: 0;
 }
 
 #procSearchExp {
@@ -574,6 +574,15 @@ header h1 {
 		font-size: 1.5rem;
 		width:60%;
 	}
+
+	#cheatDiv {
+		font-size: 1.5rem;
+	}
+
+	#procSearchExp {
+		font-size: 1.5rem;
+	}
+
 }
 
 @media only screen and (max-width: 900px) {
@@ -769,6 +778,14 @@ header h1 {
 	#searchbox {
 		font-size: 1.2rem;
 		width:75%;
+	}
+
+	#cheatDiv {
+		font-size: 1.2rem;
+	}
+
+	#procSearchExp {
+		font-size: 1.2rem;
 	}
 
 	#tribCheckBoxes {
