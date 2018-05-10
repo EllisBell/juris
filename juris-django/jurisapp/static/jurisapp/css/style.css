@@ -159,6 +159,34 @@ header h1 {
 	box-shadow: none;
 }
 
+#cheatDiv {
+	font-family: inherit;
+	font-size: 2rem;
+	margin: none;
+	padding-left: 0;
+	white-space: pre;
+	display: inline-block;
+}
+
+#procSearchExp {
+	position:absolute;
+	font-family: inherit;
+	font-size: 2rem;	
+	color: #111111;
+	display: inline-block;
+	background-color: inherit;
+	min-width: 20%;
+	border: none;
+	margin-bottom: none;
+	padding-bottom: none;
+	border-bottom: 1px solid blue;
+}
+
+#procSearchExp {
+	outline: none;
+	box-shadow: none;
+}
+
 .searchButtons {
   height: 40px;
   width: 60px;

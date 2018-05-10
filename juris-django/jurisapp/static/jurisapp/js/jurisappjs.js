@@ -1,13 +1,60 @@
 $(document).ready(function() {
 
 	//search...
-	$('#searchbox').keydown(function(event) {
+	$('#searchbox').keyup(function(e) {
 	//var code = event.
-		if(event.keyCode == 13) {
-			event.preventDefault();			
+		if(e.keyCode == 13) {
+			e.preventDefault();			
             doFreshSearch();
 		}
+        else {
+            // keep inserting typed text into cheat div, watch it grow
+            var text = $('#searchbox').val();
+            $("#cheatDiv").text(text);
+
+            var lastChar = text.substr(text.length-1);
+            if(lastChar == 'y') {
+                // remove last char, as we want to start textbox before it (to include it)
+                var withoutLast = text.substr(0, text.length-1);
+                $("#cheatDiv").text(withoutLast);
+
+                var target = $(e.target);
+                var x = target.offset().left;
+                var y = target.offset().top;
+                cheatWidth = $("#cheatDiv").width();
+                x = x + cheatWidth;
+                $("#content").append('<span contenteditable="true" id="procSearchExp"></span>');
+                $("#procSearchExp").css({"left": x + "px", "top": y + "px"});
+
+                // take text and put it in procsearchexp
+                $("#procSearchExp").focus();
+                $("#procSearchExp").text(lastChar);
+                setEndOfContenteditable($("#procSearchExp").get(0));
+                $("#searchbox").val(withoutLast);
+            }
+        }
 	});
+
+    function setEndOfContenteditable(contentEditableElement)
+    {
+        var range,selection;
+        if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+        {
+            range = document.createRange();//Create a range (a range is a like the selection but invisible)
+            range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+            selection = window.getSelection();//get the selection object (allows you to change selection)
+            selection.removeAllRanges();//remove any selections already made
+            selection.addRange(range);//make the range you have just created the visible selection
+        }
+        else if(document.selection)//IE 8 and lower
+        { 
+            range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+            range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+            range.select();//Select the range (make it the visible selection
+        }
+    }
 
    $(".searchBtn").click(function() {
         doFreshSearch();
@@ -34,6 +81,33 @@ $(document).ready(function() {
             event.preventDefault();
             doFreshSearch();
         }
+    });
+
+    (function ($) {
+        var original = $.fn.val;
+        $.fn.val = function() {
+        if ($(this).is('[contenteditable]')) {
+            return $.fn.text.apply(this, arguments);
+        };
+        return original.apply(this, arguments);
+        };
+    })(jQuery);
+
+    var availableTags = ["Hallway","Kitchen","Bathroom","Lounge"];
+
+    $(document).on('keydown.autocomplete', "#procSearchExp", function() {
+        $(this).autocomplete({
+                source: "/suggest_processo/",
+                minLength: 4,
+                select: function (event, ui) {        
+                    currentSearch = $("#searchbox").val();
+                    newSearch = currentSearch + ui.item.label;
+                    $("#searchbox").val(newSearch);
+                    $("#procSearchExp").remove();
+                    //alert(ui.item.label);
+                    return false;
+                },
+        });
     });
 
     $(".datePicker").datepicker(
