@@ -8,32 +8,69 @@ $(document).ready(function() {
             doFreshSearch();
 		}
         else {
-            // keep inserting typed text into cheat div, watch it grow
-            var text = $('#searchbox').val();
-            $("#cheatDiv").text(text);
-
+           /* var text = $('#searchbox').val();
             var lastChar = text.substr(text.length-1);
             if(lastChar == 'y') {
                 // remove last char, as we want to start textbox before it (to include it)
                 var withoutLast = text.substr(0, text.length-1);
-                $("#cheatDiv").text(withoutLast);
-
+                var cheatWidth = getWidth(withoutLast);
+                
                 var target = $(e.target);
                 var x = target.offset().left;
                 var y = target.offset().top;
-                cheatWidth = $("#cheatDiv").width();
                 x = x + cheatWidth;
-                $("#content").append('<span contenteditable="true" id="procSearchExp"></span>');
-                $("#procSearchExp").css({"left": x + "px", "top": y + "px"});
 
-                // take text and put it in procsearchexp
-                $("#procSearchExp").focus();
-                $("#procSearchExp").text(lastChar);
-                setEndOfContenteditable($("#procSearchExp").get(0));
-                $("#searchbox").val(withoutLast);
-            }
+                var procSearchExp = appendProcSearchExp(x, y);
+                setUpTextForTypingInProcSearchExp(lastChar, withoutLast);
+            }*/
+            setUpMainSearchAutoComplete();
         }
 	});
+
+    function setUpMainSearchAutoComplete() {
+        var searchBox = $("#searchbox");
+        var text = searchBox.val();
+        var tokens = text.split(" ");
+        var lastToken = tokens[tokens.length-1];
+        firstCharOfLastToken = lastToken.substr(0, 1);
+        
+        if(isNumber(firstCharOfLastToken) && lastToken.length > 3) {
+            var withoutLast = text.substr(0, text.length-lastToken.length);
+            var cheatWidth = getWidth(withoutLast);
+            
+            var x = searchBox.offset().left;
+            var y = searchBox.offset().top;
+            x = x + cheatWidth;
+
+            var procSearchExp = appendProcSearchExp(x, y);
+            setUpTextForTypingInProcSearchExp(lastToken, withoutLast);
+        }
+    }
+
+    function isNumber(input) {
+        return !isNaN(parseInt(input));
+    }
+
+    function getWidth(text) {
+        $("#cheatDiv").text(text);
+        var cheatWidth = $("#cheatDiv").width();
+        return cheatWidth;
+    }
+
+    function appendProcSearchExp(x, y) {
+        $("#content").append('<span contenteditable="true" id="procSearchExp"></span>');
+        var procSearchExp = $("#procSearchExp");
+        procSearchExp.css({"left": x + "px", "top": y + "px"});
+        return procSearchExp;
+    }
+
+    function setUpTextForTypingInProcSearchExp(procSearchExpText, mainSearchText) {
+        var procSearchExp = $("#procSearchExp")
+        procSearchExp.focus();
+        procSearchExp.text(procSearchExpText);
+        setEndOfContenteditable(procSearchExp.get(0));
+        $("#searchbox").val(mainSearchText);
+    }
 
     function setEndOfContenteditable(contentEditableElement)
     {
@@ -93,17 +130,18 @@ $(document).ready(function() {
         };
     })(jQuery);
 
-    var availableTags = ["Hallway","Kitchen","Bathroom","Lounge"];
-
     $(document).on('keydown.autocomplete', "#procSearchExp", function() {
         $(this).autocomplete({
                 source: "/suggest_processo/",
                 minLength: 4,
                 select: function (event, ui) {        
-                    currentSearch = $("#searchbox").val();
-                    newSearch = currentSearch + ui.item.label;
-                    $("#searchbox").val(newSearch);
+                    var searchBox = $("#searchbox");
+                    currentSearch = searchBox.val();
+                    newSearch = currentSearch + ui.item.value;
                     $("#procSearchExp").remove();
+                    searchBox.focus();
+                    searchBox.val('');
+                    searchBox.val(newSearch);
                     //alert(ui.item.label);
                     return false;
                 },
