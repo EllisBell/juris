@@ -115,20 +115,14 @@ $(document).ready(function() {
         };
     })(jQuery);
 
-    $(document).on('keydown.autocomplete', "#procSearchExp", function() {
+    $(document).on('keyup.autocomplete', "#procSearchExp", function() {
         $(this).autocomplete({
                 source: "/suggest_processo/",
                 minLength: 4,
                 select: function (event, ui) {        
-                  /*  var searchBox = $("#searchbox");
-                    currentSearch = searchBox.val();
-                    newSearch = currentSearch + ui.item.value;
-                    $("#procSearchExp").remove();
-                    searchBox.focus();
-                    searchBox.val('');
-                    searchBox.val(newSearch);
-                    //alert(ui.item.label);*/
-                    switchEmUp(ui.item.value);
+                   // switchEmUp(ui.item.value);
+                   // event.stopPropagation();
+                    setEndOfContenteditable($(this).get(0));
                     return false;
                 },
         });
@@ -151,7 +145,8 @@ $(document).ready(function() {
             e.preventDefault();
             var autoText = $(this).text();
             switchEmUp(autoText);
-            doFreshSearch();
+            // TODO may or may not need this dofreshsearch
+         //   doFreshSearch();
         }
     });
 
@@ -159,13 +154,12 @@ $(document).ready(function() {
         var searchBox = $("#searchbox");
         currentSearch = searchBox.val();
         newSearch = currentSearch + autoText;
-        newSearch = newSearch.replace(/&nbsp;/gi," ");
+        //newSearch = newSearch.replace(/&nbsp;/gi," ");
         $("#procSearchExp").remove();
-      //  searchBox.focus();
+        searchBox.focus();
         searchBox.val('');
         searchBox.val(newSearch);
         //alert(ui.item.label);
-        searchBox.focus();
     }
 
     $(".datePicker").datepicker(
