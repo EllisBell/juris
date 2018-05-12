@@ -1,17 +1,12 @@
 $(document).ready(function() {
 
 	//search...
-	$('#searchbox').keyup(function(e) {
+	$('#searchbox').keypress(function(e) {
 	//var code = event.
 		if(e.keyCode == 13) {
 			e.preventDefault();			
             doFreshSearch();
-          // var word = getCurrentlyTypedWord($(this).get(0));
-         //  alert(word);
 		}
-        /*else {
-            setUpMainSearchAutoComplete();
-        }*/
 	});
 
     function setUpMainSearchAutoComplete() {
@@ -44,20 +39,6 @@ $(document).ready(function() {
         return cheatWidth;
     }
 
-    function appendProcSearchExp(x, y) {
-        $("#content").append('<span contenteditable="true" id="procSearchExp"></span>');
-        var procSearchExp = $("#procSearchExp");
-        procSearchExp.css({"left": x + "px", "top": y+1 + "px"});
-        return procSearchExp;
-    }
-
-    function setUpTextForTypingInProcSearchExp(procSearchExpText, mainSearchText) {
-        var procSearchExp = $("#procSearchExp")
-        procSearchExp.focus();
-        procSearchExp.text(procSearchExpText);
-        setEndOfContenteditable(procSearchExp.get(0));
-        $("#searchbox").val(mainSearchText);
-    }
 
     function setEndOfContenteditable(contentEditableElement)
     {
@@ -100,6 +81,16 @@ $(document).ready(function() {
         minLength: 4,
     });
 
+    $("#procSearch").data("ui-autocomplete")._resizeMenu = function () {
+        var ul = this.menu.element;
+        ul.outerWidth(this.element.outerWidth());
+    }
+
+        /*jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+        var ul = this.menu.element;
+        ul.outerWidth(this.element.outerWidth());
+    }*/
+
     $("#procSearch").keydown(function(event) {
         if(event.keyCode == 13) {
             event.preventDefault();
@@ -107,69 +98,62 @@ $(document).ready(function() {
         }
     });
 
-    (function ($) {
-        var original = $.fn.val;
-        $.fn.val = function() {
-        if ($(this).is('[contenteditable]')) {
-            return $.fn.text.apply(this, arguments);
-        };
-        return original.apply(this, arguments);
-        };
-    })(jQuery);
-
-    $(document).on('keyup.autocomplete', "#procSearchExp", function() {
-        $(this).autocomplete({
-                source: "/suggest_processo/",                
-                minLength: 4,                
-                select: function (event, ui) {        
-                   // switchEmUp(ui.item.value);
-                   // event.stopPropagation();
-                    setEndOfContenteditable($(this).get(0));
-                    return false;
-                },
-        });
+    $("#searchbox").autocomplete({
+        //source: "/suggest_processo/",
+        source: function (request, response) {
+            // full string
+            //var term = request.term;
+            var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0)).word;
+            jQuery.get("/suggest_processo/", 
+                {term: currentlyTypedWord}, 
+                function (data) {
+                response(data);
+            });
+        },
+        minLength: 4,
+        search: function(event, ui) {
+            // Only trigger autocomplete if word being typed starts with number
+            var currentlyTypedWord = getCurrentlyTypedWord(event.target).word;
+            return firstCharIsNumber(currentlyTypedWord);
+        },
+        focus: function(event, ui) {
+            // when scrolling through autocomplete options do not replace text with option
+            event.preventDefault();
+        },
+        select: function (event, ui) {
+            // When option selected, replace search term within string with selected option
+            var fullText = $("#searchbox").val();
+            var info = getCurrentlyTypedWord($("#searchbox").get(0));
+            var beforeTerm = fullText.substr(0, info.startInd);
+            var afterTerm = fullText.substr(info.endInd+1);
+            var newText = beforeTerm + ui.item.value + afterTerm;
+            $("#searchbox").val(newText);
+            return false;
+        },             
+    }).keyup(function(e) {
+            // hide autocomplete options dropdown on spacebar
+            if(e.keyCode == 32) {
+                $(".ui-menu-item").hide(); 
+            }
+            // on arrow keys, if moved to non searchable word, hide dropdown
+            else if(e.keyCode == 39 || e.keyCode == 37) {
+                var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0)).word;
+                if(!firstCharIsNumber(currentlyTypedWord)) {
+                    $(".ui-menu-item").hide(); 
+                }
+            }
     });
 
-    $("#searchbox").autocomplete({
-                //source: "/suggest_processo/",
-                source: function (request, response) {
-                    // full string
-                    //var term = request.term;
-                    var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0));
-                    jQuery.get("/suggest_processo/", 
-                        {term: currentlyTypedWord}, 
-                        function (data) {
-                        // assuming data is a JavaScript array such as
-                        // ["one@abc.de", "onf@abc.de","ong@abc.de"]
-                        // and not a string
-                        response(data);
-                    });
-                },
-                minLength: 4,
-                search: function(event, ui) {
-                    var currentlyTypedWord = getCurrentlyTypedWord(event.target);
-                    var firstCharCurrentlyTyped = currentlyTypedWord.substr(0,1);
-                    // Only trigger autocomplete if last token starts with number
-                    // todo but should not be last token, should be word being typed
-                    if(isNumber(firstCharCurrentlyTyped)) {
-                        return true;
-                    }
-                    return false;
-                },
-                focus: function(event, ui) {
-                    event.preventDefault();
-                },
-                select: function (event, ui) {        
-                   // switchEmUp(ui.item.value);
-                   // event.stopPropagation();
-                    //setEndOfContenteditable($(this).get(0));
-                    var fullText = $("#searchbox").val();
-                    var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0));
-                    var newText = fullText.replace(currentlyTypedWord, ui.item.value);
-                    $("#searchbox").val(newText);
-                    return false;
-                },             
-        });
+    // TODO change this width to width of longest option
+    // todo position it according to offset of hidden span etc.
+    $("#searchbox").data("ui-autocomplete")._resizeMenu = function () {
+        var ul = this.menu.element;
+        ul.outerWidth(this.element.outerWidth());
+    }
+
+    function firstCharIsNumber(word) {
+        return isNumber(word.substr(0,1));
+    }
 
     function getCurrentlyTypedWord(element) {
         var text = element.value;
@@ -190,54 +174,15 @@ $(document).ready(function() {
             endOfCurrentlyTyped = text.length;
         }
 
-        return text.substr(startOfCurrentlyTyped, (endOfCurrentlyTyped-startOfCurrentlyTyped)+1);
-    }
+        // substring(start index, length of substring)
+        var currentlyTypedWord = text.substr(startOfCurrentlyTyped, (endOfCurrentlyTyped-startOfCurrentlyTyped)+1);
 
-    $(document).on('keyup', "#procSearchExp", function(e) {
-        var caretPosition = doGetCaretPosition($(this).get(0));
-        // space
-        if(e.keyCode == 32) {
-            e.preventDefault();
-            var autoText = $(this).text();
-            switchEmUp(autoText);
-            setCursorEndOfTextInput($("#searchbox"));
+        var currentlyTypedWordInfo = {
+            word: currentlyTypedWord,
+            startInd: startOfCurrentlyTyped,
+            endInd: endOfCurrentlyTyped
         }
-        // backspace
-       else if(e.keyCode == 8 && $(this).text().length == 0) {
-            var autoText = $(this).text();
-            switchEmUp(autoText);
-            setCursorEndOfTextInput($("#searchbox"));
-        }
-        else if(e.keyCode == 8 && caretPosition == 0) {
-            var autoText = $(this).text();
-            switchEmUp(autoText);
-            var fullText = $("#searchbox").val();
-            alert(fullText);
-        }
-    });
-
-    $(document).on('keypress', "#procSearchExp", function(e) {
-        if(e.keyCode == 13) {
-            e.preventDefault();
-            var autoText = $(this).text();
-            switchEmUp(autoText);
-            setCursorEndOfTextInput($("#searchbox"));
-            // TODO may or may not need this dofreshsearch
-         //   doFreshSearch();
-        }
-    });
-
-    function switchEmUp(autoText) {
-        var searchBox = $("#searchbox");
-        currentSearch = searchBox.val();
-        newSearch = currentSearch + autoText;
-        searchBox.val(newSearch);
-        $("#procSearchExp").remove();
-
-        /*searchBox.focus();
-        searchBox.val('');
-        searchBox.val(newSearch);*/
-        //alert(ui.item.label);
+        return currentlyTypedWordInfo;
     }
 
     function setCursorEndOfTextInput(elem) {
@@ -275,26 +220,6 @@ $(document).ready(function() {
           // Return results
           return iCaretPos;
     }
-
-    function setCaretToPos (input, pos) {
-      setSelectionRange(input, pos, pos);
-    }
-
-    function setSelectionRange(input, selectionStart, selectionEnd) {
-      if (input.setSelectionRange) {
-        input.focus();
-        input.setSelectionRange(selectionStart, selectionEnd);
-      }
-      else if (input.createTextRange) {
-        var range = input.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', selectionEnd);
-        range.moveStart('character', selectionStart);
-        range.select();
-      }
-    }
-
-
 
     $(".datePicker").datepicker(
         // configure datepicker
@@ -571,7 +496,7 @@ $(document).ready(function() {
 
 });
 
-    jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+  /*  jQuery.ui.autocomplete.prototype._resizeMenu = function () {
         var ul = this.menu.element;
         ul.outerWidth(this.element.outerWidth());
-    }
+    }*/
