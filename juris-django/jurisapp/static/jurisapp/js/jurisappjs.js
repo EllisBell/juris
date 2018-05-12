@@ -5,9 +5,9 @@ $(document).ready(function() {
 	//var code = event.
 		if(e.keyCode == 13) {
 			e.preventDefault();			
-           // doFreshSearch();
-           var word = getCurrentlyTypedWord($(this).get(0));
-           alert(word);
+            doFreshSearch();
+          // var word = getCurrentlyTypedWord($(this).get(0));
+         //  alert(word);
 		}
         /*else {
             setUpMainSearchAutoComplete();
@@ -130,12 +130,14 @@ $(document).ready(function() {
         });
     });
 
-   /* $("#searchbox").autocomplete({
+    $("#searchbox").autocomplete({
                 //source: "/suggest_processo/",
                 source: function (request, response) {
-                    
+                    // full string
+                    //var term = request.term;
+                    var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0));
                     jQuery.get("/suggest_processo/", 
-                        {term: request.term}, 
+                        {term: currentlyTypedWord}, 
                         function (data) {
                         // assuming data is a JavaScript array such as
                         // ["one@abc.de", "onf@abc.de","ong@abc.de"]
@@ -145,37 +147,29 @@ $(document).ready(function() {
                 },
                 minLength: 4,
                 search: function(event, ui) {
-                    var text = event.target.value;
-
-                    var caretPosition = doGetCaretPosition($("#searchbox").get(0));
-
-                    // find last space up to here
-                    var stringUpToCaret = text.substr(0, caretPosition);
-                    // if spacebefore not found, will return -1, in which case start will be 0
-                    var spaceBefore = stringUpToCaret.lastIndexOf(" ");
-                    var startOfCurrentlyTyped = spaceBefore + 1;
-
-                    var stringAfterCaret = text.substr(caretPosition);
-                    var spaceAfter = stringAfterCaret.indexOf(" ");
-                    var endOfCurrentlyTyped;
-                    if(spaceAfter != -1) {
-                        endOfCurrentlyTyped = spaceAfter - 1;
-                    }
-                    else {
-                        endOfCurrentlyTyped = text.length;
-                    }
-
-                    var tokens = text.split(/\s+/);  
-                    var lastToken = tokens[tokens.length-1];
-                    firstCharOfLastToken = lastToken.substr(0, 1);
+                    var currentlyTypedWord = getCurrentlyTypedWord(event.target);
+                    var firstCharCurrentlyTyped = currentlyTypedWord.substr(0,1);
                     // Only trigger autocomplete if last token starts with number
                     // todo but should not be last token, should be word being typed
-                    if(isNumber(firstCharOfLastToken)) {
+                    if(isNumber(firstCharCurrentlyTyped)) {
                         return true;
                     }
                     return false;
+                },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                },
+                select: function (event, ui) {        
+                   // switchEmUp(ui.item.value);
+                   // event.stopPropagation();
+                    //setEndOfContenteditable($(this).get(0));
+                    var fullText = $("#searchbox").val();
+                    var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0));
+                    var newText = fullText.replace(currentlyTypedWord, ui.item.value);
+                    $("#searchbox").val(newText);
+                    return false;
                 },             
-        });*/
+        });
 
     function getCurrentlyTypedWord(element) {
         var text = element.value;
