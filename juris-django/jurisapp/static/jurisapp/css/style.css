@@ -159,31 +159,10 @@ header h1 {
 	box-shadow: none;
 }
 
-#cheatDiv {
-	font-family: inherit;
-	font-size: 2rem;
-	margin: 0;
-	padding-left: 0;
-	white-space: pre;
-	display: inline-block;
-}
-
-#procSearchExp {
-	position:absolute;
-	font-family: inherit;
-	font-size: 2rem;	
-	color: blue;
-	display: inline-block;
-	background-color: inherit;
-	min-width: 20%;
-	border: none;
-	margin:0;
-	padding: 0;
-}
-
-#procSearchExp {
-	outline: none;
-	box-shadow: none;
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover 
+{
+  border: 1px solid #52949a;;
+  background-color: #52949a;
 }
 
 .searchButtons {

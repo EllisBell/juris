@@ -9,87 +9,29 @@ $(document).ready(function() {
 		}
 	});
 
-    function setUpMainSearchAutoComplete() {
-        var searchBox = $("#searchbox");
-        var text = searchBox.val();
-        var tokens = text.split(/\s+/);  
-        var lastToken = tokens[tokens.length-1];
-        firstCharOfLastToken = lastToken.substr(0, 1);
-
-        if(isNumber(firstCharOfLastToken) && lastToken.length > 3) {
-            var withoutLast = text.substr(0, text.length-lastToken.length);
-            var cheatWidth = getWidth(withoutLast);
-            
-            var x = searchBox.offset().left;
-            var y = searchBox.offset().top;
-            x = x + cheatWidth;
-
-            var procSearchExp = appendProcSearchExp(x, y);
-            setUpTextForTypingInProcSearchExp(lastToken, withoutLast);
-        }
-    }
-
     function isNumber(input) {
         return !isNaN(parseInt(input));
-    }
-
-    function getWidth(text) {
-        $("#cheatDiv").text(text);
-        var cheatWidth = $("#cheatDiv").width();
-        return cheatWidth;
-    }
-
-
-    function setEndOfContenteditable(contentEditableElement)
-    {
-        var range,selection;
-        if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-        {
-            range = document.createRange();//Create a range (a range is a like the selection but invisible)
-            range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-            selection = window.getSelection();//get the selection object (allows you to change selection)
-            selection.removeAllRanges();//remove any selections already made
-            selection.addRange(range);//make the range you have just created the visible selection
-        }
-        else if(document.selection)//IE 8 and lower
-        { 
-            range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
-            range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
-            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-            range.select();//Select the range (make it the visible selection
-        }
     }
 
    $(".searchBtn").click(function() {
         doFreshSearch();
     });
 
-       $(".showAdv").click(function() {
-        var adv = $("#advancedSearch");
-        if(adv.is(':visible')) {
-            adv.hide(200);
-            clearAdvancedSearch();
-        }
-        else {
-            adv.show(200);
-        }
+   $(".showAdv").click(function() {
+    var adv = $("#advancedSearch");
+    if(adv.is(':visible')) {
+        adv.hide(200);
+        clearAdvancedSearch();
+    }
+    else {
+        adv.show(200);
+    }
     });
 
     $("#procSearch").autocomplete({
         source: "/suggest_processo/",
         minLength: 4,
     });
-
-    $("#procSearch").data("ui-autocomplete")._resizeMenu = function () {
-        var ul = this.menu.element;
-        ul.outerWidth(this.element.outerWidth());
-    }
-
-        /*jQuery.ui.autocomplete.prototype._resizeMenu = function () {
-        var ul = this.menu.element;
-        ul.outerWidth(this.element.outerWidth());
-    }*/
 
     $("#procSearch").keydown(function(event) {
         if(event.keyCode == 13) {
@@ -114,7 +56,7 @@ $(document).ready(function() {
         search: function(event, ui) {
             // Only trigger autocomplete if word being typed starts with number
             var currentlyTypedWord = getCurrentlyTypedWord(event.target).word;
-            return firstCharIsNumber(currentlyTypedWord);
+            return isAutoCompleteable(currentlyTypedWord);
         },
         focus: function(event, ui) {
             // when scrolling through autocomplete options do not replace text with option
@@ -135,20 +77,17 @@ $(document).ready(function() {
             if(e.keyCode == 32) {
                 $(".ui-menu-item").hide(); 
             }
-            // on arrow keys, if moved to non searchable word, hide dropdown
-            else if(e.keyCode == 39 || e.keyCode == 37) {
+            // on arrow keys or backspace, if moved to non searchable word, hide dropdown
+            else if(e.keyCode == 39 || e.keyCode == 37 || e.keyCode == 8) {
                 var currentlyTypedWord = getCurrentlyTypedWord($("#searchbox").get(0)).word;
-                if(!firstCharIsNumber(currentlyTypedWord)) {
+                if(!isAutoCompleteable(currentlyTypedWord)) {
                     $(".ui-menu-item").hide(); 
                 }
             }
-    });
+    }); 
 
-    // TODO change this width to width of longest option
-    // todo position it according to offset of hidden span etc.
-    $("#searchbox").data("ui-autocomplete")._resizeMenu = function () {
-        var ul = this.menu.element;
-        ul.outerWidth(this.element.outerWidth());
+    function isAutoCompleteable(word) {
+        return firstCharIsNumber(word) && word.length >= 4
     }
 
     function firstCharIsNumber(word) {
@@ -494,9 +433,11 @@ $(document).ready(function() {
 
     setOrderByButtonSelectedAndColours($("#relevanceBtn"));
 
-});
 
-  /*  jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+    jQuery.ui.autocomplete.prototype._resizeMenu = function () {
         var ul = this.menu.element;
         ul.outerWidth(this.element.outerWidth());
-    }*/
+    }
+
+});
+
