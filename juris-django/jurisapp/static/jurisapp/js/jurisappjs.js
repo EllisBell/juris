@@ -5,11 +5,13 @@ $(document).ready(function() {
 	//var code = event.
 		if(e.keyCode == 13) {
 			e.preventDefault();			
-            doFreshSearch();
+           // doFreshSearch();
+           var word = getCurrentlyTypedWord($(this).get(0));
+           alert(word);
 		}
-        else {
+        /*else {
             setUpMainSearchAutoComplete();
-        }
+        }*/
 	});
 
     function setUpMainSearchAutoComplete() {
@@ -117,8 +119,8 @@ $(document).ready(function() {
 
     $(document).on('keyup.autocomplete', "#procSearchExp", function() {
         $(this).autocomplete({
-                source: "/suggest_processo/",
-                minLength: 4,
+                source: "/suggest_processo/",                
+                minLength: 4,                
                 select: function (event, ui) {        
                    // switchEmUp(ui.item.value);
                    // event.stopPropagation();
@@ -128,15 +130,95 @@ $(document).ready(function() {
         });
     });
 
+   /* $("#searchbox").autocomplete({
+                //source: "/suggest_processo/",
+                source: function (request, response) {
+                    
+                    jQuery.get("/suggest_processo/", 
+                        {term: request.term}, 
+                        function (data) {
+                        // assuming data is a JavaScript array such as
+                        // ["one@abc.de", "onf@abc.de","ong@abc.de"]
+                        // and not a string
+                        response(data);
+                    });
+                },
+                minLength: 4,
+                search: function(event, ui) {
+                    var text = event.target.value;
+
+                    var caretPosition = doGetCaretPosition($("#searchbox").get(0));
+
+                    // find last space up to here
+                    var stringUpToCaret = text.substr(0, caretPosition);
+                    // if spacebefore not found, will return -1, in which case start will be 0
+                    var spaceBefore = stringUpToCaret.lastIndexOf(" ");
+                    var startOfCurrentlyTyped = spaceBefore + 1;
+
+                    var stringAfterCaret = text.substr(caretPosition);
+                    var spaceAfter = stringAfterCaret.indexOf(" ");
+                    var endOfCurrentlyTyped;
+                    if(spaceAfter != -1) {
+                        endOfCurrentlyTyped = spaceAfter - 1;
+                    }
+                    else {
+                        endOfCurrentlyTyped = text.length;
+                    }
+
+                    var tokens = text.split(/\s+/);  
+                    var lastToken = tokens[tokens.length-1];
+                    firstCharOfLastToken = lastToken.substr(0, 1);
+                    // Only trigger autocomplete if last token starts with number
+                    // todo but should not be last token, should be word being typed
+                    if(isNumber(firstCharOfLastToken)) {
+                        return true;
+                    }
+                    return false;
+                },             
+        });*/
+
+    function getCurrentlyTypedWord(element) {
+        var text = element.value;
+        var caretPosition = doGetCaretPosition(element);
+        // find last space up to here
+        var stringUpToCaret = text.substr(0, caretPosition);
+        // if spacebefore not found, will return -1, in which case start will be 0
+        var spaceBefore = stringUpToCaret.lastIndexOf(" ");
+        var startOfCurrentlyTyped = spaceBefore + 1;
+
+        var stringAfterCaret = text.substr(caretPosition);
+        var spaceAfter = stringAfterCaret.indexOf(" ");
+        var endOfCurrentlyTyped;
+        if(spaceAfter != -1) {
+            endOfCurrentlyTyped = stringUpToCaret.length + spaceAfter - 1;
+        }
+        else {
+            endOfCurrentlyTyped = text.length;
+        }
+
+        return text.substr(startOfCurrentlyTyped, (endOfCurrentlyTyped-startOfCurrentlyTyped)+1);
+    }
+
     $(document).on('keyup', "#procSearchExp", function(e) {
+        var caretPosition = doGetCaretPosition($(this).get(0));
+        // space
         if(e.keyCode == 32) {
             e.preventDefault();
             var autoText = $(this).text();
             switchEmUp(autoText);
+            setCursorEndOfTextInput($("#searchbox"));
         }
-        else if(e.keyCode == 8 && $(this).text().length == 0) {
+        // backspace
+       else if(e.keyCode == 8 && $(this).text().length == 0) {
             var autoText = $(this).text();
             switchEmUp(autoText);
+            setCursorEndOfTextInput($("#searchbox"));
+        }
+        else if(e.keyCode == 8 && caretPosition == 0) {
+            var autoText = $(this).text();
+            switchEmUp(autoText);
+            var fullText = $("#searchbox").val();
+            alert(fullText);
         }
     });
 
@@ -145,6 +227,7 @@ $(document).ready(function() {
             e.preventDefault();
             var autoText = $(this).text();
             switchEmUp(autoText);
+            setCursorEndOfTextInput($("#searchbox"));
             // TODO may or may not need this dofreshsearch
          //   doFreshSearch();
         }
@@ -154,13 +237,70 @@ $(document).ready(function() {
         var searchBox = $("#searchbox");
         currentSearch = searchBox.val();
         newSearch = currentSearch + autoText;
-        //newSearch = newSearch.replace(/&nbsp;/gi," ");
-        $("#procSearchExp").remove();
-        searchBox.focus();
-        searchBox.val('');
         searchBox.val(newSearch);
+        $("#procSearchExp").remove();
+
+        /*searchBox.focus();
+        searchBox.val('');
+        searchBox.val(newSearch);*/
         //alert(ui.item.label);
     }
+
+    function setCursorEndOfTextInput(elem) {
+        text = elem.val();
+        elem.focus();
+        elem.val('');
+        elem.val(text);
+    }
+
+    function doGetCaretPosition (oField) {
+
+          // Initialize
+          var iCaretPos = 0;
+
+          // IE Support
+          if (document.selection) {
+
+            // Set focus on the element
+            oField.focus();
+
+            // To get cursor position, get empty selection range
+            var oSel = document.selection.createRange();
+
+            // Move selection start to 0 position
+            oSel.moveStart('character', -oField.value.length);
+
+            // The caret position is selection length
+            iCaretPos = oSel.text.length;
+          }
+
+          // Firefox support
+          else if (oField.selectionStart || oField.selectionStart == '0')
+            iCaretPos = oField.selectionStart;
+
+          // Return results
+          return iCaretPos;
+    }
+
+    function setCaretToPos (input, pos) {
+      setSelectionRange(input, pos, pos);
+    }
+
+    function setSelectionRange(input, selectionStart, selectionEnd) {
+      if (input.setSelectionRange) {
+        input.focus();
+        input.setSelectionRange(selectionStart, selectionEnd);
+      }
+      else if (input.createTextRange) {
+        var range = input.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', selectionEnd);
+        range.moveStart('character', selectionStart);
+        range.select();
+      }
+    }
+
+
 
     $(".datePicker").datepicker(
         // configure datepicker

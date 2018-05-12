@@ -145,3 +145,4 @@ def get_suggestions(proc):
     suggs = Acordao.objects.filter(processo__istartswith=proc).only("processo")
     just_procs = [sugg.processo for sugg in suggs]
     return just_procs
+    #return []
