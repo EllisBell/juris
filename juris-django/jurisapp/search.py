@@ -264,13 +264,22 @@ def get_should_bool_dict(bool_dict, sd):
 
     # query components is a list of lists of dicts
     # each component was a part of the original query separated by or
+    # the dicts in each component are either normal cross_fields query
+    # or a phrase query
+    # or a cross_fields query for just words with nums (using different versions of searchable fields)
     for query_comp in query_components:
         # query_comp is a list of dicts
         inner_bool_dict = {'bool': {}}
         for query_dict in query_comp:
-            multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
+            # todo where there are numbers involved
+            if query_dict["is_words_with_nums"]:
+                multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields_with_nums,
+                                                         query_dict["type"], "and")
+                add_to_bool(inner_bool_dict, "must", multi_match_dict)
+            else:
+                multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
                                                      query_dict["type"], "and")
-            add_to_bool(inner_bool_dict, "must", multi_match_dict)
+                add_to_bool(inner_bool_dict, "must", multi_match_dict)
             # if query_dict["type"] != "phrase":
             #     match_dict = get_match_query(query_dict["query"], "processo", "or")
             #     add_to_bool(inner_bool_dict, "should", match_dict)

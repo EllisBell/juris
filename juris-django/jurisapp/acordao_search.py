@@ -79,6 +79,7 @@ def replace_or_with_pipe(term):
     # it would then replace that with group 1 (" ") + "|" + group 3 (" ").
     # n.b. group 2 is the "ou", which is actually replaced by the | (pipe)
     r = re.compile(r"(^|\s)(%s)($|\s)" % or_symbol)
+    # x is a regex match object
     term = r.sub(lambda x: '%s|%s' % (x.group(1), x.group(3)), term)
     return term
 
@@ -107,15 +108,34 @@ def get_or_component(or_part):
         if normal_part:
             normal_dict = make_query_component(normal_part, "cross_fields")
             or_component.append(normal_dict)
+            # todo here also get just words with numbers
+            # todo make query component from them
+            # todo with number flag or something
+            normal_just_numbers = get_just_words_containing_numbers(normal_part)
+            if normal_just_numbers:
+                normal_just_numbers_dict = make_query_component(normal_just_numbers, "cross_fields", True)
+                or_component.append(normal_just_numbers_dict)
     else:
         query_dict = make_query_component(or_part, "cross_fields")
         or_component.append(query_dict)
+        # Just words with numbers
+        normal_just_numbers = get_just_words_containing_numbers(or_part)
+        if normal_just_numbers:
+            normal_just_numbers_dict = make_query_component(normal_just_numbers, "cross_fields", True)
+            or_component.append(normal_just_numbers_dict)
 
     return or_component
 
 
-def make_query_component(query, type):
-    return {"query": query, "type": type}
+def get_just_words_containing_numbers(full_string):
+    tokens = full_string.split()
+    # get just the tokens in which any character c is a digit
+    just_with_nums = [token for token in tokens if any(c.isdigit() for c in token)]
+    return " ".join(just_with_nums)
+
+
+def make_query_component(query, type, words_with_nums=False):
+    return {"query": query, "type": type, "is_words_with_nums": words_with_nums}
 
 
 def is_valid_phrase_search(query):
@@ -155,8 +175,9 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
 
     sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date,
                       to_date=asd.to_date, processo=asd.processo, searchable_fields=get_searchable_fields(),
-                      sort_by=sort_by, filter_dict=filter_dict,
-                      exclude=exclude, start_at=start, res_size=display_size, query_components=query_components)
+                      get_searchable_fields_with_nums=get_searchable_fields_with_nums(), sort_by=sort_by,
+                      filter_dict=filter_dict, exclude=exclude, start_at=start, res_size=display_size,
+                      query_components=query_components)
 
     res = s.search_fields(sd)
 
@@ -168,8 +189,13 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
 
 def get_searchable_fields():
     # ^ syntax weights fields more
-    return ["processo", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
-    #return ["relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
+    return ["processo^4", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
+    #return ["relator", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
+
+
+def get_searchable_fields_with_nums():
+    return ["processo.just_with_nums^4", "sumario.just_with_nums", "txt_integral.just_with_nums",
+            "txt_parcial.just_with_nums", "descritores.just_with_nums^3"]
 
 
 def get_ids_from_res(res):
