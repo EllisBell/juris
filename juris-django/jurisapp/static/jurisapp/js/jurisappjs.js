@@ -49,6 +49,10 @@ $(document).ready(function() {
             jQuery.get("/suggest_processo/", 
                 {term: currentlyTypedWord}, 
                 function (data) {
+                // Add "Proc nº" for context
+                for(var i=0; i<data.length; i++) {
+                    data[i].label = "Proc. nº " + data[i].label;
+                }
                 response(data);
             });
         },

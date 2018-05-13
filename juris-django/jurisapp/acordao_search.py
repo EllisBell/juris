@@ -108,9 +108,7 @@ def get_or_component(or_part):
         if normal_part:
             normal_dict = make_query_component(normal_part, "cross_fields")
             or_component.append(normal_dict)
-            # todo here also get just words with numbers
-            # todo make query component from them
-            # todo with number flag or something
+            # get string consisting of any and only words containing numbers in part of query outside of phrase
             normal_just_numbers = get_just_words_containing_numbers(normal_part)
             if normal_just_numbers:
                 normal_just_numbers_dict = make_query_component(normal_just_numbers, "cross_fields", True)
@@ -127,6 +125,21 @@ def get_or_component(or_part):
     return or_component
 
 
+# OK
+# Essentially, wanted:
+# a) To avoid a query for e.g. artigo 127 matching cases with processo number e.g. 127/abc-p2
+# This was happening because the ES analyzer (portuguese) was splitting on "/" (amongst others)
+# b) To still allow for searching cross_fields including processo number
+# e.g. 127/abc-p2 materia de facto
+# cross_fields only works if the fields being searched in are indexed with the same analyzer,
+# so have left processo being analyzed with portuguese analyzer like other full text fields
+# But that was causing problem a)
+# To avoid problem a), now also indexing processo and text fields (sumario, txt_integral etc.) in such a way
+# that only the words in those fields that contain numbers are indexed, and are left untouched
+# E.g. 127/abc-p2 would remain 127/abc-p2 in that version of the field
+# So wherever there is a word (or words) containing a number in the query (outside of phrases), we take those words
+# and we also search for them against the words_with_numbers version of the fields in the index
+# So searching for artigo 127 will only bring back the results that have a true "127" not a "127/abc-p2"
 def get_just_words_containing_numbers(full_string):
     tokens = full_string.split()
     # get just the tokens in which any character c is a digit
@@ -175,7 +188,7 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
 
     sd = s.SearchData(index='acordao_idx', query=asd.query, from_date=asd.from_date,
                       to_date=asd.to_date, processo=asd.processo, searchable_fields=get_searchable_fields(),
-                      get_searchable_fields_with_nums=get_searchable_fields_with_nums(), sort_by=sort_by,
+                      searchable_fields_with_nums=get_searchable_fields_with_nums(), sort_by=sort_by,
                       filter_dict=filter_dict, exclude=exclude, start_at=start, res_size=display_size,
                       query_components=query_components)
 

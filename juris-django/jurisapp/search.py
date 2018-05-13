@@ -10,10 +10,23 @@ def get_es():
 
 # indexing a doc using es.index would normally create index if didn't exist
 # but we want to specify analyzer for index so think I need to specifically create one with mappings etc.
+
 def create_acordao_idx():
     es = get_es()
     index_client = es.indices
 
+    # OK
+    # Essentially, wanted:
+    # a) To avoid a query for e.g. artigo 127 matching cases with processo number e.g. 127/abc-p2
+    # This was happening because the ES analyzer (portuguese) was splitting on "/" (amongst others)
+    # b) To still allow for searching cross_fields including processo number
+    # e.g. 127/abc-p2 materia de facto
+    # cross_fields only works if the fields being searched in are indexed with the same analyzer,
+    # so have left processo being analyzed with portuguese analyzer like other full text fields
+    # But that was causing problem a)
+    # To avoid problem a), now also indexing processo and text fields (sumario, txt_integral etc.) in such a way
+    # that only the words in those fields that contain numbers are indexed, and are left untouched
+    # E.g. 127/abc-p2 would remain 127/abc-p2 in that version of the field
     # matches words that don't contain any numbers (we want to exclude these in our custom analyzer)
     no_num_pattern = "^[^0-9]+$"
 

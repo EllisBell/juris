@@ -133,7 +133,7 @@ def suggest_processo(request):
     results = []
     for proc in suggestions:
         print(proc)
-        proc_json = {'value': proc, 'label': "Proc. nº " + proc}
+        proc_json = {'value': proc, 'label': proc}
         results.append(proc_json)
     data = json.dumps(results)
 
