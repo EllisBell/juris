@@ -14,11 +14,32 @@ def create_acordao_idx():
     es = get_es()
     index_client = es.indices
 
+    # matches words that don't contain any numbers (we want to exclude these in our custom analyzer)
+    no_num_pattern = "^[^0-9]+$"
+
     settings = {"analysis": {
+        "analyzer": {
+          "words_with_numbers": {
+              "type": "custom",
+              "tokenizer": "whitespace",
+              "filter": ["lowercase", "non_nums_remover", "remove_empty"]
+          }
+        },
+        "filter": {
+          "non_nums_remover": {
+              "type": "pattern_replace",
+              "pattern": no_num_pattern,
+              "replacement": ""
+          },
+          "remove_empty": {
+              "type": "stop",
+              "stopwords": [""]
+            }
+        },
         "normalizer": {
-            "lowercaser": {
+            "lowercase_ascii": {
                 "type": "custom",
-                "filter": "lowercase"
+                "filter": ["lowercase", "asciifolding"]
             }
         }
     }}
@@ -31,7 +52,8 @@ def create_acordao_idx():
             # Todo test these keywords out -send in capitalized, uncapitalized etc.
             "processo": {"type": "text", "analyzer": "portuguese",
                          "fields": {
-                             "raw": {"type": "keyword", "normalizer": "lowercaser"}
+                             "raw": {"type": "keyword", "normalizer": "lowercase_ascii"},
+                             "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
                          }
                          },
             "tribunal": {"type": "keyword"},
@@ -39,10 +61,27 @@ def create_acordao_idx():
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
             # todo e.g. just to remove accents or something
             "relator": {"type": "text", "analyzer": "portuguese"},
-            "sumario": {"type": "text", "analyzer": "portuguese"},
-            "txt_integral": {"type": "text", "analyzer": "portuguese"},
-            "txt_parcial": {"type": "text", "analyzer": "portuguese"},
-            "descritores": {"type": "text", "analyzer": "portuguese"},
+            # todo now adding raw version of each of these... Should they be keyword types or text?
+            "sumario": {"type": "text", "analyzer": "portuguese",
+                        "fields": {
+                            "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
+                        }
+                        },
+            "txt_integral": {"type": "text", "analyzer": "portuguese",
+                             "fields": {
+                                 "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
+                             }
+                             },
+            "txt_parcial": {"type": "text", "analyzer": "portuguese",
+                            "fields": {
+                                "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
+                            }
+                            },
+            "descritores": {"type": "text", "analyzer": "portuguese",
+                            "fields": {
+                                "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
+                            }
+                            },
             "data": {"type": "date"}
         }
     }
@@ -89,6 +128,8 @@ def get_bulk_actions(just_new):
 # todo as that takes quite a while
 
 def create_acordao_doc(ac):
+    # TODO probably best to check that trib property exists
+    # todo otherwise will break when getting id_name/long_name
     doc = {"id": ac.acordao_id,
            "processo": ac.processo,
            "tribunal": ac.tribunal.id_name,
@@ -165,6 +206,13 @@ def test_analyse(analyser, text):
     return index_client.analyze(body={"analyzer": analyser, "text": text})
 
 
+# analyzes text
+def test_normalise(normaliser, text):
+    es = get_es()
+    index_client = es.indices
+    return index_client.analyze(body={"normalizer": normaliser, "text": text})
+
+
 # what we're going for when creating the query is something like this:
 # e.g. query is 'orange grape "red onion" OR apple banana'
 # {query :
@@ -181,6 +229,8 @@ def test_analyse(analyser, text):
 #     {filter: {filter dict}
 #     {sort: {sort dict}
 #
+# todo to deal with processo, plan is to try adding a should to each of the above or component bools
+# todo matching just on processo with an or
 def search_fields(sd):
     body = get_query_outline()
     outer_bool_dict = {'bool': {}}
@@ -213,6 +263,7 @@ def get_should_bool_dict(bool_dict, sd):
         return bool_dict
 
     # query components is a list of lists of dicts
+    # each component was a part of the original query separated by or
     for query_comp in query_components:
         # query_comp is a list of dicts
         inner_bool_dict = {'bool': {}}
@@ -220,6 +271,9 @@ def get_should_bool_dict(bool_dict, sd):
             multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
                                                      query_dict["type"], "and")
             add_to_bool(inner_bool_dict, "must", multi_match_dict)
+            # if query_dict["type"] != "phrase":
+            #     match_dict = get_match_query(query_dict["query"], "processo", "or")
+            #     add_to_bool(inner_bool_dict, "should", match_dict)
 
         # add to the bool dict should clause
         add_to_bool(bool_dict, "should", inner_bool_dict)
@@ -294,6 +348,19 @@ def get_multi_match_query(query, fields, match_type, operator):
     }
 
     return multi_match_dict
+
+
+def get_match_query(query, field, operator):
+    match_dict = {
+        "match": {
+            field: {
+                "query": query,
+                "operator": operator
+            }
+        }
+    }
+
+    return match_dict
 
 
 def add_to_bool(dict_with_bool, bool_type, dict_to_add):

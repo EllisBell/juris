@@ -146,7 +146,9 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
     filter_dict = {"tribunal": asd.tribs}
     # add processo filter if there
     if asd.processo:
+        # TODO may want raw back
         filter_dict["processo.raw"] = [asd.processo, ]
+        #filter_dict["processo"] = [asd.processo, ]
 
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']
@@ -166,7 +168,8 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
 
 def get_searchable_fields():
     # ^ syntax weights fields more
-    return ["processo^4", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
+    return ["processo", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
+    #return ["relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
 
 
 def get_ids_from_res(res):
