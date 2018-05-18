@@ -264,6 +264,7 @@ header h1 {
 #tribCheckBoxes {
 	margin-top: 3%;
 	width: 90%;
+	max-width: 1000px;
 }
 
 .tribLabel {
