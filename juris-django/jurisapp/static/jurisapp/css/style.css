@@ -39,7 +39,6 @@ body {
 	width: 100%;
 }
 
-
 #termos-container {
 	margin-bottom: 5%;
 	max-width: 90%;
@@ -549,35 +548,48 @@ header h1 {
     display: table;
 }
 
-@media only screen and (max-width: 1000px) {
-	#searchbox {
-		font-size: 1.5rem;
-		width:60%;
+@media only screen and (max-width: 1200px) {
+	#all-content {
+		width: 100%;
 	}
 
-	#cheatDiv {
-		font-size: 1.5rem;
+	#outer-container {
+		width: 100%;
 	}
 
-	#procSearchExp {
-		font-size: 1.5rem;
+	header {
+		width: 95%;
+		margin: 0 auto;
 	}
 
-}
+	#content {
+		max-width: 90%;
+		margin: 8% auto 0 auto;
+	}
 
-@media only screen and (max-width: 900px) {
+	#termos-container {
+		width: 75%;
+		margin: 0 auto 5% auto;
+	}
+
+	/* acordao page */
+	#container {
+		margin-top: 3%;
+	}
+	
 	#ac-sidebar {
 		float:none;
 		width: 100%;
 		height: auto;
-		margin-top: 3%;
-	    background-color: #81bbc0;
-	    padding-top: 5px;
+		margin-top: 0;
+		margin-bottom: 4%;
+		background-color: #81bbc0;
+		padding-top: 2%;
+		padding-left: 3%;
 	}
 
-	#acordao-main-info {
-		float:left;
-		width: 50%;
+	#ac-sidebar div {
+		margin-bottom: 1%;
 	}
 
 	#acordao-icons {
@@ -586,21 +598,25 @@ header h1 {
 		font-size: 3rem;
 	}
 
-	/*#acordao-descritores: {
-		margin-top: 50%;
-	}*/
-
 	#ac-content {
 		width: 70%;
 		margin: 0 auto;
 	}
 }
 
-@media only screen and (max-width: 700px) {
-	#all-content {
-		width: 95%;
+@media only screen and (max-width: 1000px) {
+	#searchbox {
+		font-size: 1.5rem;
+		width:60%;
 	}
 
+	#content {
+		max-width: 90%;
+		margin: 15% auto 0 auto;
+	}
+}
+
+@media only screen and (max-width: 700px) {
 	#top-nav {
 		height:100%;
 	}
@@ -682,6 +698,10 @@ header h1 {
 	.dateClear {
 		font-size: 0.8rem;
 	}
+	
+	#tribCheckBoxes {
+		max-width: 500px;
+	}
 
 	.trib-long {
 		display: none;
@@ -699,6 +719,10 @@ header h1 {
 	.acordao-result {
 		width: 100%;
 		margin: 5% auto 5% auto;
+	}
+
+	#container {
+		margin-top: 6%;
 	}
 
 	#acordao-main-info {
@@ -720,7 +744,6 @@ header h1 {
 	.help-img {
 		width: 90%;
 	}
-
 }
 
 
@@ -731,14 +754,6 @@ header h1 {
 
 	html {
 		font-size: 16px;
-	}
-
-	#all-content {
-		width: 100%;
-	}
-
-	#outer-container {
-		width: 100%;
 	}
 
 	header {
@@ -804,7 +819,6 @@ header h1 {
 	.result-bottom {
 		margin-top: 8%;
 	}
-
 
 	.loading {
   		width: inherit;
