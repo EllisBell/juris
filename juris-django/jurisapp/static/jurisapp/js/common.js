@@ -66,6 +66,17 @@ $(document).ready(function() {
 		document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	}
 
+	function delete_juris_cookie(name) {
+		var domain;
+		if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
+			domain = ".jurisprudencia.pt";
+		}	
+		else {
+			domain = "127.0.0.1";
+		}
+		document.cookie = name +'=; Path=/; Domain=' + domain + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	}
+
 	function getCookie(name) {
 		var nameEQ = name + "=";
 		var ca = document.cookie.split(';');
@@ -79,19 +90,20 @@ $(document).ready(function() {
 			
 	function enableGa() {
 		// only activate ga if not on localhost
-		if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
+	//	if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 
 			gtag('config', 'UA-116554949-1');
-		}
+	//	}
 	}
 
 	function disableGa() {
-		delete_cookie("_ga");
-		delete_cookie("_gat_gtag_UA_116554949_1");
-		delete_cookie("_gid");
+		var a = document.location.hostname;
+		delete_juris_cookie("_ga");
+		delete_juris_cookie("_gat_gtag_UA_116554949_1");
+		delete_juris_cookie("_gid");
 	}
 
 });
