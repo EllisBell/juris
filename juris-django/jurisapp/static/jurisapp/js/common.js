@@ -32,7 +32,7 @@ $(document).ready(function() {
 			"content": {
 				"message": "Este website usa cookies para melhorar o site e a sua experiência. OK?",
 				"allow": "OK, pode ser",
-				"dismiss": "Nao obrigado",
+				"dismiss": "Não obrigado",
 				"link": "Saiba mais",
 				"href": "/termos"
 			},
@@ -64,7 +64,7 @@ $(document).ready(function() {
 	initialiseCookieConsent();
 
 	function restartCookieConsent() {
-		delete_cookie("cookieconsent_status");
+		deleteCookie("cookieconsent_status");
 		initialiseCookieConsent();
 	}
 
@@ -81,20 +81,20 @@ $(document).ready(function() {
 
 	function disableGa() {
 		var a = document.location.hostname;
-		delete_juris_cookie("_ga");
-		delete_juris_cookie("_gat_gtag_UA_116554949_1");
-		delete_juris_cookie("_gid");
+		deleteJurisCookie("_ga");
+		deleteJurisCookie("_gat_gtag_UA_116554949_1");
+		deleteJurisCookie("_gid");
 	}
 
 	$("#cookieBtn").click(function(e) {
 		restartCookieConsent();
 	});
 
-	function delete_cookie(name) {
+	function deleteCookie(name) {
 		document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	}
 
-	function delete_juris_cookie(name) {
+	function deleteJurisCookie(name) {
 		var domain;
 		if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
 			domain = ".jurisprudencia.pt";
