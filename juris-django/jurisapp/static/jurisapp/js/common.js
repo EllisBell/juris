@@ -17,7 +17,7 @@ $(document).ready(function() {
 		
 	function initialiseCookieConsent() {
 		window.cookieconsent.initialise({
-			domain: ".jurisprudencia.pt",
+			domain: "jurisprudencia.pt",
 			revokable: false,
 			"palette": {
 				"popup": {
