@@ -203,8 +203,7 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
 def get_searchable_fields():
     # ^ syntax weights fields more
     return ["processo^4", "relator^4", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
-    #return ["relator", "sumario", "txt_integral", "txt_parcial", "descritores^3"]
-
+    
 
 def get_searchable_fields_with_nums():
     return ["processo.just_with_nums^4", "sumario.just_with_nums", "txt_integral.just_with_nums",

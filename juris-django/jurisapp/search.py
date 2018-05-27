@@ -27,7 +27,7 @@ def create_acordao_idx():
     # To avoid problem a), now also indexing processo and text fields (sumario, txt_integral etc.) in such a way
     # that only the words in those fields that contain numbers are indexed, and are left untouched
     # E.g. 127/abc-p2 would remain 127/abc-p2 in that version of the field
-    # matches words that don't contain any numbers (we want to exclude these in our custom analyzer)
+    # This pattern matches words that don't contain any numbers (we want to exclude these in our custom analyzer)
     no_num_pattern = "^[^0-9]+$"
 
     settings = {"analysis": {
@@ -74,7 +74,6 @@ def create_acordao_idx():
             # TODO see if this works ok, might be better off having it as keyword, or with custom analyzer
             # todo e.g. just to remove accents or something
             "relator": {"type": "text", "analyzer": "portuguese"},
-            # todo now adding raw version of each of these... Should they be keyword types or text?
             "sumario": {"type": "text", "analyzer": "portuguese",
                         "fields": {
                             "just_with_nums": {"type": "text", "analyzer": "words_with_numbers"}
@@ -284,7 +283,7 @@ def get_should_bool_dict(bool_dict, sd):
         # query_comp is a list of dicts
         inner_bool_dict = {'bool': {}}
         for query_dict in query_comp:
-            # todo where there are numbers involved
+            # where there are numbers involved
             if query_dict["is_words_with_nums"]:
                 multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields_with_nums,
                                                          query_dict["type"], "and")
@@ -293,9 +292,6 @@ def get_should_bool_dict(bool_dict, sd):
                 multi_match_dict = get_multi_match_query(query_dict["query"], sd.searchable_fields,
                                                      query_dict["type"], "and")
                 add_to_bool(inner_bool_dict, "must", multi_match_dict)
-            # if query_dict["type"] != "phrase":
-            #     match_dict = get_match_query(query_dict["query"], "processo", "or")
-            #     add_to_bool(inner_bool_dict, "should", match_dict)
 
         # add to the bool dict should clause
         add_to_bool(bool_dict, "should", inner_bool_dict)

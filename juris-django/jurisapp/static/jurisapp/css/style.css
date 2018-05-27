@@ -313,6 +313,19 @@ header h1 {
 	border-radius: 1.5px;
 }
 
+.standardButton {
+	outline: none;
+	box-shadow: none;	
+	/*background-color: #9ff8cd;*/
+	background-color: #b4dce0;
+	border: none;
+	font-family: inherit;
+	font-weight: normal;
+	font-size: inherit;
+	cursor: pointer;
+	border-radius: 1.5px;
+}
+
 #searchResults {
 	width:85%;
 	padding-bottom: 2%;
