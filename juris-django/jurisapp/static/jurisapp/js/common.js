@@ -55,11 +55,39 @@ $(document).ready(function() {
 		});
 	}
 
+	// if user has ga cookie there already but cookie consent is not allow,
+	// ask for consent again
+	if(getCookie("_ga") && getCookie("cookieconsent_status") != "allow") {
+		restartCookieConsent();
+	};
+
 	initialiseCookieConsent();
 
-	$("#cookieBtn").click(function(e) {
-		delete_cookie("cookieconsent_status");
+	function restartCookieConsent() {
+		delete_juris_cookie("cookieconsent_status");
 		initialiseCookieConsent();
+	}
+
+	function enableGa() {
+		// only activate ga if not on localhost
+		if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-116554949-1');
+		}
+	}
+
+	function disableGa() {
+		var a = document.location.hostname;
+		delete_juris_cookie("_ga");
+		delete_juris_cookie("_gat_gtag_UA_116554949_1");
+		delete_juris_cookie("_gid");
+	}
+
+	$("#cookieBtn").click(function(e) {
+		restartCookieConsent();
 	});
 
 	function delete_cookie(name) {
@@ -87,23 +115,5 @@ $(document).ready(function() {
 		}
 		return null;
 	}	
-			
-	function enableGa() {
-		// only activate ga if not on localhost
-	//	if (document.location.hostname.search("jurisprudencia.pt") !== -1) {
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'UA-116554949-1');
-	//	}
-	}
-
-	function disableGa() {
-		var a = document.location.hostname;
-		delete_juris_cookie("_ga");
-		delete_juris_cookie("_gat_gtag_UA_116554949_1");
-		delete_juris_cookie("_gid");
-	}
 
 });
