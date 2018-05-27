@@ -64,7 +64,7 @@ $(document).ready(function() {
 	initialiseCookieConsent();
 
 	function restartCookieConsent() {
-		delete_juris_cookie("cookieconsent_status");
+		delete_cookie("cookieconsent_status");
 		initialiseCookieConsent();
 	}
 
