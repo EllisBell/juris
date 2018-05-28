@@ -19,6 +19,7 @@ $(document).ready(function() {
 		window.cookieconsent.initialise({
 			domain: "jurisprudencia.pt",
 			revokable: false,
+			revokeBtn: '<div class=”cc-revoke {{classes}}” style="visibility:hidden;font-size:1px;">Cookie Policy</div>',
 			"palette": {
 				"popup": {
 					"background": "#e3e5e4",
