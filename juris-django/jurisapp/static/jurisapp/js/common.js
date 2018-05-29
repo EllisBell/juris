@@ -18,8 +18,6 @@ $(document).ready(function() {
 	function initialiseCookieConsent() {
 		window.cookieconsent.initialise({
 			domain: "jurisprudencia.pt",
-			revokable: false,
-			revokeBtn: '<div class=”cc-revoke {{classes}}” style="visibility:hidden;font-size:1px;">Cookie Policy</div>',
 			"palette": {
 				"popup": {
 					"background": "#e3e5e4",
@@ -31,38 +29,18 @@ $(document).ready(function() {
 				}
 			},
 			"content": {
-				"message": "Este website usa cookies para melhorar o site e a sua experiência. OK?",
-				"allow": "OK, pode ser",
-				"dismiss": "Não obrigado",
+				"message": "Este website usa cookies para melhorar o site e a sua experiência.?",
+				//"allow": "OK, pode ser",
+				"dismiss": "OK",
 				"link": "Saiba mais",
 				"href": "/termos"
 			},
-			"type": "opt-in",
-			onInitialise: function(status) {
-				var type = this.options.type;
-				if(type == 'opt-in' && status== "allow") {
-					enableGa();
-				}
-			},
-			onStatusChange: function(status, chosenBefore) {
-				if(status == "allow") {
-					enableGa();
-				}
-				if(status == "dismiss") {
-					disableGa();
-				}
-				location.reload();
-			},
+			//"type": "opt-in",
 		});
 	}
 
-	// if user has ga cookie there already but cookie consent is not allow,
-	// ask for consent again
-	if(getCookie("_ga") && getCookie("cookieconsent_status") != "allow") {
-		restartCookieConsent();
-	};
-
 	initialiseCookieConsent();
+	enableGa();
 
 	function restartCookieConsent() {
 		deleteCookie("cookieconsent_status");
