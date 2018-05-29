@@ -29,7 +29,7 @@ $(document).ready(function() {
 				}
 			},
 			"content": {
-				"message": "Este website usa cookies para melhorar o site e a sua experiência.?",
+				"message": "Este website usa cookies para melhorar o site e a sua experiência.",
 				//"allow": "OK, pode ser",
 				"dismiss": "OK",
 				"link": "Saiba mais",
