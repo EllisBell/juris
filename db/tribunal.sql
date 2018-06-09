@@ -11,5 +11,7 @@ insert into tribunal(id_name, long_name) values ('TRC', 'Tribunal da Relação d
 insert into tribunal(id_name, long_name) values ('TRE', 'Tribunal da Relação de Évora');
 insert into tribunal(id_name, long_name) values ('TRG', 'Tribunal da Relação de Guimarães');
 
+insert into tribunal(id_name, long_name) values ('STJ', 'Supremo Tribunal de Justiça');
+
 
 select * from tribunal t;

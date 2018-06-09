@@ -129,7 +129,7 @@ def get_acordao(case_url, trib_id):
         trib_recurso = get_content(get_row(rows, "Tribunal Recorrido:"))
     proc_trib_recurso = get_content(get_row(rows, "Processo no Tribunal Recurso:"))
     if not proc_trib_recurso:
-        trib_recurso = get_content(get_row(rows, "Processo no Tribunal Recorrido:"))
+        proc_trib_recurso = get_content(get_row(rows, "Processo no Tribunal Recorrido:"))
 
     data_dec_recorrida = get_content(get_row(rows, "Data Dec. Recorrida:"))
 
@@ -157,6 +157,10 @@ def get_acordao(case_url, trib_id):
     decisao = get_content(get_row(rows, "Decisão:"))
 
     sumario = get_text_no_strip(get_row(rows, "Sumário:"))
+    # For STJ, Sumario field seems to have space between Sumário and colon
+    if not sumario:
+        sumario = get_text_no_strip(get_row(rows, "Sumário :"))
+
     dec_texto_parcial = get_text_no_strip(get_row(rows, "Decisão Texto Parcial:"))
 
     dec_texto_integral = get_text_no_strip(get_row(rows, "Decisão Texto Integral:"))

@@ -8,7 +8,8 @@ default_trib_dict = {
     "TRP": "/jtrp.nsf?OpenDatabase",
     "TRC": "/jtrc.nsf?OpenDatabase",
     "TRE": "/jtre.nsf?OpenDatabase",
-    "TRG": "/jtrg.nsf?OpenDatabase"
+    "TRG": "/jtrg.nsf?OpenDatabase",
+    "STJ": "/jstj.nsf?OpenDatabase"
 }
 
 

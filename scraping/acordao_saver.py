@@ -32,15 +32,20 @@ class AcordaoSaver(object):
         cur = self.conn.cursor()
 
         sql = """INSERT INTO acordao(processo, tribunal_id, relator, numero, data, votacao, txt_integral_flag, 
-                 txt_parcial_flag, meio_processual, decisao, sumario, txt_parcial, html_txt_parcial, 
+                 txt_parcial_flag, meio_processual, decisao, trib_recorrido, proc_trib_recorrido, indic_eventuais, 
+                 area_tematica, doutrina, legis_nacional, juris_nacional, sumario, txt_parcial, html_txt_parcial, 
                  txt_integral, html_txt_integral, url, date_loaded, descritores)
-                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING acordao_id"""
+                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+                 RETURNING acordao_id"""
 
         cur.execute(sql, (
             acordao.processo, acordao.tribunal, acordao.relator, acordao.numero, acordao.data, acordao.votacao,
             acordao.texto_integral_flag,
             acordao.texto_parcial_flag,
-            acordao.meio_processual, acordao.decisao, acordao.sumario, acordao.dec_texto_parcial,
+            acordao.meio_processual, acordao.decisao, acordao.trib_recurso, acordao.proc_trib_recurso,
+            acordao.indic_eventuais, acordao.area_tematica,
+            acordao.doutrina, acordao.legis_nacional, acordao.juris_nacional,
+            acordao.sumario, acordao.dec_texto_parcial,
             acordao.html_txt_parcial, acordao.dec_texto_integral, acordao.html_texto_integral,
             acordao.url, datetime.datetime.now(), desc_string))
 
