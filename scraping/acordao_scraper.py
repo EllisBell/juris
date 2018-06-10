@@ -124,6 +124,9 @@ def get_acordao(case_url, trib_id):
     # see e.g. proc 770/12.3TBSLX.L1.S1 (STJ)
     if not data:
         data = get_content(get_row(rows, "Data da Decisão Sumária:"))
+    # see e.g. proc 44/1999-A.E2.S1 (STJ)
+    if not data:
+        data = get_content(get_row(rows, "Data da Reclamação:"))
 
     votacao = get_content(get_row(rows, "Votação:"))
 
