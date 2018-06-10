@@ -119,7 +119,12 @@ def get_acordao(case_url, trib_id):
     relator = get_content(get_row(rows, "Relator:"))
     descritores = get_list_content(get_row(rows, "Descritores:"))
     numero = get_content(get_row(rows, "Nº do Documento:"))
+    
     data = get_content(get_row(rows, "Data do Acordão:"))
+    # see e.g. proc 770/12.3TBSLX.L1.S1 (STJ)
+    if not data:
+        data = get_content(get_row(rows, "Data da Decisão Sumária:"))
+
     votacao = get_content(get_row(rows, "Votação:"))
 
     aditamento = get_content(get_row(rows, "Aditamento:"))
