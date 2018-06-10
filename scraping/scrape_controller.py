@@ -1,16 +1,17 @@
+from collections import OrderedDict
 import trib_scraper as ts
 import acordao_scraper as acs
 import acordao_saver
 import time
 
-default_trib_dict = {
-    "TRL": "/jtrl.nsf?OpenDatabase",
-    "TRP": "/jtrp.nsf?OpenDatabase",
-    "TRC": "/jtrc.nsf?OpenDatabase",
-    "TRE": "/jtre.nsf?OpenDatabase",
-    "TRG": "/jtrg.nsf?OpenDatabase",
-    "STJ": "/jstj.nsf?OpenDatabase"
-}
+default_trib_dict = OrderedDict([
+    ("TRL", "/jtrl.nsf?OpenDatabase"),
+    ("TRP", "/jtrp.nsf?OpenDatabase"),
+    ("TRC", "/jtrc.nsf?OpenDatabase"),
+    ("TRE", "/jtre.nsf?OpenDatabase"),
+    ("TRG", "/jtrg.nsf?OpenDatabase"),
+    ("STJ", "/jstj.nsf?OpenDatabase")
+])
 
 
 def scrape_tribs(tribs=default_trib_dict, time_limit=None):
