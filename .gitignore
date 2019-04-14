@@ -3,3 +3,5 @@ __pycache__/
 scraping/test_files/
 juris-django/static
 *.vscode
+bin/
+obj/
