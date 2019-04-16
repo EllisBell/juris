@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Dossier.Core.Services;
 using Dossier.Api.Models;
 using Dossier.Core.Interfaces;
 
@@ -13,31 +12,28 @@ namespace Dossier.Api.Controllers
     [ApiController]
     public class FoldersController : ControllerBase
     {
-        private IFolderService _folderService;
         private readonly IDbService _dbService;
         
-        public FoldersController(IFolderService folderService, IDbService dbService) {
-            _folderService = folderService;
-            _dbService = _dbService;
+        public FoldersController(IDbService dbService) {
+            _dbService = dbService;
         }
         
+        // TODO make other controller actions async
         // GET api/folders
         [HttpGet]
-        public ActionResult<IEnumerable<Folder>> Get()
+        public async Task<ActionResult<IEnumerable<FolderDto>>> Get()
         {
-           var result = _dbService.GetFolders().ToList();
+           var result = await _dbService.GetFolders();
 
-           return result.Select(x => new Folder() {
-               Name = x.Name,
-               Acordaos = x.SavedAcordaos.Select(a => a.Id)
-           }).ToList();
+           return result.Select(x => FolderDto.FromEntity(x)).ToList();
         }
 
         // GET api/folders/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<FolderDto>> Get(int id)
         {
-            return "folder";
+            var result = await _dbService.GetFolder(id);
+            return FolderDto.FromEntity(result);
         }
 
 

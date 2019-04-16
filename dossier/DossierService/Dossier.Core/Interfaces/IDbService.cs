@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dossier.Core.Entities;
 
 namespace Dossier.Core.Interfaces {
     public interface IDbService {
-        IEnumerable<Folder> GetFolders();
+        Task<IEnumerable<Folder>> GetFolders();
 
-        Folder GetFolder(int id);
+        Task<Folder> GetFolder(int id);
 
-        IEnumerable<SavedAcordao> GetSavedAcordaos();
+        Task<IEnumerable<SavedAcordao>> GetSavedAcordaos();
 
-        SavedAcordao GetSavedAcordao(int id);
+        Task<SavedAcordao> GetSavedAcordao(int id);
     }
 }

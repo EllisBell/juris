@@ -3,15 +3,17 @@ using System;
 using Dossier.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dossier.Infrastructure.Migrations
 {
     [DbContext(typeof(DossierContext))]
-    partial class DossierContextModelSnapshot : ModelSnapshot
+    [Migration("20190416202637_ChangeCommentsDate")]
+    partial class ChangeCommentsDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

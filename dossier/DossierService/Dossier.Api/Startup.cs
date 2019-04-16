@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dossier.Core.Entities;
 using Dossier.Core.Interfaces;
-using Dossier.Core.Services;
 using Dossier.Infrastructure.Data;
 using Dossier.Infrastructure.ConfigSettings;
 using Dossier.Api.ConfigSettings;
@@ -49,7 +48,6 @@ namespace Dossier.Api
             // https://stackoverflow.com/questions/33566075/
          //   services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); 
             services.AddScoped<IDbService, DbService>();
-            services.AddTransient<IFolderService, FolderService>();   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

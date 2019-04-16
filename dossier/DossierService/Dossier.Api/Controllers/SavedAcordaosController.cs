@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Dossier.Core.Services;
 using Dossier.Api.Models;
 using Dossier.Core.Interfaces;
 
@@ -16,26 +15,23 @@ namespace Dossier.Api.Controllers
         private readonly IDbService _dbService;
         
         public SavedAcordaosController(IDbService dbService) {
-            _dbService = _dbService;
+            _dbService = dbService;
         }
         
         // GET api/savedAcordaos
         [HttpGet]
-        public ActionResult<IEnumerable<SavedAcordao>> Get()
+        public async Task<ActionResult<IEnumerable<SavedAcordaoDto>>> Get()
         {
-           var result = _dbService.GetSavedAcordaos().ToList();
-
-           return result.Select(x => new SavedAcordao() {
-               AcordaoId = x.OriginalAcordaoId,
-               Comments = x.Comments
-           }).ToList();
+           var result = await _dbService.GetSavedAcordaos();
+           return result.Select(x => SavedAcordaoDto.FromEntity(x)).ToList();
         }
 
         // GET api/savedAcordaos/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<SavedAcordaoDto>> Get(int id)
         {
-            return "savedAcordao";
+            var sa = await _dbService.GetSavedAcordao(id);
+            return SavedAcordaoDto.FromEntity(sa);
         }
 
 
