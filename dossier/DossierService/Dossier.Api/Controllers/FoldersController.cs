@@ -20,6 +20,10 @@ namespace Dossier.Api.Controllers
             _dbService = dbService;
         }
         
+        /// <summary>
+        /// Gets all folders.
+        /// </summary>
+        // GET api/folders/5
         // GET api/folders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FolderDto>>> Get()
@@ -29,14 +33,23 @@ namespace Dossier.Api.Controllers
            return result.Select(x => FolderDto.FromEntity(x)).ToList();
         }
 
+        /// <summary>
+        /// Gets a specific folder.
+        /// </summary>
         // GET api/folders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<FolderDto>> Get(int id)
         {
             var result = await _dbService.GetFolder(id);
+            if(result is null) {
+                return NotFound();
+            }
             return FolderDto.FromEntity(result);
         }
 
+        /// <summary>
+        /// Creates a new folder.
+        /// </summary>
         // POST api/folders
         [HttpPost]
         public async Task<IActionResult> CreateFolder(FolderDto folder) {
@@ -50,6 +63,9 @@ namespace Dossier.Api.Controllers
             return CreatedAtAction(nameof(Get), new {id = folderEntity.Id}, folder);
         }
 
+        /// <summary>
+        /// Updates a specific folder.
+        /// </summary>
         // PUT api/folders/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFolder(int id, FolderDto folderDto) {
@@ -57,6 +73,7 @@ namespace Dossier.Api.Controllers
             if(id != folderDto.Id) {
                 return BadRequest("You cannot change the folder Id");
             }
+            // TODO reassess how to map from DTO to entity model
             var folderEntity = new Folder() {
                 Id = folderDto.Id,
                 Name = folderDto.Name
@@ -65,13 +82,19 @@ namespace Dossier.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a specific folder.
+        /// </summary>
         // DELETE api/folders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFolder(int id) {
             await _dbService.DeleteFolder(id);
-            return Ok();
+            return NoContent();
         }
 
+        /// <summary>
+        /// Gets the acordaos saved in a specific folder.
+        /// </summary>
         // GET api/folders/5/acordaos
         [HttpGet("{id}/acordaos")]
         public async Task<ActionResult<IEnumerable<SavedAcordaoDto>>> GetFolderAcordaos(int id) {
@@ -79,6 +102,9 @@ namespace Dossier.Api.Controllers
             return folder.SavedAcordaos.Select(x => SavedAcordaoDto.FromEntity(x)).ToList();
         }
 
+        /// <summary>
+        /// Adds an acordao to a specific folder.
+        /// </summary>
         // POST api/folders/5/acordaos
         [HttpPost("{id}/acordaos")]
         public async Task<IActionResult> AddAcordaoToFolder(int id, SavedAcordaoDto acordaoDto) {
