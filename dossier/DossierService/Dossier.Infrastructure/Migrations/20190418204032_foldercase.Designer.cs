@@ -3,15 +3,17 @@ using System;
 using Dossier.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dossier.Infrastructure.Migrations
 {
     [DbContext(typeof(DossierContext))]
-    partial class DossierContextModelSnapshot : ModelSnapshot
+    [Migration("20190418204032_foldercase")]
+    partial class foldercase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,17 +26,17 @@ namespace Dossier.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AcordaoId");
-
                     b.Property<string>("Author");
 
                     b.Property<DateTime>("Date");
+
+                    b.Property<int?>("SavedAcordaoId");
 
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AcordaoId");
+                    b.HasIndex("SavedAcordaoId");
 
                     b.ToTable("Comments");
                 });
@@ -69,9 +71,9 @@ namespace Dossier.Infrastructure.Migrations
 
             modelBuilder.Entity("Dossier.Core.Entities.Comment", b =>
                 {
-                    b.HasOne("Dossier.Core.Entities.SavedAcordao", "Acordao")
+                    b.HasOne("Dossier.Core.Entities.SavedAcordao")
                         .WithMany("Comments")
-                        .HasForeignKey("AcordaoId");
+                        .HasForeignKey("SavedAcordaoId");
                 });
 
             modelBuilder.Entity("Dossier.Core.Entities.SavedAcordao", b =>

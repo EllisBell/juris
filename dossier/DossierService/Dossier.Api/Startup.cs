@@ -44,9 +44,6 @@ namespace Dossier.Api
             );
 
             services.AddDbContext<DossierContext>();
-            // Providing "open generic types" for generic repository
-            // https://stackoverflow.com/questions/33566075/
-         //   services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); 
             services.AddScoped<IDbService, DbService>();
         }
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Dossier.Api.Models;
 using Dossier.Core.Interfaces;
+using Dossier.Core.Entities;
 
 namespace Dossier.Api.Controllers
 {
@@ -34,6 +35,33 @@ namespace Dossier.Api.Controllers
             return SavedAcordaoDto.FromEntity(sa);
         }
 
+        //GET api/savedacordaos/5/comments
+        [HttpGet("{id}/comments")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAcordaoComments(int id) {
+            var acordao = await _dbService.GetSavedAcordao(id);
+            return acordao.Comments.Select(x => CommentDto.FromEntity(x)).ToList();
+        }
+
+        // POST api/savedacordaos/5/comments
+        [HttpPost("{id}/comments")]
+        public async Task<IActionResult> AddCommentToAcordao(int id, CommentDto commentDto) {
+            var commentEntity = new Comment() {
+                Author = commentDto.Author,
+                Date = commentDto.Date,
+                Text = commentDto.Text
+            };
+
+            await _dbService.AddCommentToAcordao(id, commentEntity);
+            commentDto.Id = commentEntity.Id;
+            return CreatedAtAction("Get", "comments", new {id = commentDto.Id}, commentDto);
+        }
+
+        // DELETE api/savedacordaos/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSavedAcordao(int id) {
+            await _dbService.DeleteSavedAcordao(id);
+            return Ok();
+        }
 
     }
 }

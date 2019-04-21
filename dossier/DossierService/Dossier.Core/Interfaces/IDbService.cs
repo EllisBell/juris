@@ -8,8 +8,22 @@ namespace Dossier.Core.Interfaces {
 
         Task<Folder> GetFolder(int id);
 
+        Task CreateFolder(Folder newFolder);
+
+        Task UpdateFolder(Folder updatedFolder);
+
+        Task DeleteFolder(int id);
+
         Task<IEnumerable<SavedAcordao>> GetSavedAcordaos();
 
         Task<SavedAcordao> GetSavedAcordao(int id);
+
+        Task DeleteSavedAcordao(int id);
+
+        Task AddAcordaoToFolder(int folderId, SavedAcordao acordao);
+
+        Task AddCommentToAcordao(int acordaoId, Comment comment); 
+
+        Task<Comment> GetComment(int id);
     }
 }
