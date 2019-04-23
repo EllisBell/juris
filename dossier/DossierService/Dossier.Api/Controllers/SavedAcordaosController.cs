@@ -9,9 +9,10 @@ using Dossier.Core.Entities;
 
 namespace Dossier.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class SavedAcordaosController : ControllerBase
+    public class SavedAcordaosController : DossierBaseController
     {
         private readonly IDbService _dbService;
         
@@ -35,6 +36,32 @@ namespace Dossier.Api.Controllers
             return SavedAcordaoDto.FromEntity(sa);
         }
 
+
+
+        // PUT api/savedacordaos/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAcordao(int id, SavedAcordaoUpdateDto acordaoDto) {
+            var folder = await _dbService.GetFolder(acordaoDto.FolderId);
+            if(folder == null) {
+                return BadRequest("Folder does not exist");
+            }
+            var acordaoEntity = new SavedAcordao() {
+                Id = id,
+                OriginalAcordaoId = acordaoDto.AcordaoId,
+                Folder = folder
+            };
+            await _dbService.UpdateSavedAcordao(acordaoEntity);
+            return CreatedAtAction(nameof(Get), "savedacordaos", new {id = acordaoEntity.Id, version = ApiVersion}, 
+                                    acordaoDto);
+        }
+
+        // DELETE api/savedacordaos/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSavedAcordao(int id) {
+            await _dbService.DeleteSavedAcordao(id);
+            return NoContent();
+        }
+
         //GET api/savedacordaos/5/comments
         [HttpGet("{id}/comments")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetAcordaoComments(int id) {
@@ -53,14 +80,8 @@ namespace Dossier.Api.Controllers
 
             await _dbService.AddCommentToAcordao(id, commentEntity);
             commentDto.Id = commentEntity.Id;
-            return CreatedAtAction("Get", "comments", new {id = commentDto.Id}, commentDto);
-        }
-
-        // DELETE api/savedacordaos/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSavedAcordao(int id) {
-            await _dbService.DeleteSavedAcordao(id);
-            return Ok();
+            return CreatedAtAction("Get", "comments", new {id = commentDto.Id, version = ApiVersion}, 
+                                    commentDto);
         }
 
     }

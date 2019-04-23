@@ -51,6 +51,13 @@ namespace Dossier.Api
             services.AddDbContext<DossierContext>();
             services.AddScoped<IDbService, DbService>();
 
+            // Versioning
+            services.AddApiVersioning(o => {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1,0);
+            });
+
             // Swagger
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Info {Title = "Dossier API", Version = "v1"});

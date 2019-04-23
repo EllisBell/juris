@@ -31,15 +31,21 @@ namespace Dossier.Infrastructure.Data {
 
         public async Task UpdateFolder(Folder updatedFolder) {
             var folderToUpdate = await _context.Folders.SingleOrDefaultAsync(x => x.Id == updatedFolder.Id);
-            _context.Entry(folderToUpdate).CurrentValues.SetValues(updatedFolder);
-            await _context.SaveChangesAsync();
+            if(folderToUpdate != null) {
+                _context.Entry(folderToUpdate).CurrentValues.SetValues(updatedFolder);
+                await _context.SaveChangesAsync();
+            }
+            else {
+                await CreateFolder(updatedFolder);
+            }
         }
 
         public async Task DeleteFolder(int id) {
-            var folderToDelete = new Folder() {Id = id};
-            _context.Folders.Attach(folderToDelete);
-            _context.Folders.Remove(folderToDelete);
-            _context.SaveChangesAsync();
+            var folderToDelete = await _context.Folders.SingleOrDefaultAsync(x => x.Id == id);
+            if(folderToDelete != null) {
+                _context.Folders.Remove(folderToDelete);
+                await _context.SaveChangesAsync();
+            }   
         }
 
         public async Task<IEnumerable<SavedAcordao>> GetSavedAcordaos() => 
@@ -56,10 +62,23 @@ namespace Dossier.Infrastructure.Data {
         }
 
         public async Task DeleteSavedAcordao(int id) {
-            var acordaoToDelete = new SavedAcordao() {Id = id};
-            _context.SavedAcordaos.Attach(acordaoToDelete);
-            _context.SavedAcordaos.Remove(acordaoToDelete);
-            await _context.SaveChangesAsync();
+            var acordaoToDelete = await _context.SavedAcordaos.SingleOrDefaultAsync(x => x.Id == id);
+            if(acordaoToDelete != null) {
+                _context.SavedAcordaos.Remove(acordaoToDelete);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateSavedAcordao(SavedAcordao updatedAcordao) {
+            var acordaoToUpdate = await _context.SavedAcordaos.SingleOrDefaultAsync(x => x.Id == updatedAcordao.Id);
+            if(acordaoToUpdate != null) {
+                _context.Entry(acordaoToUpdate).CurrentValues.SetValues(updatedAcordao);
+                acordaoToUpdate.Folder = updatedAcordao.Folder;
+                await _context.SaveChangesAsync();
+            }
+            else {
+                await AddAcordaoToFolder(updatedAcordao.Folder.Id, updatedAcordao);
+            }
         }
 
         public async Task AddCommentToAcordao(int acordaoId, Comment comment) {

@@ -18,12 +18,13 @@ namespace Dossier.Core.Interfaces {
 
         Task<SavedAcordao> GetSavedAcordao(int id);
 
+        Task UpdateSavedAcordao(SavedAcordao updatedAcordao);
+
         Task DeleteSavedAcordao(int id);
 
         Task AddAcordaoToFolder(int folderId, SavedAcordao acordao);
 
         Task AddCommentToAcordao(int acordaoId, Comment comment); 
-
         Task<Comment> GetComment(int id);
     }
 }
