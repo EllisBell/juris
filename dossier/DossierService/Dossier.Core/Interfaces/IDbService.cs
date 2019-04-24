@@ -26,5 +26,9 @@ namespace Dossier.Core.Interfaces {
 
         Task AddCommentToAcordao(int acordaoId, Comment comment); 
         Task<Comment> GetComment(int id);
+
+        Task UpdateCommentText(int commentId, string newText);
+
+        Task DeleteComment(int id);
     }
 }

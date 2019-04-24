@@ -45,9 +45,10 @@ namespace Dossier.Api.Controllers
         public async Task<ActionResult<FolderDto>> Get(int id)
         {
             var result = await _dbService.GetFolder(id);
-            if(result is null) {
+            
+            if(result is null)
                 return NotFound();
-            }
+
             return FolderDto.FromEntity(result);
         }
 
