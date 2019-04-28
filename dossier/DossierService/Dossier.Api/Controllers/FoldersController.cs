@@ -34,8 +34,6 @@ namespace Dossier.Api.Controllers
         public async Task<ActionResult<IEnumerable<FolderDto>>> Get()
         {
            var result = await _dbService.GetFolders();
-           throw new Exception("hello world");
-           _logger.LogInformation("In the get folders method");
            return result.Select(x => FolderDto.FromEntity(x)).ToList();
         }
 
