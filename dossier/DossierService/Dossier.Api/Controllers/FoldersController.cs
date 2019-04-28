@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Dossier.Api.Models;
 using Dossier.Core.Interfaces;
 using Dossier.Core.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Dossier.Api.Controllers
 {
@@ -17,9 +18,11 @@ namespace Dossier.Api.Controllers
     public class FoldersController : DossierBaseController
     {
         private readonly IDbService _dbService;
+        private readonly ILogger _logger;
         
-        public FoldersController(IDbService dbService) {
+        public FoldersController(IDbService dbService, ILogger<FoldersController> logger) {
             _dbService = dbService;
+            _logger = logger;
         }
         
         /// <summary>
@@ -31,7 +34,8 @@ namespace Dossier.Api.Controllers
         public async Task<ActionResult<IEnumerable<FolderDto>>> Get()
         {
            var result = await _dbService.GetFolders();
-
+           throw new Exception("hello world");
+           _logger.LogInformation("In the get folders method");
            return result.Select(x => FolderDto.FromEntity(x)).ToList();
         }
 
