@@ -27,9 +27,9 @@ def setup_periodic_tasks(sender, **kwargs):
 def run_scrape():
     # time limit is in seconds
     try:
-        sc.scrape_tribs(time_limit=14400)
+        all_errors = sc.scrape_tribs(time_limit=14400)
         new = sc.get_newly_saved()
-        send_scrape_report_email(new)
+        send_scrape_report_email(new, all_errors)
     except Exception as e:
         send_scrape_error_email(str(e))
 
@@ -46,6 +46,9 @@ def send_scrape_report_email(new_counts):
     if new_counts:
         for trib_count in new_counts:
             report += trib_count[0] + ": " + str(trib_count[1]) + "\n"
+        report += "\n\n"
+        for error in all_errors:
+            report += error + "\n"
     else:
         report += "Nothing new to report"
 
