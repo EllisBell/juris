@@ -40,7 +40,7 @@ def run_dep_dups_del():
 
 # TODO consider doing this in django instead?
 # todo or with sentry
-def send_scrape_report_email(new_counts):
+def send_scrape_report_email(new_counts, all_errors):
     subject = "The Daily Scrape"
     report = "The Daily Scrape\n\n"
     if new_counts:
