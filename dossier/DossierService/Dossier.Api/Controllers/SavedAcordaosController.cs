@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,8 +8,7 @@ using Dossier.Core.Entities;
 
 namespace Dossier.Api.Controllers
 {
-    [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SavedAcordaosController : DossierBaseController
     {
@@ -51,7 +49,7 @@ namespace Dossier.Api.Controllers
                 Folder = folder
             };
             await _dbService.UpdateSavedAcordao(acordaoEntity);
-            return CreatedAtAction(nameof(Get), "savedacordaos", new {id = acordaoEntity.Id, version = ApiVersion}, 
+            return CreatedAtAction(nameof(Get), "savedacordaos", new {id = acordaoEntity.Id}, 
                                     acordaoDto);
         }
 
@@ -80,8 +78,7 @@ namespace Dossier.Api.Controllers
 
             await _dbService.AddCommentToAcordao(id, commentEntity);
             commentDto.Id = commentEntity.Id;
-            return CreatedAtAction("Get", "comments", new {id = commentDto.Id, version = ApiVersion}, 
-                                    commentDto);
+            return CreatedAtAction("Get", "comments", new {id = commentDto.Id}, commentDto);
         }
 
     }

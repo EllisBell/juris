@@ -20,25 +20,24 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Dossier.Api.Middleware;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace Dossier.Api
 {
     public class Startup
     {
-        private readonly ILogger _logger;
-        
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddOptions();
 
             // Link config section in appsettings.json to RepoConfig type
@@ -53,53 +52,57 @@ namespace Dossier.Api
             services.AddDbContext<DossierContext>();
             services.AddScoped<IDbService, DbService>();
 
+            services.AddControllers();
+
             // Versioning
-            services.AddApiVersioning(o => {
-                o.ReportApiVersions = true;
-                o.AssumeDefaultVersionWhenUnspecified = true;
-                o.DefaultApiVersion = new ApiVersion(1,0);
-            });
+            // services.AddApiVersioning(o => {
+            //     o.ReportApiVersions = true;
+            //     o.AssumeDefaultVersionWhenUnspecified = true;
+            //     o.DefaultApiVersion = new ApiVersion(1,0);
+            // });
 
             // Swagger
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new Info {Title = "Dossier API", Version = "v1"});
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            // services.AddSwaggerGen(c => {
+            //     c.SwaggerDoc("v1", new Info {Title = "Dossier API", Version = "v1"});
+            //     // Set the comments path for the Swagger JSON and UI.
+            //     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //     c.IncludeXmlComments(xmlPath);
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
                 // Calling our custom exception method
-                app.ConfigureExceptionHandler(_logger);
+                app.ConfigureExceptionHandler(logger);
             }
-
- 
 
             app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+       //     app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dossier API V1");
-            });
+            // app.UseSwaggerUI(c =>
+            // {
+            //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dossier API V1");
+            // });
 
-            app.UseMvc();
+            app.UseRouting(); 
+
+            app.UseEndpoints(endpoints => {endpoints.MapControllers();});
+
         }
     }
 }

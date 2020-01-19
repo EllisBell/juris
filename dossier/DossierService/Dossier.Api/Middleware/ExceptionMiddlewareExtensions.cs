@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Dossier.Api.Middleware {
     public static class ExceptionMiddlewareExtensions {
@@ -19,7 +19,7 @@ namespace Dossier.Api.Middleware {
                     var error = exceptionHandlerPathFeature.Error;
 
                     var errorObj = new {Error = "Internal Server Error", Message = error.Message};
-                    var jsonErrorObj = JsonConvert.SerializeObject(errorObj);
+                    var jsonErrorObj = JsonSerializer.Serialize(errorObj);
 
                     // TODO log error
                     logger.LogInformation("THIS IS A TEST");

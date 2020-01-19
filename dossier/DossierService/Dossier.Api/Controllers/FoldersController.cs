@@ -11,8 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Dossier.Api.Controllers
 {
-    [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     //[Route("api/[controller]")]
     [ApiController]
     public class FoldersController : DossierBaseController
@@ -68,7 +67,7 @@ namespace Dossier.Api.Controllers
             await _dbService.CreateFolder(folderEntity);
             folderDto.Id = folderEntity.Id;
             // N.b. having to use API version for this to work
-            return CreatedAtAction(nameof(Get), new {id = folderEntity.Id, version = ApiVersion}, 
+            return CreatedAtAction(nameof(Get), new {id = folderEntity.Id}, 
                                     folderDto);
         }
 
@@ -92,7 +91,7 @@ namespace Dossier.Api.Controllers
             await _dbService.UpdateFolder(folderEntity);
             folderDto.Id = folderEntity.Id;
 
-            return CreatedAtAction(nameof(Get), new {id = folderEntity.Id, version = ApiVersion}, 
+            return CreatedAtAction(nameof(Get), new {id = folderEntity.Id}, 
                                     folderDto);
         }
 
@@ -131,7 +130,7 @@ namespace Dossier.Api.Controllers
             await _dbService.AddAcordaoToFolder(id, acordaoEntity);
             acordaoDto.Id = acordaoEntity.Id;
 
-            return CreatedAtAction("Get", "savedacordaos", new {id = acordaoDto.Id, version = ApiVersion}, 
+            return CreatedAtAction("Get", "savedacordaos", new {id = acordaoDto.Id}, 
                                     acordaoDto);
         }
 
