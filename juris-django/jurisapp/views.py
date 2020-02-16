@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
+from django.db.models import Max
 from .models import Acordao
 from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
@@ -149,7 +150,9 @@ def get_suggestions(proc):
     #return []
 
 def recent_acordaos(request):
-    recent_date = datetime.now() - timedelta(days=3)
+    most_recent_date = Acordao.objects.aggregate(Max('date_loaded'))['date_loaded__max']
+    recent_date = most_recent_date - timedelta(days=3)
+   # recent_date = datetime.now() - timedelta(days=3)
     acordaos = Acordao.objects.filter(date_loaded__gte=recent_date).order_by('-data')
     for acordao in acordaos:
         convert_descritores_to_list(acordao)
