@@ -6,6 +6,7 @@ from . import acordao_search
 from raven.contrib.django.raven_compat.models import client
 from . import pdf
 import json
+from datetime import datetime, timedelta
 
 
 def index(request):
@@ -146,3 +147,11 @@ def get_suggestions(proc):
     just_procs = [sugg.processo for sugg in suggs]
     return just_procs
     #return []
+
+def recent_acordaos(request):
+    recent_date = datetime.now() - timedelta(days=10)
+    acordaos = Acordao.objects.filter(data__gte=recent_date).order_by('-data')
+    for acordao in acordaos:
+        convert_descritores_to_list(acordao)
+    context_dict = {'acordaos': acordaos}
+    return render(request, 'jurisapp/recent_acordaos.html', context_dict)

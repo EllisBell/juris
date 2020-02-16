@@ -139,6 +139,12 @@ header h1 {
 	width: inherit;
 }
 
+#content-recentes {
+	margin-top: 4%;
+	height:80%;
+	width: inherit;
+}
+
 #searchbox {
 	display: inline-block;
 	width: 50%;

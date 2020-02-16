@@ -1,0 +1,38 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block body_block %}
+
+<div id="content-recentes">
+<h1>Acórdãos Recentes</h1>
+
+<div id="searchResults">
+
+{% for acordao in acordaos %}
+<div class="acordao-result">
+    <div class="acordao-result-content">
+        <div class="result-link"><a href="/acordao/{{ acordao.acordao_id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
+        <span class="result-field">Tribunal:</span> {{ acordao.tribunal.long_name }} <br>
+        {% language 'pt' %}
+        <span class="result-field">Sessão:</span> {{ acordao.data|date:'d F Y' }} <br>
+        {% endlanguage %}
+        <span class="result-field">Relator:</span> {{acordao.relator}}<br>
+        <div class="result-descritores">
+        {% for desc in acordao.descritores %}
+        <div class="descritor-div"><span class="result-descritor">{{ desc }}</span></div> 
+        {% endfor %}
+        </div>
+        <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
+    </div>
+    <div class="result-bottom">
+        <a href="/acordao/{{ acordao.acordao_id }}" target="_blank" class="bottom-link">ver acórdão</a>
+    </div>
+</div>
+{% endfor %}
+</div>
+</div>
+
+{% endblock %}
+
+

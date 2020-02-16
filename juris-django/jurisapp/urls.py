@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^suggest_processo/$', views.suggest_processo, name='suggest_processo'),
     url(r'^acordao/(?P<acordao_id>[0-9]+)/$', views.acordao, name='acordao'),
     url(r'^acordao/(?P<acordao_id>[0-9]+)/pdf/$', views.acordao_pdf, name='acordao_pdf'),
+    url(r'^recentes/$', views.recent_acordaos, name='recent_acordaos'),
     url(r'^termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     url(r'^sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),
 ]
