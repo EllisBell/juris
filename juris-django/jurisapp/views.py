@@ -149,8 +149,8 @@ def get_suggestions(proc):
     #return []
 
 def recent_acordaos(request):
-    recent_date = datetime.now() - timedelta(days=10)
-    acordaos = Acordao.objects.filter(data__gte=recent_date).order_by('-data')
+    recent_date = datetime.now() - timedelta(days=3)
+    acordaos = Acordao.objects.filter(date_loaded__gte=recent_date).order_by('-data')
     for acordao in acordaos:
         convert_descritores_to_list(acordao)
     context_dict = {'acordaos': acordaos}
