@@ -36,7 +36,7 @@ rope==0.14.0
 six==1.11.0
 sqlparse==0.3.0
 tinycss2==0.6.1
-urllib3==1.23
+urllib3==1.24.2
 vine==1.1.4
 WeasyPrint==0.42.3
 webencodings==0.5.1
