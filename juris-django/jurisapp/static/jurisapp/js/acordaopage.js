@@ -5,7 +5,7 @@ $(document).ready(function() {
    function fixSidebarWhenScrollingOnWideScreen() {
    	var sidebar = $('#ac-sidebar');
    	if($(window).width() >= 1200) {		
-		sidebar.css("width", "22.4%")
+		sidebar.css("width", "28%")
 		var topOfSidebar = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
 
 		$(window).scroll(function (event) {
@@ -14,7 +14,7 @@ $(document).ready(function() {
           if (scrollBelowTopOfSidebar) {
 	        sidebar.css("position", "fixed");
 	        sidebar.css("top",  0);
-            sidebar.css("width", "22.4%")
+            sidebar.css("width", "28%")
 	      } else {
 	        sidebar.css("position", "static");
             sidebar.css("width", "28%");
