@@ -522,12 +522,12 @@ header h1 {
 	width: 28%;
 	/*padding-left: 10px;*/
 	padding-bottom: 5px;
-	font-size: 1.1rem;
+	font-size: 1.0rem;
 }
 
-#acordao-main-info {
+/* #acordao-main-info {
 	font-size: 1.1rem;
-}
+} */
 
 #acordao-icons {
 	color: #52949a;
@@ -549,12 +549,18 @@ header h1 {
 }
 
 .ac-sidebar-field {
+	/* font-weight: bold; */
+	color: #327A81;
+}
+
+.ac-sidebar-field-main {
+	font-size: 1.1rem;
 	font-weight: bold;
 }
 
 
 #ac-content {
-	width: 60%;
+	width: 65%;
 	margin-left: 30%;
 	padding-left: 2%;
 	font-size: 1.1rem;
@@ -745,16 +751,8 @@ header h1 {
 		margin-top: 6%;
 	}
 
-	#acordao-main-info {
-		font-size: 1.15rem;
-	}
-
 	#ac-content {
 		width: 75%;
-	}
-
-	#acordao-main-info {
-		float:none;
 	}
 
 	.emphasis-block {

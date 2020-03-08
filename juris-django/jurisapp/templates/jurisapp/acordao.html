@@ -14,18 +14,17 @@
 
 	<div id="ac-sidebar"> 
 		<div id="acordao-main-info">
-			<div class="ac-sidebar-field">{{ acordao.tribunal.long_name }}</div>
-			<div class="ac-sidebar-field">Processo nº {{ acordao.processo }}</div>
-			<div><span class="ac-sidebar-field">Relator:</span> {{ acordao.relator }}</div>
+			<div class="ac-sidebar-field-main">{{ acordao.tribunal.long_name }}</div>
+			<div> <span class="ac-sidebar-field">Processo </span><br> {{ acordao.processo }}</div>
+			<div><span class="ac-sidebar-field">Relator</span><br>{{ acordao.relator }}</div>
 			 {% language 'pt' %}
-			<div><span class="ac-sidebar-field">Sessão:</span> {{ acordao.data|date:'d F Y' }}</div>
+			<div><span class="ac-sidebar-field">Sessão</span><br>{{ acordao.data|date:'d F Y' }}</div>
 	        {% endlanguage %}
     	</div>
     	<div id="acordao-other-info">
-    		{% if acordao.numero %}<div><span class="ac-sidebar-field">Número:</span> {{ acordao.numero }}</div>{% endif %}
-    		{% if acordao.votacao %}<div><span class="ac-sidebar-field">Votação:</span> {{ acordao.votacao }}</div>{% endif %}
-    		{% if acordao.meio_processual %}<div><span class="ac-sidebar-field">Meio Processual:</span> {{ acordao.meio_processual }}</div>{% endif %}
-    		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão:</span> {{ acordao.decisao }}</div>{% endif %}
+    		{% if acordao.votacao %}<div><span class="ac-sidebar-field">Votação</span><br> {{ acordao.votacao }}</div>{% endif %}
+    		{% if acordao.meio_processual %}<div><span class="ac-sidebar-field">Meio Processual</span><br> {{ acordao.meio_processual }}</div>{% endif %}
+    		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão</span><br> {{ acordao.decisao }}</div>{% endif %}
     		<div><span class="ac-sidebar-field"><a href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver versão dgsi.pt</a></span></div>
     	</div>
     	<div id="acordao-icons">
