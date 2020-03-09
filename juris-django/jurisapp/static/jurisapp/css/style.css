@@ -49,23 +49,20 @@ body {
 }
 
 .my-button {
-	/* font: bold 11px Arial; */
 	text-decoration: none;
-	/* background-color: #EEEEEE; */
 	color: #333333;
-	padding: 6px 6px 6px 6px;
-	border-top: 1px solid #333333;
-	border-right: 1px solid #333333;
-	border-bottom: 1px solid #333333;
-	border-left: 1px solid #333333;
+	padding: 8px;
+	border: 1px solid #666666;
 	border-radius: 1.5px;
 }
 
+.my-button-block {
+	display: inline-block;
+}
+
 .my-button:hover {
-	border-top: 2px solid #52949a;
-	border-right: 2px solid #52949a;
-	border-bottom: 2px solid #52949a;
-	border-left: 2px solid #52949a;
+	border: 1px solid #81bbc0;
+	background-color: #81bbc0;
 }
 
 .spacer-top-small {
@@ -573,7 +570,7 @@ header h1 {
 }
 
 
-#ac-sidebar div {
+.ac-sidebar-elem {
 	margin-bottom: 2%;
 }
 
@@ -627,6 +624,10 @@ header h1 {
 		margin: 0 auto 5% auto;
 	}
 
+	.my-button:hover {
+		border: 1px solid #FFE4AA;
+	}
+
 	/* acordao page */
 	#container {
 		margin-top: 3%;
@@ -643,7 +644,7 @@ header h1 {
 		padding-left: 3%;
 	}
 
-	#ac-sidebar div {
+	.ac-sidebar-elem {
 		margin-bottom: 1%;
 	}
 

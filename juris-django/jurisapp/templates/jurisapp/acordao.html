@@ -14,19 +14,19 @@
 
 	<div id="ac-sidebar"> 
 		<div id="acordao-main-info">
-			<div class="ac-sidebar-field-main">{{ acordao.tribunal.long_name }}</div>
-			<div> <span class="ac-sidebar-field">Processo </span><br> {{ acordao.processo }}</div>
-			<div><span class="ac-sidebar-field">Relator</span><br>{{ acordao.relator }}</div>
+			<div class="ac-sidebar-elem"><div class="ac-sidebar-field-main">{{ acordao.tribunal.long_name }}</div></div>
+			<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Processo </span><br> {{ acordao.processo }}</div>
+			<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Relator</span><br>{{ acordao.relator }}</div>
 			 {% language 'pt' %}
-			<div><span class="ac-sidebar-field">Sessão</span><br>{{ acordao.data|date:'d F Y' }}</div>
+			<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Sessão</span><br>{{ acordao.data|date:'d F Y' }}</div>
 	        {% endlanguage %}
     	</div>
     	<div id="acordao-other-info">
-    		{% if acordao.votacao %}<div><span class="ac-sidebar-field">Votação</span><br> {{ acordao.votacao }}</div>{% endif %}
-    		{% if acordao.meio_processual %}<div><span class="ac-sidebar-field">Meio Processual</span><br> {{ acordao.meio_processual }}</div>{% endif %}
-    		{% if acordao.decisao %}<div><span class="ac-sidebar-field">Decisão</span><br> {{ acordao.decisao }}</div>{% endif %}
-    		<div class="spacer-top-small"><span class="ac-sidebar-field"><a class="my-button" href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">ver versão dgsi.pt</a></span></div>
-		    <div class="spacer-top-small"><span class="ac-sidebar-field"><a class="my-button" href = "/acordao/{{ acordao.acordao_id }}/pdf" target="_blank">PDF</a></span></div>
+    		{% if acordao.votacao %}<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Votação</span><br> {{ acordao.votacao }}</div>{% endif %}
+    		{% if acordao.meio_processual %}<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Meio Processual</span><br> {{ acordao.meio_processual }}</div>{% endif %}
+    		{% if acordao.decisao %}<div class="ac-sidebar-elem"><span class="ac-sidebar-field">Decisão</span><br> {{ acordao.decisao }}</div>{% endif %}
+    		<div class="ac-sidebar-elem"><span class="ac-sidebar-field"><a class="my-button my-button-block" href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">Ver versão dgsi.pt</a></span></div>
+		    <div class="ac-sidebar-elem"><span class="ac-sidebar-field"><a class="my-button my-button-block" href = "/acordao/{{ acordao.acordao_id }}/pdf" target="_blank">Obter PDF</a></span></div>
     	</div>
     	{% comment %} <div id="acordao-icons">
     		<span class="ac-icon"><a href="/acordao/{{ acordao.acordao_id }}/pdf" target="_blank"><i class="far fa-file-pdf"></i></a></span>
