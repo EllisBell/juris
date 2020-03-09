@@ -6,7 +6,7 @@
 <div class="pagination">
     <span class="step-links">
     {% if has_previous %}
-        <i class="fas fa-arrow-circle-left pageBtn prevBtn" aria-hidden="true"></i>
+        <i class="fas fa-arrow-circle-left pageBtn prevBtn light-mint-text" aria-hidden="true"></i>
     {% endif %}
 
     <span class="current">
@@ -14,7 +14,7 @@
     </span>
 
     {% if has_next %}
-        <i class="fas fa-arrow-circle-right pageBtn nextBtn" aria-hidden="true"></i>
+        <i class="fas fa-arrow-circle-right pageBtn nextBtn light-mint-text" aria-hidden="true"></i>
     {% endif %}
 </span>
 </div>
@@ -22,7 +22,7 @@
 {% for acordao in acordaos %}
 <div class="acordao-result">
     <div class="acordao-result-content">
-        <div class="result-link"><a href="/acordao/{{ acordao.id }}" target="_blank" class="main-link"> Processo nº {{ acordao.processo }}</a></div>
+        <div class="result-link"><a href="/acordao/{{ acordao.id }}" target="_blank" class="main-link light-mint-underline"> Processo nº {{ acordao.processo }}</a></div>
         <span class="result-field">Tribunal:</span> {{ acordao.tribunal_long }} <br>
         {% language 'pt' %}
         <span class="result-field">Sessão:</span> {{ acordao.data|date:'d F Y' }} <br>
@@ -44,7 +44,7 @@
 <div class="pagination">
     <span class="step-links">
     {% if has_previous %}
-        <i class="fas fa-arrow-circle-left pageBtn prevBtn bottomPageBtn" aria-hidden="true"></i>
+        <i class="fas fa-arrow-circle-left pageBtn prevBtn bottomPageBtn light-mint-texts" aria-hidden="true"></i>
     {% endif %}
 
     <span class="current">
@@ -54,7 +54,7 @@
     </span>
 
     {% if has_next %}
-        <i class="fas fa-arrow-circle-right pageBtn nextBtn bottomPageBtn" aria-hidden="true"></i>
+        <i class="fas fa-arrow-circle-right pageBtn nextBtn bottomPageBtn light-mint-text" aria-hidden="true"></i>
     {% endif %}
 </span>
 </div>
