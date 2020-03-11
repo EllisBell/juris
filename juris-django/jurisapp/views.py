@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.db.models import Max
 from .models import Acordao
@@ -8,6 +8,7 @@ from raven.contrib.django.raven_compat.models import client
 from . import pdf
 import json
 from datetime import datetime, timedelta
+from .forms import CustomUserCreationForm
 
 
 def index(request):
@@ -158,3 +159,20 @@ def recent_acordaos(request):
         convert_descritores_to_list(acordao)
     context_dict = {'acordaos': acordaos}
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
+
+# TODO needs work
+def register(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            # redirect to home for now
+            form.save()
+            return HttpResponseRedirect('/')
+
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'jurisapp/register.html', {'form': form})
