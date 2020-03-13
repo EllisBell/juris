@@ -96,9 +96,9 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'jurisapp.user'
 
-LOGIN_URL ='/login'
+LOGIN_URL = 'juris_login'
 
-LOGIN_REDIRECT_URL = '/dossier'
+LOGIN_REDIRECT_URL = 'dossier_home'
 
 
 # Password validation
