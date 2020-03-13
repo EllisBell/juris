@@ -2,13 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.db.models import Max
-from .models import Acordao
-from . import acordao_search
+from django.contrib.auth.decorators import login_required
 from raven.contrib.django.raven_compat.models import client
-from . import pdf
 import json
 from datetime import datetime, timedelta
+from .models import Acordao
 from .forms import CustomUserCreationForm
+from . import acordao_search
+from . import pdf
+
 
 
 def index(request):
@@ -162,6 +164,10 @@ def recent_acordaos(request):
 
 # TODO needs work
 def register(request):
+    # TODO poor man's feature toggle, remove when ready
+    if not settings.DEBUG:
+        return HttpResponseRedirect('/')
+    
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -175,4 +181,12 @@ def register(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'jurisapp/register.html', {'form': form})
+    return render(request, 'jurisapp/registration/register.html', {'form': form})
+
+@login_required
+def dossier_home(request):
+    # TODO poor man's feature toggle, remove when ready
+    if not settings.DEBUG:
+        return HttpResponseRedirect('/')
+    
+    return render(request, 'jurisapp/dossier/dossier.html')

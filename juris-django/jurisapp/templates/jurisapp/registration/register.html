@@ -1,0 +1,17 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+{% block body_block %}
+
+<div id="container">
+<form action="/register/" method="post">
+    {% csrf_token %}
+    {% comment %} <div>{{ form.email }}</div>
+    <div>{{ form.password1 }}</div>
+    <div>{{ form.password2 }}</div> {% endcomment %}
+    {{form}}
+    <input type="submit" value="Submit">
+</form>
+</div>
+
+{% endblock %}

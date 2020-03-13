@@ -96,6 +96,11 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'jurisapp.user'
 
+LOGIN_URL ='/login'
+
+LOGIN_REDIRECT_URL = '/dossier'
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -117,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-PT'
 
 TIME_ZONE = 'UTC'
 

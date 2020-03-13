@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from . import views
 from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+from django.urls import path
 
 
 urlpatterns = [
@@ -12,7 +14,9 @@ urlpatterns = [
     url(r'^acordao/(?P<acordao_id>[0-9]+)/$', views.acordao, name='acordao'),
     url(r'^acordao/(?P<acordao_id>[0-9]+)/pdf/$', views.acordao_pdf, name='acordao_pdf'),
     url(r'^recentes/$', views.recent_acordaos, name='recent_acordaos'),
-    url(r'^register', views.register, name='register'), 
+    url(r'^register/', views.register, name='register'), 
+    path('login/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html')),
+    url(r'^dossier/', views.dossier_home, name='dossier_home'), 
     url(r'^termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     url(r'^sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),
 ]
