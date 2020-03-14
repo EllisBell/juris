@@ -16,6 +16,7 @@ urlpatterns = [
     path('recentes', views.recent_acordaos, name='recent_acordaos'),
     path('register/', views.register, name='register'), 
     path('login/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html'), name='juris_login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='juris_logout'),
     path('dossier/', views.dossier_home, name='dossier_home'), 
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),
