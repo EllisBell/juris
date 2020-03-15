@@ -117,7 +117,6 @@ def bulk_index_acordaos(just_new, timeout):
 
 
 def bulk_index_acordaos_alt(just_new, timeout):
-    es = get_es()
     paginator = Paginator(Acordao.objects.all(), 1000)
 
     actions = []
@@ -131,11 +130,12 @@ def bulk_index_acordaos_alt(just_new, timeout):
                     }
             actions.append(action)
         bulk_index_these(actions, timeout)
+        print("indexed page " + page_idx)
 
 
 
 def bulk_index_these(actions, timeout):
-    es.get_es()
+    es = es.get_es()
     helpers.bulk(es, actions, request_timeout=timeout)
 
 
