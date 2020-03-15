@@ -1,6 +1,7 @@
 from elasticsearch import Elasticsearch, helpers
 from .models import Acordao
 from collections import deque
+from django.core.paginator import Paginator
 
 
 def get_es():
@@ -113,6 +114,30 @@ def bulk_index_acordaos(just_new, timeout):
     es = get_es()
     actions = get_bulk_actions(just_new)
     helpers.bulk(es, actions, request_timeout=timeout)
+
+
+def bulk_index_acordaos_alt(just_new, timeout):
+    es = get_es()
+    paginator = Paginator(Acordao.objects.all(), 1000)
+
+    actions = []
+
+    for page_idx in range(1, paginator.num_pages):
+        for row in paginator.page(page_idx).object_list:
+            doc = create_acordao_doc_with_desc(row)
+            action = {"_index": "acordao_idx",
+                        "_type": "acordao",
+                        "_source": doc
+                    }
+            actions.append(action)
+        bulk_index_these(actions, timeout)
+
+
+
+def bulk_index_these(actions, timeout):
+    es.get_es()
+    helpers.bulk(es, actions, request_timeout=timeout)
+
 
 
 def parallel_bulk(just_new, timeout):
