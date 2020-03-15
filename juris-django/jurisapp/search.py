@@ -135,7 +135,7 @@ def bulk_index_acordaos_alt(just_new, timeout):
 
 
 def bulk_index_these(actions, timeout):
-    es = es.get_es()
+    es = get_es()
     helpers.bulk(es, actions, request_timeout=timeout)
 
 
