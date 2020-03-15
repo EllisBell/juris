@@ -130,7 +130,7 @@ def bulk_index_acordaos_alt(just_new, timeout):
                     }
             actions.append(action)
         bulk_index_these(actions, timeout)
-        print("indexed page " + page_idx)
+        print("indexed page " + str(page_idx))
 
 
 
