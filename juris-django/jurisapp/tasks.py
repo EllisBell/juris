@@ -18,5 +18,5 @@ def recreate_index_from_db():
     print("STARTED RECREATING INDEX AT " + str(datetime.datetime.now()))
     search.delete_acordao_idx()
     search.create_acordao_idx()
-    search.bulk_index_acordaos(False, 45)
+    search.bulk_index_acordaos_alt(False, 45)
     print("FINISHED RECREATING INDEX AT " + str(datetime.datetime.now()))
