@@ -351,7 +351,7 @@ $(document).ready(function() {
         var currentPos = $(window).scrollTop();
         $('#searchResults').css("visibility", "hidden");
         $('html,body').scrollTop(currentPos);
-        $(".loading").css("display", "inline-block");
+        $(".loading").css("display", "block");
         }
 
     function hideLoadingBar() {
@@ -375,13 +375,15 @@ $(document).ready(function() {
         var label = $(this);
         var currentlySelected = label.data("selected");
         if(!currentlySelected) {
-            label.css("background-color", "#b4dce0");
+            label.addClass("has-background-primary");
+            label.removeClass("has-background-grey-light")
             label.children(".ticked").css("display", "inline");
             label.children(".not-ticked").css("display", "none");
             label.data("selected", true);
         }
         else {
-            label.css("background-color", "#e3e5e4");
+            label.addClass("has-background-grey-light")
+            label.removeClass("has-background-primary");
             label.children(".ticked").css("display", "none");
             label.children(".not-ticked").css("display", "inline");           
             label.data("selected", false)
@@ -389,15 +391,14 @@ $(document).ready(function() {
     });
 
     function setTribLabel(label) {
-        label.css("background-color", "#b4dce0");
         label.children(".ticked").css("display", "inline");
         label.children(".not-ticked").css("display", "none");
         label.data("selected", true);
     }
 
-    $(".tribLabel").each(function(index) {
-        setTribLabel($(this));
-    });
+    // $(".tribLabel").each(function(index) {
+    //     setTribLabel($(this));
+    // });
 
     $(".orderByButton").click(function(event) {
     	currentlyRelevant = $("#relevanceBtn").data("selected");
@@ -426,11 +427,12 @@ $(document).ready(function() {
     		if(buttonId === selectedId) {
     			button.data("selected", true);
     			//button.css("background-color", "#9ff8cd");
-                button.css("background-color", "#b4dce0");
+                 button.removeClass("is-outlined");
             }
     		if(buttonId != selectedId) {
-    			button.data("selected", false);
-    			button.css("background-color", "#e3e5e4");
+                button.data("selected", false);
+                button.addClass("is-outlined");
+    			//button.css("background-color", "#e3e5e4");
     		}
     	});
     }
