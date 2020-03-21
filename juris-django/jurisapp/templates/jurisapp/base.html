@@ -9,7 +9,8 @@
 	<script defer src="{% static "jurisapp/js/common.js" %}"></script>
 	{% block scripts_block %}
 	{% endblock %}
-	<link rel="stylesheet" href="{% static "jurisapp/css/style2.css" %}" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	<link rel="stylesheet" href="{% static "jurisapp/css/style3.css" %}" />
 	<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
@@ -36,27 +37,39 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 </head>
 <body>
-	<div id="all-content">
-		<header>
-			<div id="logo">
-				<h1><a href="/">jurisprudência<span class="light-mint-text">.</span>pt</a></h1>
+	<nav class="navbar is-spaced has-shadow" role="navigation" aria-label="main navigation">
+		<div class="container">
+			<div class="navbar-brand">
+			<a class="navbar-item" href="/">
+				<span class="is-size-4 has-text-black-ter has-text-weight-bold" id="logo">jurisprudência<span class="has-text-primary">.</span>pt</span>
+			</a>
+			<span id="beta" class="navbar-item is-size-7">
+				versão beta
+			</span>
+		
+			<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="burgerTargets">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
 			</div>
-		    <span id="beta">versão beta</span>
-			<nav id="top-nav">
-				<div id="menu-icon"><i class="fas fa-bars"></i></div>
-				<div id="menu-close"><i class="fas fa-times"></i></div>
-				<div id="menu-div">
-					<ul id="top-list">
-					<li><a href="/recentes">acórdãos recentes</a></li>
-					<li><a href="/sobre">sobre</a></li>
-					<li><a href="/termos">termos e condições</a></li>
-					</ul>
+		
+			<div id="burgerTargets" class="navbar-menu">
+			<div class="navbar-start">
+			</div>
+		
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<a class="navbar-item"  href="/recentes">acórdãos recentes</a>
+					<a class="navbar-item" href="/sobre">sobre</a>
+					<a class="navbar-item" href="/termos">termos e condições</a>
 				</div>
-			</nav>
-		</header>
-		<div id="outer-container">
-			{% block body_block %} {% endblock %}
+			</div>
+			</div>
 		</div>
+	</nav>
+	<div class="container whole-container">
+		{% block body_block %} {% endblock %}
 	</div>
 </body>
 </html>

@@ -9,88 +9,92 @@
 {% endblock %}
 
 {% block body_block %}
+	<div class="spacer-bottom-70"></div>
+	<div class>
+		<div>
+			<input type="text" id="searchbox" class="is-size-3-desktop is-size-5-tablet is-size-6-mobile" placeholder="procure jurisprudência" autofocus autocomplete="on">
 
-	<div id="content">
-		<input type="text" id="searchbox" placeholder="procure jurisprudência" autofocus autocomplete="on">
+			<button type="button" class="searchBtn searchButtons has-background-grey-light"> <i class="fas fa-search has-text-dark"></i></button>
+			<button type="button" class="showAdv searchButtons has-background-grey-light"><i class="fas fa-plus has-text-dark"></i></button>
 
-		<button type="button" class="searchBtn searchButtons"> <i class="fas fa-search"></i></button>
-		<button type="button" class="showAdv searchButtons"><i class="fas fa-plus"></i></button>
+			<span class="searchBtn searchSpan"><i class="fas fa-search"></i></span>
+			<span class="showAdv searchSpan"><i class="fas fa-plus"></i></span>
 
-		<span class="searchBtn searchSpan"><i class="fas fa-search"></i></span>
-		<span class="showAdv searchSpan"><i class="fas fa-plus"></i></span>
+			<div id="advancedSearch">
+				<div id="procSearchDiv" class="spacer-bottom-10">
+					<label for="procSearch" class="advLabel">Processo nº:</label>
+					<input type="text" id="procSearch" class="advInput">
+				</div>
 
-		<div id="advancedSearch">
-			<div id="procSearchDiv">
-				<label for="procSearch" class="advLabel">Processo nº:</label>
-				<input type="text" id="procSearch" class="advInput">
+				<div id="dateSearchDiv">
+					<div id="fromDateDiv">
+						<label for="fromDate" class="advLabel">Data:</label>
+						<input class="datePicker advInput" id="fromDate" readonly>
+						<span class="dateClear" id="clearFromDate"><i class="fas fa-times"></i></span>
+					</div>
+					<div id="toDateDiv">
+						<label for="toDate" class="advLabel">Até:</label>
+						<input class="datePicker advInput" id="toDate" readonly>
+						<span class="dateClear" id="clearToDate"><i class="fas fa-times"></i></span>
+					</div>
+				</div>
 			</div>
 
-			<div id="dateSearchDiv">
-				<div id="fromDateDiv">
-					<label for="fromDate" class="advLabel">Data:</label>
-					<input class="datePicker advInput" id="fromDate" readonly>
-					<span class="dateClear" id="clearFromDate"><i class="fas fa-times"></i></span>
-				</div>
-				<div id="toDateDiv">
-					<label for="toDate" class="advLabel">Até:</label>
-					<input class="datePicker advInput" id="toDate" readonly>
-					<span class="dateClear" id="clearToDate"><i class="fas fa-times"></i></span>
-				</div>
+			<div id="tribCheckBoxes" class="spacer-top-20">
+					<label class="tribLabel spacer-bottom-5 has-background-primary" data-selected="true" data-trib="STJ">
+						<span class="trib-long">Supremo Tribunal de Justiça</span>
+						<span class="trib-short">STJ</span>
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>
+					</label>
+					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRL">
+						<span class="trib-long">Tribunal da Relação de Lisboa</span>
+						<span class="trib-short">TR Lisboa</span>
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>
+					</label>
+					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRP">
+						<span class="trib-long">Tribunal da Relação do Porto</span>
+						<span class="trib-short">TR Porto</span>
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>
+					</label>
+					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRC">
+						<span class="trib-long">Tribunal da Relação de Coimbra</span>
+						<span class="trib-short">TR Coimbra</span>			
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>
+					</label>
+					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRG">
+						<span class="trib-long">Tribunal da Relação de Guimarães</span>
+						<span class="trib-short">TR Guimarães</span>				
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>
+					</label>
+					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRE">
+						<span class="trib-long">Tribunal da Relação de Évora</span>
+						<span class="trib-short">TR Évora</span>				
+						<i class="far fa-check-circle tick-icon ticked"></i>
+						<i class="far fa-circle tick-icon not-ticked"></i>				
+					</label>
 			</div>
 		</div>
 
-
-		<div id="tribCheckBoxes">
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="STJ">
-					<span class="trib-long">Supremo Tribunal de Justiça</span>
-					<span class="trib-short">STJ</span>
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>
-				</label>
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="TRL">
-					<span class="trib-long">Tribunal da Relação de Lisboa</span>
-					<span class="trib-short">TR Lisboa</span>
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>
-				</label>
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="TRP">
-					<span class="trib-long">Tribunal da Relação do Porto</span>
-					<span class="trib-short">TR Porto</span>
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>
-				</label>
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="TRC">
-					<span class="trib-long">Tribunal da Relação de Coimbra</span>
-					<span class="trib-short">TR Coimbra</span>			
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>
-				</label>
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="TRG">
-					<span class="trib-long">Tribunal da Relação de Guimarães</span>
-					<span class="trib-short">TR Guimarães</span>				
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>
-				</label>
-				<label class="tribLabel lighter-mint-back" data-selected="true" data-trib="TRE">
-					<span class="trib-long">Tribunal da Relação de Évora</span>
-					<span class="trib-short">TR Évora</span>				
-					<i class="far fa-check-circle tick-icon ticked"></i>
-					<i class="far fa-circle tick-icon not-ticked"></i>				
-				</label>
+		<div id="orderByButtons" class="level spacer-top-30">
+			<!-- <div class="level-left"></div> -->
+			<div class="level-left">    
+				<button class="level-item button is-primary is-outlined orderByButton" id="recentBtn" data-selected="false">+ recente</button>
+				<button class="level-item button is-primary is-outlined orderByButton" id="relevanceBtn" data-selected="false">+ relevante</button>
+			</div>
 		</div>
-
-		<div id="orderByButtons">
-  			<button class="orderByButton" id="recentBtn" data-selected="false">+ recente</button>
-			<button class="orderByButton" id="relevanceBtn" data-selected="false">+ relevante</button>
-		</div>
-
 
 		<div class="loading">
-			  <div class="loading-bar"></div>
-			  <div class="loading-bar"></div>
-			  <div class="loading-bar"></div>
-			  <div class="loading-bar"></div>
+			<div class="loading-bar"></div>
+			<div class="loading-bar"></div>
+			<div class="loading-bar"></div>
+			<div class="loading-bar"></div>
 		</div>
+
 		<div id="searchResults"></div>
 	</div>
 

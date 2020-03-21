@@ -9,28 +9,16 @@ Set the media query breakpoints at natural breakpoints for content
 */
 
 html {
-	/*height: 100%;*/
 	overflow-y: scroll;
 	font-size: 16px;
-	/*background-color: #f7f7f7;*/
 }
 
 body {
-	margin: 0px;
-	padding:0px;
-	border:0px;
-	/*height: 100%;*/
 	font-family: 'Barlow', sans-serif;
-	/*font-family: Helvetica;*/
-	/*font-family: Times;*/
-	/*color: #0f1013;*/
-	color: #222222;
 }
 
 /* Reusable Classes */
-.dark-mint-text {
 
-}
 
 .light-mint-text {
 	color: #81bbc0;
@@ -65,116 +53,112 @@ body {
 	background-color: #81bbc0;
 }
 
-.spacer-top-small {
-	margin-top: 6%;
+/* SPACERS */
+
+.spacer-top-70 {
+	margin-top: 70px;
 }
 
-#all-content {
-	margin: 0 auto;
-	height: 100%;
-	width: 80%;
-	max-width: 1200px;
+.spacer-top-50 {
+	margin-top: 50px;
 }
 
-#outer-container {
-	height: 100%;
-	width: 100%;
+.spacer-top-30 {
+	margin-top: 30px;
 }
 
-#termos-container {
-	margin-bottom: 5%;
-	max-width: 90%;
+.spacer-top-20 {
+	margin-top: 20px;
 }
 
-header {
-	margin-top: 0px;
-	margin-bottom:15px;
-	padding-top: 10px;
-	position: relative;
+.spacer-top-10 {
+	margin-top: 10px;
 }
 
-header h1 {
-	margin:0;
+.spacer-top-5 {
+	margin-top:5px;
 }
 
-#logo {
-	font-family: inherit;
-	font-size: 0.85rem;
-	display: inline-block;
+.spacer-bottom-70 {
+	margin-bottom:70px;
 }
 
-#logo a {
-	text-decoration: none;
-	font-family: inherit;
-	color: #3c434f;
+.spacer-bottom-50 {
+	margin-bottom:50px;
 }
 
-#beta {
-	background-color: #FFE4AA;
-	padding: 1px;
-	text-align: center;
-	font-size: 0.8rem;
-	font-style: italic;
+.spacer-bottom-30 {
+	margin-bottom:30px;
 }
 
-#top-nav {
-	margin: 0;
-	padding: 0;
-	position: absolute;
-  	bottom: 0;
-  	right: 0;
+.spacer-bottom-20 {
+	margin-bottom:20px;
 }
 
-#menu-icon {
-	margin: 0;
-	padding: 0;
-	position: absolute;
-  	bottom: 0;
-  	right: 0;
-  	display: none;
+.spacer-bottom-10 {
+	margin-bottom:10px;
 }
 
-#menu-close {
-	margin: 0;
-	padding: 0;
-	position: absolute;
-  	bottom: 0;
-  	right: 0;
-  	display: none;
+.spacer-bottom-5 {
+	margin-bottom:5px;
 }
 
-#top-list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	width: 100%;
+.spacer-bottom-3 {
+	margin-bottom:10px;
 }
 
-#top-list li {
-	display: inline-block;
-	margin-left: 15px;
-	margin-bottom: 0;
+.spacer-right-1 {
+	margin-right: 1%;
 }
 
-#top-nav a {
+.spacer-right-2 {
+	margin-right: 2%;
+}
+
+.spacer-right-3 {
+	margin-right: 3%;
+}
+
+.spacer-right-5 {
+	margin-right: 5%;
+}
+
+.spacer-right-10 {
+	margin-right: 10%;
+}
+
+.spacer-left-3 {
+	margin-left: 3%;
+}
+
+.spacer-left-5 {
+	margin-left: 5%;
+}
+
+.spacer-left-10 {
+	margin-left: 10%;
+}
+
+/* END OF SPACERS */
+
+
+.pointer-on-hover {
+	cursor: default;
+}
+
+.pointer-on-hover:hover {
+	cursor: pointer;
+}
+
+#dicas-link {
 	text-decoration: none;
 	color: inherit;
 }
 
-#top-nav a:hover {
-	border-bottom: 2px solid #FFE4AA;
-}
-
-#content {
-	margin-top: 8%;
-	height:80%;
-	width: inherit;
-}
-
-#content-recentes {
-	margin-top: 4%;
-	height:80%;
-	width: inherit;
+#beta {
+	background-color: #FFE4AA;
+	font-style: italic;
+	height: 40%;
 }
 
 #searchbox {
@@ -185,7 +169,6 @@ header h1 {
 	border:none;
 	border-bottom: 2px solid #222222;
 	border-radius: 0;
-	font-size: 1.7rem;
 	background-color: inherit;
 	color: #333333;
 }
@@ -212,24 +195,18 @@ header h1 {
   font-size: 1.1rem;
   position: relative;
   bottom: 6px;
-  background-color: #e3e5e4;
-  color: #333333;
   margin-left: 5px;
-}
-
-.searchButtons:hover {
-	background-color: #B9C3BE;
 }
 
 .searchSpan {
 	font-size: 1.3rem;
 	color: #444444;
-	cursor: pointer;
 	display: none;
 }
 
 .searchSpan:hover {
 	color: #222222;
+	cursor: pointer;
 }
 
 .showAdv {
@@ -254,10 +231,6 @@ header h1 {
 	box-shadow: none;
 	border:none;
 	border-bottom: 1px solid #1E2127;
-}
-
-#procSearchDiv {
-	margin-bottom: 2%;
 }
 
 #procSearch {
@@ -296,14 +269,12 @@ header h1 {
 }
 
 #tribCheckBoxes {
-	margin-top: 3%;
 	width: 90%;
 	max-width: 900px;
 }
 
 .tribLabel {
 	margin-right: 5px;
-	margin-bottom: 10px;
 	padding: 8px;
 	white-space: nowrap;
 	display: inline-block;
@@ -331,26 +302,9 @@ header h1 {
 	visibility: hidden;
 }
 
-#orderByButtons button {
-	outline: none;
-	box-shadow: none;	
-	/*background-color: #9ff8cd;*/
-	background-color: #b4dce0;
-	border: none;
-	float:right;
-	padding: 4px;
-	font-family: inherit;
-	font-weight: normal;
-	font-size: inherit;
-	cursor: pointer;
-	padding: 1%;
-	border-radius: 1.5px;
-}
-
 .standardButton {
 	outline: none;
 	box-shadow: none;	
-	/*background-color: #9ff8cd;*/
 	background-color: #b4dce0;
 	border: none;
 	font-family: inherit;
@@ -361,36 +315,12 @@ header h1 {
 }
 
 #searchResults {
-	width:85%;
 	padding-bottom: 2%;
-	margin-top: 5%;
 	clear: right;
 }
 
-
 .pageBtn {
 	font-size: 1.5rem;
-}
-
-
-.pagination .pageBtn:hover {
-	cursor: pointer;
-}
-
-.pagination .nextBtn {
-	margin-left: 1%;
-}
-
-.pagination .prevBtn {
-	margin-right: 1%;
-}
-
-.acordao-result {
-	margin-top: 2%;
-	margin-bottom: 3%;
-	font-size: 1.1rem;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	height: 100%;
 }
 
 .acordao-result-content {
@@ -403,58 +333,17 @@ header h1 {
 	margin-bottom: 2%;
 }
 
-.acordao-result .main-link {
-	font-size: 1.2rem;
-	color: inherit;
-	text-decoration: none;
-	font-weight: bold;
-}
 .acordao-result .main-link:hover {
 	border-bottom: 2px solid #FFE4AA;
 }
 
-.result-field {
-	font-weight: bold;
-}
-
-.result-descritores {
-	margin-top:1%;
-	margin-bottom:1%;
-}
-
-.descritor-div {
-	margin-right:1%;
-	margin-bottom: 1%;
-	margin-top: 1%;
-	display: inline-block;
-}
-
 .result-descritor {
-	font-weight: bold;
     white-space: normal;
-    background-color: #e3f4f6;
     padding: 5px;
-    display: inline-block;
 }
 
 .long-text {
 	line-height: 1.5em;
-}
-
-.result-bottom {
-	position: relative;
-	margin-top: 4%;
-	border-top: 1px solid white;
-}
-
-.bottom-link {
-	position: absolute;
-	bottom: 5px;
-	right: 10px;
-	color: #327A81;
-	text-decoration: none;
-	border-bottom: 2px solid white;
-	font-weight: bold;
 }
 
 .bottom-link:hover {
@@ -536,139 +425,23 @@ header h1 {
 /* STYLE FOR ACORDAO PAGE */
 /**************************/
 
-#container {
-	position: static;
-	margin-top: 8%;
-	margin-bottom: 2%;
-}
-
-#ac-sidebar {
-	float:left;
-	height:100%;
-	width: 28%;
-	/*padding-left: 10px;*/
-	padding-bottom: 5px;
-	font-size: 1.0rem;
-}
-
-/* #acordao-main-info {
-	font-size: 1.1rem;
-} */
-
-#acordao-icons {
-	color: #52949a;
-	font-size: 3rem;
-}
-
-#acordao-icons a {
-	text-decoration: none;
-	color: inherit;
-}
-
-.ac-icon {
-	cursor: pointer;
+/* sticky class makes the acordao side bar sticky!! */ 
+.sticky	{
+	position: sticky;
+  	top: 30px;
 }
 
 
-.ac-sidebar-elem {
-	margin-bottom: 2%;
-}
-
-.ac-sidebar-field {
-	/* font-weight: bold; */
-	color: #327A81;
-}
-
-.ac-sidebar-field-main {
-	font-size: 1.1rem;
-	font-weight: bold;
-}
-
-
-#ac-content {
-	width: 65%;
-	margin-left: 30%;
-	padding-left: 2%;
-	font-size: 1.1rem;
-	line-height: 1.5rem;
-}
-
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-
-@media only screen and (max-width: 1200px) {
-	#all-content {
-		width: 100%;
-	}
-
-	#outer-container {
-		width: 100%;
-	}
-
-	header {
-		width: 95%;
-		margin: 0 auto;
-	}
-
-	#content {
-		max-width: 90%;
-		margin: 8% auto 0 auto;
-	}
-
-	#termos-container {
-		width: 75%;
-		margin: 0 auto 5% auto;
-	}
-
-	.my-button:hover {
-		border: 1px solid #FFE4AA;
-	}
-
-	/* acordao page */
-	#container {
-		margin-top: 3%;
-	}
-	
-	#ac-sidebar {
-		float:none;
-		width: 100%;
-		height: auto;
-		margin-top: 0;
-		margin-bottom: 4%;
-		background-color: #81bbc0;
-		padding-top: 2%;
-		padding-left: 3%;
-	}
-
-	.ac-sidebar-elem {
-		margin-bottom: 1%;
-	}
-
-	#acordao-icons {
-		clear: left;
-		color: #555555;
-		font-size: 3rem;
-	}
-
-	#ac-content {
-		width: 70%;
-		margin: 0 auto;
+@media only screen and (max-width: 1023px) {
+	.whole-container {
+		margin-left: 3%;
+		margin-right: 3%;
 	}
 }
 
 @media only screen and (max-width: 1000px) {
 	#searchbox {
-		font-size: 1.5rem;
 		width:60%;
-	}
-
-	#content {
-		max-width: 90%;
-		margin: 15% auto 0 auto;
 	}
 }
 
@@ -709,15 +482,6 @@ header h1 {
 		font-size: 1.5rem;		
 	}
 
-	#content {
-		max-width: 95%;
-		margin: 15% auto 0 auto;
-	}
-
-	#searchbox {
-		width:75%;
-	}
-
 	.searchButtons {
 		display: none;
 	}
@@ -729,11 +493,6 @@ header h1 {
 
 	.showAdv{
 		margin-left: 4%;
-	}
-
-	#advancedSearch {
-		margin-top: 4%;
-		margin-bottom: 4%;
 	}
 
 	#procSearch {
@@ -767,22 +526,8 @@ header h1 {
 		display: inline-block;
 	}
 
-	#searchResults {
-		width: 98%;
-		margin: 10% auto 0 auto;
-	}
-
-	.acordao-result {
-		width: 100%;
-		margin: 5% auto 5% auto;
-	}
-
 	#container {
 		margin-top: 6%;
-	}
-
-	#ac-content {
-		width: 75%;
 	}
 
 	.emphasis-block {
@@ -800,27 +545,9 @@ header h1 {
 		overflow-x: hidden;
 	}
 
-	html {
-		font-size: 16px;
-	}
-
 	header {
 		width: 95%;
 		margin: 0 auto;
-	}
-
-	#logo {
-		font-size: 0.6rem;
-	}
-
-	#content {
-		max-width: 95%;
-		margin: 15% auto 0 auto;
-	}
-
-	#searchbox {
-		font-size: 1.2rem;
-		width:75%;
 	}
 
 	#cheatDiv {
@@ -844,57 +571,10 @@ header h1 {
 		margin-top: 5%;
 	}	
 
-	#searchResults {
-		width: 98%;
-		margin: 20% auto 0 auto;
-	}
-
-	.acordao-result {
-		width: 100%;
-		margin: 5% auto 5% auto;
-	}
-
-	.result-descritor {
-	    white-space: normal;
-	    font-size: 0.85rem;
-	}
-
-	.descritor-div {
-		margin-top: 1%;
-		margin-bottom: 1%;
-	}
-
-	.result-bottom {
-		margin-top: 8%;
-	}
-
 	.loading {
   		width: inherit;
   		margin: 15% auto 0 auto;
 	}
-
-	#ac-sidebar {
-		margin-bottom: 5%;
-		width: 100%;
-		padding-left: 2%;
-	}
-
-	#acordao-main-info {
-		float:none;
-		width: 100%;
-	}
-
-	#ac-content {
-		margin: 0 auto;
-		width: 90%;
-		font-size: 1rem;
-	}
-
-	#termos-container {
-		width: 95%;
-		margin: 0 auto 5% auto;
-	}
-
 }
 
 
