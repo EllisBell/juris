@@ -117,10 +117,11 @@ def bulk_index_acordaos(just_new, timeout):
 
 
 def bulk_index_acordaos_alt(just_new, timeout):
-    paginator = Paginator(Acordao.objects.all(), 1000)
+    paginator = Paginator(Acordao.objects.all().order_by('acordao_id'), 1000)
 
     for page_idx in range(1, paginator.num_pages + 1):
         actions = []
+        
         for row in paginator.page(page_idx).object_list:
             doc = create_acordao_doc_with_desc(row)
             action = {"_index": "acordao_idx",
@@ -128,7 +129,9 @@ def bulk_index_acordaos_alt(just_new, timeout):
                         "_source": doc
                     }
             actions.append(action)
+        
         bulk_index_these(actions, timeout)
+        
         print("indexed page " + str(page_idx))
 
 
