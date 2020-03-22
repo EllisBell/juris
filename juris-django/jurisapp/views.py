@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Max
 from django.urls import reverse
@@ -167,7 +167,7 @@ def recent_acordaos(request):
 def register(request):
     # TODO poor man's feature toggle, remove when ready
     if not settings.DEBUG:
-        return HttpResponseRedirect(reverse('juris_index'))
+        return redirect('juris_index')
     
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -177,7 +177,7 @@ def register(request):
             print('form is valid')
             # redirect to home for now
             form.save()
-            return HttpResponseRedirect(reverse('juris_index'))
+            return redirect('juris_index')
 
     else:
         form = CustomUserCreationForm(label_suffix="")
@@ -188,6 +188,6 @@ def register(request):
 def dossier_home(request):
     # TODO poor man's feature toggle, remove when ready
     if not settings.DEBUG:
-        return HttpResponseRedirect(reverse('juris_index'))
+        return redirect('juris_index')
     
     return render(request, 'jurisapp/dossier/dossier.html')
