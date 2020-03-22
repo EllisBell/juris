@@ -9,13 +9,9 @@
         <div class="column is-one-third">
             <form action="/reenviar/" method="post">
                 {% csrf_token %}
-                <div class="field">
-                    <label class="label">{{form.email.label_tag}}</label>
-                    <div class="control">
-                        {{form.email}}
-                    </div>
-                    <div class="help is-danger">{{form.email.errors}}</div>
-                </div> 
+                
+                {% include "jurisapp/snippets/form_snippet.html" %}
+
                 <div class="spacer-bottom-20"></div>
                 <input class="button is-primary" type="submit" value="Enviar">
                 <a class="button is-info" href="/">Cancelar</a>
