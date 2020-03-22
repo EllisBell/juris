@@ -7,7 +7,7 @@
     <div class="spacer-bottom-20"></div>
     <div class="columns">
         <div class="column is-one-third">
-            <form action="/register/" method="post">
+            <form action="/registar/" method="post">
                 {% csrf_token %}
                 <div class="field">
                     <label class="label">{{form.email.label_tag}}</label>
@@ -15,6 +15,13 @@
                         {{form.email}}
                     </div>
                     <div class="help is-danger">{{form.email.errors}}</div>
+                </div>
+                <div class="field">
+                    <label class="label">{{form.first_name.label_tag}}</label>
+                    <div class="control">
+                        {{form.first_name}}
+                    </div>
+                    <div class="help is-danger">{{form.first_name.errors}}</div>
                 </div>
                 <div class="field">
                     <label class="label">{{form.password1.label_tag}}</label>
@@ -36,8 +43,12 @@
             </form>
             <div class="spacer-top-20">
                 Já tem conta?
-              </div>
-              <a class="button is-primary" href="{% url 'juris_login' %}">Entre</a>
+            </div>
+            <a class="button is-primary" href="{% url 'juris_login' %}">Entre</a>
+            <div class="spacer-top-20">
+                Já se registou mas não recebeu email para confirmar a conta?
+            </div>
+            <a class="button is-primary" href="{% url 'resend_confirmation_email' %}">Peça reenvio do email</a>
         </div>
     </div>
 </div>

@@ -1,5 +1,10 @@
-{% autoescape off %}
-Hi {{ user.username }},
-Please click on the link to confirm your registration,
-https://{{ domain }}{% url 'activate_account' uidb64=uid token=token %}
-{% endautoescape %}
+<p>Olá {{ user.first_name }},</p>
+
+<p>Obrigado por registar-se no jurisprudencia.pt! 😊</p>
+
+<p>Por favor clique no seguinte link para confirmar o seu registo:</p>
+
+<p>https://{{ domain }}{% url 'activate_account' uidb64=uid token=token %}</p>
+
+Obrigado,<br/>
+Equipa jurisprudencia.pt

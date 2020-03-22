@@ -15,12 +15,17 @@ urlpatterns = [
     path('acordao/<int:acordao_id>/', views.acordao, name='acordao'),
     path('acordao/<int:acordao_id>/pdf/', views.acordao_pdf, name='acordao_pdf'),
     path('recentes', views.recent_acordaos, name='recent_acordaos'),
+    # Registration and authentication urls
     path('registar/', views.register, name='register'), 
-    path('email_ativacao_enviado/', views.account_activation_sent, name='account_activation_sent'),
+    path('email-ativacao-enviado/<str:email>/', views.account_activation_sent, name='account_activation_sent'),
+    path('conta-ativada/', views.account_activated, name='account_activated'),
+    path('reenviar/', views.resend_confirmation_email, name='resend_confirmation_email'),
     path('ativar/<str:uidb64>/<str:token>/', views.activate_account, name='activate_account'),
     path('entrar/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html', authentication_form=UserLoginForm), name='juris_login'),
     path('sair/', auth_views.LogoutView.as_view(), name='juris_logout'),
+    # Dossier urls
     path('dossier/', views.dossier_home, name='dossier_home'), 
+    # Static pages urls
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),
 ]

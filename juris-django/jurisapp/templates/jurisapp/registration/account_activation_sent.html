@@ -1,1 +1,18 @@
-account activation email has been sent
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block body_block %}
+
+<div class="spacer-top-30">
+    <div class="title">
+        Obrigado 🎉
+    </div>
+    <div class="is-size-4">
+        📫
+        Enviámos um email para <span class="has-text-weight-bold">{{ email }}</span>.
+        <div>Por favor siga as instruções para confirmar a sua conta.</div>
+    </div>
+</div>
+
+{% endblock %}

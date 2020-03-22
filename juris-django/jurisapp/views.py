@@ -6,19 +6,15 @@ from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_text
 from raven.contrib.django.raven_compat.models import client
 import json
 from datetime import datetime, timedelta
-from .tokens import account_activation_token
 from .models import Acordao, User
-from .forms import CustomUserCreationForm
-from . import acordao_search
-from . import pdf
-
+from .forms import CustomUserCreationForm, ResendEmailForm
+from .tokens import account_activation_token
+from . import acordao_search, pdf, emailer
 
 
 def index(request):
@@ -170,6 +166,7 @@ def recent_acordaos(request):
     context_dict = {'acordaos': acordaos}
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
 
+
 # TODO needs work
 # TODO now confirming email address
 def register(request):
@@ -188,24 +185,14 @@ def register(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            subject = 'Ative a sua conta jurisprudencia.pt'
-            message = render_to_string('jurisapp/registration/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
             to_email = form.cleaned_data.get('email')
-            email = EmailMessage(subject, message, to=[to_email])
-            email.send()
-            return redirect('account_activation_sent')
-
-            return redirect('juris_index')
-
+            emailer.send_confirmation_email(user, current_site, to_email)
+            return redirect('account_activation_sent', to_email)
     else:
         form = CustomUserCreationForm(label_suffix="")
 
     return render(request, 'jurisapp/registration/register.html', {'form': form})
+
 
 def activate_account(request, uidb64, token):
     try:
@@ -220,12 +207,41 @@ def activate_account(request, uidb64, token):
         user.email_confirmed = True
         user.save()
         login(request, user)
-        return redirect('juris_index')
+        return redirect('account_activated')
     else:
         return render(request, 'jurisapp/registration/account_activation_invalid.html')
 
-def account_activation_sent(request):
-    return render(request, 'jurisapp/registration/account_activation_sent.html')
+
+def account_activation_sent(request, email):
+    return render(request, 'jurisapp/registration/account_activation_sent.html', {'email': email})
+
+
+def account_activated(request):
+    return render(request, 'jurisapp/registration/account_activated.html')
+
+
+def resend_confirmation_email(request):
+    if request.method == 'POST':
+        form = ResendEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+
+            # get user
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = None
+
+            if user is not None:
+                current_site = get_current_site(request)
+                emailer.send_confirmation_email(user, current_site, email)
+            # render view even if user doesn't exist to not divulge data unnecessarily
+            return redirect('account_activation_sent', email)
+    else:
+        form = ResendEmailForm()
+
+    return render(request, 'jurisapp/registration/resend_confirmation_email.html', {'form': form})
+
 
 @login_required
 def dossier_home(request):

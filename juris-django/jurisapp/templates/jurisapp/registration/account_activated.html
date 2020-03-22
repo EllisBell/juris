@@ -1,0 +1,21 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block body_block %}
+
+<div class="spacer-top-30">
+    <div class="title">
+        Obrigado 🎉
+    </div>
+    <div class="is-size-4">
+        A sua conta foi ativada 🙂
+    </div>
+
+    <div class="buttons is-grouped spacer-top-30">
+        <a class="button is-link is-outlined" href="{% url 'dossier_home' %}">Aceda à sua área dossier</a>
+        <a class="button is-link is-outlined" href="{% url 'juris_index' %}">Pesquise jurisprudência</a>
+    </div>
+</div>
+
+{% endblock %}
