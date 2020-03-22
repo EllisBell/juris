@@ -5,3 +5,4 @@ juris-django/static
 *.vscode
 bin/
 obj/
+node_modules/

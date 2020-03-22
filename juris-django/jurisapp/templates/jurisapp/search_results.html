@@ -7,7 +7,7 @@
     <div class="level-left">
         {% if has_previous %}
         <div class="level-item">
-            <i class="fas fa-arrow-circle-left pageBtn prevBtn has-text-primary pointer-on-hover" aria-hidden="true"></i>
+            <i class="fas fa-arrow-circle-left pageBtn prevBtn has-text-info pointer-on-hover" aria-hidden="true"></i>
         </div>
         {% endif %}
         <div class="level-item">
@@ -17,7 +17,7 @@
         </div>
         {% if has_next %}
         <div class="level-item">
-            <i class="fas fa-arrow-circle-right pageBtn nextBtn has-text-primary pointer-on-hover" aria-hidden="true"></i>
+            <i class="fas fa-arrow-circle-right pageBtn nextBtn has-text-info pointer-on-hover" aria-hidden="true"></i>
         </div>
         {% endif %}
     </div>
@@ -26,30 +26,30 @@
 <div class="columns">
     <div class="column is-three-quarters">
         {% for acordao in acordaos %}
-        <div class="box spacer-bottom-10">
+        <div class="box has-background-white-ter is-shadowless spacer-bottom-20">
             <div class="acordao-result-content">
-                <div class="result-link spacer-bottom-10"><a class="has-text-primary title is-5" href="/acordao/{{ acordao.id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
-                <div class="spacer-bottom-10">
-                    <span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal_long }} <br>
+                <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao.id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
+                <div class="spacer-bottom-20">
+                    <div class="spacer-bottom-10"><span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal_long }}</div>
                     {% language 'pt' %}
-                    <span class="has-text-weight-bold">Sessão:</span> {{ acordao.data|date:'d F Y' }} <br>
+                    <div class="spacer-bottom-10"><span class="has-text-weight-bold">Sessão:</span> {{ acordao.data|date:'d F Y' }}</div>
                     {% endlanguage %}
-                    <span class="has-text-weight-bold">Relator:</span> {{acordao.relator}}<br>
+                    <div class="spacer-bottom-10"><span class="has-text-weight-bold">Relator:</span> {{acordao.relator}}</div>
                 </div>
                 <div class="spacer-top-10 spacer-bottom-10">
                     {% for desc in acordao.descritores %}
-                    <div class="is-inline-block has-background-grey has-text-white has-text-weight-bold spacer-bottom-10 spacer-right-1">
+                    <div class="descritor-box is-inline-block has-background-info has-text-white has-text-weight-bold spacer-bottom-10 spacer-right-1">
                         <span class="result-descritor">{{ desc }}</span>
                     </div> 
                     {% endfor %}
                 </div>
-                <div class="long-text">{{ acordao.sumario|truncatechars:500 }}</div>
+                <div class="long-text spacer-bottom-10">{{ acordao.sumario|truncatechars:500 }}</div>
             </div>
             <div class="level">
                 <div class="level-left"></div>
                 <div class="right">
                     <div class="level-item">
-                        <a href="/acordao/{{ acordao.id }}" target="_blank" class="has-text-primary has-text-weight-bold">ver acórdão</a>
+                        <a href="/acordao/{{ acordao.id }}" target="_blank" class="button is-info has-text-weight-bold">ver acórdão</a>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     <div class="level-left">
         {% if has_previous %}
         <div class="level-item">
-            <i class="fas fa-arrow-circle-left pageBtn prevBtn has-text-primary pointer-on-hover" aria-hidden="true"></i>
+            <i class="fas fa-arrow-circle-left pageBtn prevBtn has-text-info pointer-on-hover" aria-hidden="true"></i>
         </div>
         {% endif %}
         <div class="level-item">
@@ -73,7 +73,7 @@
         </div>
         {% if has_next %}
         <div class="level-item">
-            <i class="fas fa-arrow-circle-right pageBtn nextBtn has-text-primary pointer-on-hover" aria-hidden="true"></i>
+            <i class="fas fa-arrow-circle-right pageBtn nextBtn has-text-info pointer-on-hover" aria-hidden="true"></i>
         </div>
         {% endif %}
     </div>

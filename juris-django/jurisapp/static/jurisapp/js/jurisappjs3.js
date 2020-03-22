@@ -375,15 +375,11 @@ $(document).ready(function() {
         var label = $(this);
         var currentlySelected = label.data("selected");
         if(!currentlySelected) {
-            label.addClass("has-background-primary");
-            label.removeClass("has-background-grey-light")
             label.children(".ticked").css("display", "inline");
             label.children(".not-ticked").css("display", "none");
             label.data("selected", true);
         }
         else {
-            label.addClass("has-background-grey-light")
-            label.removeClass("has-background-primary");
             label.children(".ticked").css("display", "none");
             label.children(".not-ticked").css("display", "inline");           
             label.data("selected", false)
@@ -426,13 +422,11 @@ $(document).ready(function() {
     		buttonId = button.attr('id');
     		if(buttonId === selectedId) {
     			button.data("selected", true);
-    			//button.css("background-color", "#9ff8cd");
-                 button.removeClass("is-outlined");
+                 button.addClass("is-outlined");
             }
     		if(buttonId != selectedId) {
                 button.data("selected", false);
-                button.addClass("is-outlined");
-    			//button.css("background-color", "#e3e5e4");
+                button.removeClass("is-outlined");
     		}
     	});
     }
