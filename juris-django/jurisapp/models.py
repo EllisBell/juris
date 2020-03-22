@@ -116,6 +116,8 @@ class User(AbstractUser):
     email = models.EmailField(_('Endereço de email'), unique=True, 
                                 error_messages={'unique': 'Já existe um utilizador com este email'})
 
+    email_confirmed = models.BooleanField(default=False)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
