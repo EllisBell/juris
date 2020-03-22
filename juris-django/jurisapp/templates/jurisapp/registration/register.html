@@ -7,6 +7,7 @@
     <div class="spacer-bottom-20"></div>
     <div class="columns">
         <div class="column is-one-third">
+            <div class="title">Crie uma conta</div>
             <form action="/registar/" method="post">
                 {% csrf_token %}
                 
@@ -19,11 +20,11 @@
             <div class="spacer-top-20">
                 Já tem conta?
             </div>
-            <a class="button is-info" href="{% url 'juris_login' %}">Entre</a>
+            <a class="button is-primary is-outlined" href="{% url 'juris_login' %}">Login</a>
             <div class="spacer-top-20">
                 Já se registou mas não recebeu email para confirmar a conta?
             </div>
-            <a class="button is-info" href="{% url 'resend_confirmation_email' %}">Peça reenvio do email</a>
+            <a class="button is-primary is-outlined" href="{% url 'resend_confirmation_email' %}">Peça reenvio do email</a>
         </div>
     </div>
 </div>

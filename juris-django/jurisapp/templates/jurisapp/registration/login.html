@@ -7,6 +7,7 @@
   <div class="spacer-bottom-20"></div>
   <div class="columns">
     <div class="column is-one-third">
+      <div class="title">Login</div>
       <form method="post">
         {% csrf_token %}
         <!-- {{ form.as_p }} -->
@@ -19,18 +20,19 @@
         <div class="spacer-bottom-20"></div>
         <input class="button is-primary" type="submit" value="Submeter">
         <a class="button is-info" href="/">Cancelar</a> 
-             
+
       </form>
       <div class="spacer-top-20">
         Não tem conta?
       </div>
-      <a class="button is-primary" href="{% url 'register' %}">Registe-se</a>
+      <a class="button is-primary is-outlined" href="{% url 'register' %}">Criar conta</a>
+      <div class="spacer-top-20">
+        Já se registou mas não recebeu email para confirmar a conta?
+      </div>
+      <a class="button is-primary is-outlined" href="{% url 'resend_confirmation_email' %}">Peça reenvio do email</a>
     </div>
   </div>
 
 </div>
-
-
-
 
 {% endblock %}
