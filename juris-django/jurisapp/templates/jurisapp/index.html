@@ -5,7 +5,7 @@
 {% block scripts_block %}
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script defer src="{% static "jurisapp/js/jurisappjs2.js" %}"></script>
+	<script defer src="{% static "jurisapp/js/jurisappjs3.js" %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -41,50 +41,50 @@
 			</div>
 
 			<div id="tribCheckBoxes" class="spacer-top-20">
-					<label class="tribLabel spacer-bottom-5 has-background-primary" data-selected="true" data-trib="STJ">
-						<span class="trib-long">Supremo Tribunal de Justiça</span>
-						<span class="trib-short">STJ</span>
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>
-					</label>
-					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRL">
-						<span class="trib-long">Tribunal da Relação de Lisboa</span>
-						<span class="trib-short">TR Lisboa</span>
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>
-					</label>
-					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRP">
-						<span class="trib-long">Tribunal da Relação do Porto</span>
-						<span class="trib-short">TR Porto</span>
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>
-					</label>
-					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRC">
-						<span class="trib-long">Tribunal da Relação de Coimbra</span>
-						<span class="trib-short">TR Coimbra</span>			
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>
-					</label>
-					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRG">
-						<span class="trib-long">Tribunal da Relação de Guimarães</span>
-						<span class="trib-short">TR Guimarães</span>				
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>
-					</label>
-					<label class="tribLabel has-background-primary" data-selected="true" data-trib="TRE">
-						<span class="trib-long">Tribunal da Relação de Évora</span>
-						<span class="trib-short">TR Évora</span>				
-						<i class="far fa-check-circle tick-icon ticked"></i>
-						<i class="far fa-circle tick-icon not-ticked"></i>				
-					</label>
+				<label class="tribLabel spacer-bottom-10 has-background-white-ter" data-selected="true" data-trib="STJ">
+					<span class="trib-long">Supremo Tribunal de Justiça</span>
+					<span class="trib-short">STJ</span>
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>
+				</label>
+				<label class="tribLabel has-background-white-ter" data-selected="true" data-trib="TRL">
+					<span class="trib-long">Tribunal da Relação de Lisboa</span>
+					<span class="trib-short">TR Lisboa</span>
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>
+				</label>
+				<label class="tribLabel has-background-white-ter" data-selected="true" data-trib="TRP">
+					<span class="trib-long">Tribunal da Relação do Porto</span>
+					<span class="trib-short">TR Porto</span>
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>
+				</label>
+				<label class="tribLabel has-background-white-ter" data-selected="true" data-trib="TRC">
+					<span class="trib-long">Tribunal da Relação de Coimbra</span>
+					<span class="trib-short">TR Coimbra</span>			
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>
+				</label>
+				<label class="tribLabel has-background-white-ter" data-selected="true" data-trib="TRG">
+					<span class="trib-long">Tribunal da Relação de Guimarães</span>
+					<span class="trib-short">TR Guimarães</span>				
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>
+				</label>
+				<label class="tribLabel has-background-white-ter" data-selected="true" data-trib="TRE">
+					<span class="trib-long">Tribunal da Relação de Évora</span>
+					<span class="trib-short">TR Évora</span>				
+					<i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+					<i class="far fa-circle tick-icon not-ticked"></i>				
+				</label>
 			</div>
 		</div>
 
 		<div id="orderByButtons" class="level spacer-top-30">
 			<!-- <div class="level-left"></div> -->
 			<div class="level-left">    
-				<button class="level-item button is-primary is-outlined orderByButton" id="recentBtn" data-selected="false">+ recente</button>
-				<button class="level-item button is-primary is-outlined orderByButton" id="relevanceBtn" data-selected="false">+ relevante</button>
+				<button class="level-item button is-primary is-light is-outlined orderByButton" id="recentBtn" data-selected="false">+ recente</button>
+				<button class="level-item button is-primary is-light is-outlined orderByButton" id="relevanceBtn" data-selected="false">+ relevante</button>
 			</div>
 		</div>
 

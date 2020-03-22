@@ -11,16 +11,18 @@ Set the media query breakpoints at natural breakpoints for content
 html {
 	overflow-y: scroll;
 	font-size: 16px;
+	/* background-color: #f7faff; */
 }
 
 body {
 	font-family: 'Barlow', sans-serif;
+	/* background-color: #eef3fc; */
 }
 
 /* Reusable Classes */
 
 
-.light-mint-text {
+/* .light-mint-text {
 	color: #81bbc0;
 }
 
@@ -34,6 +36,10 @@ body {
 
 .light-mint-back {
 	background-color: #81bbc0;
+} */
+
+.has-background-primary-light {
+	background-color: #eef3fc;
 }
 
 .my-button {
@@ -156,7 +162,7 @@ body {
 }
 
 #beta {
-	background-color: #FFE4AA;
+	background-color: #FFDC4D;
 	font-style: italic;
 	height: 40%;
 }
@@ -279,7 +285,7 @@ body {
 	white-space: nowrap;
 	display: inline-block;
 	cursor: pointer;
-	border-radius: 1.5px;
+	border-radius: 2.5px;
 }
 
 .trib-long {
@@ -323,18 +329,13 @@ body {
 	font-size: 1.5rem;
 }
 
-.acordao-result-content {
-	background-color: inherit;
-	padding-bottom:1%;
-	padding:1%;
+.acordao-box {
+	border-left: 6px solid #2E8BC0;
 }
 
-.acordao-result .result-link {
-	margin-bottom: 2%;
-}
-
-.acordao-result .main-link:hover {
-	border-bottom: 2px solid #FFE4AA;
+.descritor-box {
+	padding: 5px;
+	border-radius: 15px;
 }
 
 .result-descritor {

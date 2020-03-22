@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+// $jurisprimary: #3273dc;
+$jurisprimary: #2E8BC0;
+$jurisprimarylight: #79cdff;
+$jurisprimarylighter: #eef3fc;
+
+$primary: $jurisprimary;
+$info: $jurisprimarylight;
+// $link: $jurisprimarylighter;
+
+@import "../node_modules/bulma/bulma.sass";
