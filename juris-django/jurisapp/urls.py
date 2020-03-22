@@ -3,6 +3,7 @@ from . import views
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
+from jurisapp.forms import UserLoginForm
 
 
 urlpatterns = [
@@ -15,7 +16,7 @@ urlpatterns = [
     path('acordao/<int:acordao_id>/pdf/', views.acordao_pdf, name='acordao_pdf'),
     path('recentes', views.recent_acordaos, name='recent_acordaos'),
     path('register/', views.register, name='register'), 
-    path('login/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html'), name='juris_login'),
+    path('login/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html', authentication_form=UserLoginForm), name='juris_login'),
     path('logout/', auth_views.LogoutView.as_view(), name='juris_logout'),
     path('dossier/', views.dossier_home, name='dossier_home'), 
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),

@@ -172,7 +172,7 @@ def register(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, label_suffix="")
         if form.is_valid():
             print('form is valid')
             # redirect to home for now
@@ -180,7 +180,7 @@ def register(request):
             return HttpResponseRedirect(reverse('juris_index'))
 
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm(label_suffix="")
 
     return render(request, 'jurisapp/registration/register.html', {'form': form})
 
