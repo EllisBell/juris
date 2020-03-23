@@ -22,7 +22,17 @@ urlpatterns = [
     path('reenviar/', views.resend_confirmation_email, name='resend_confirmation_email'),
     path('ativar/<str:uidb64>/<str:token>/', views.activate_account, name='activate_account'),
     path('entrar/', auth_views.LoginView.as_view(template_name='jurisapp/registration/login.html', authentication_form=UserLoginForm), name='juris_login'),
-    path('sair/', auth_views.LogoutView.as_view(), name='juris_logout'),
+    path('sair/', auth_views.LogoutView.as_view(template_name='jurisapp/registration/logged_out.html'), name='juris_logout'),
+    path('redefinir-passe/', 
+         auth_views.PasswordResetView.as_view
+        (
+            template_name='jurisapp/registration/password_reset.html', 
+            email_template_name='jurisapp/registration/password_reset_email.html'
+        ), 
+        name='password_reset'),
+    path('email-passe-enviado/', auth_views.PasswordResetDoneView.as_view(template_name='jurisapp/registration/password_reset_done.html'), name='password_reset_done'),
+    path('confirmar-redefinicao-passe/<str:uidb64>/<str:token>/', auth_views.PasswordResetConfirmView.as_view(template_name='jurisapp/registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('palavra-passe-alterada', auth_views.PasswordResetCompleteView.as_view(template_name='jurisapp/registration/password_reset_complete.html'), name='password_reset_complete'),
     # Dossier urls
     path('dossier/', views.dossier_home, name='dossier_home'), 
     # Static pages urls

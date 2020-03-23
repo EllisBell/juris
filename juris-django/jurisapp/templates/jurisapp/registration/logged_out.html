@@ -1,0 +1,21 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block body_block %}
+
+<div class="spacer-top-30">
+    <div class="title is-size-4">
+        O logout foi efetuado com sucesso
+    </div>
+    <div class="is-size-4">
+        Até logo! 👋
+    </div>
+    <div class="spacer-top-20"></div>
+    <div class="buttons">
+        <a class="button is-primary is-outlined" href="{% url 'juris_login' %}">Volte a entrar</a>
+        <a class="button is-primary is-outlined" href="{% url 'juris_index' %}">Pesquise jurisprudência</a>
+    </div>
+</div>
+
+{% endblock %}
