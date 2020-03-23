@@ -17,7 +17,7 @@
             <div class="acordao-result-content">
                 <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao.id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
                 <div class="spacer-bottom-20">
-                    <div class="spacer-bottom-10"><span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal_long }}</div>
+                    <div class="spacer-bottom-10"><span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal.long_name }}</div>
                     {% language 'pt' %}
                     <div class="spacer-bottom-10"><span class="has-text-weight-bold">Sessão:</span> {{ acordao.data|date:'d F Y' }}</div>
                     {% endlanguage %}
