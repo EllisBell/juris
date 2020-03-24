@@ -140,8 +140,8 @@ class Customer(models.Model):
         db_table = 'customer'
 
 class CustomerUser(models.Model):
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'customer_user'

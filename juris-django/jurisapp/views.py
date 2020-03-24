@@ -11,7 +11,7 @@ from django.utils.encoding import force_text
 from raven.contrib.django.raven_compat.models import client
 import json
 from datetime import datetime, timedelta
-from .models import Acordao, User
+from .models import Acordao, User, Customer, CustomerUser
 from .forms import CustomUserCreationForm, ResendEmailForm
 from .tokens import account_activation_token
 from . import acordao_search, pdf, emailer
@@ -167,8 +167,6 @@ def recent_acordaos(request):
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
 
 
-# TODO needs work
-# TODO now confirming email address
 def register(request):
     # TODO poor man's feature toggle, remove when ready
     if not settings.DEBUG:
@@ -179,11 +177,13 @@ def register(request):
         # create a form instance and populate it with data from the request:
         form = CustomUserCreationForm(request.POST, label_suffix="")
         if form.is_valid():
-            print('form is valid')
-            # redirect to home for now
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            customer = Customer()
+            customer.save()
+            customer_user = CustomerUser(customer_id = customer, user_id = user)
+            customer_user.save()
             current_site = get_current_site(request)
             to_email = form.cleaned_data.get('email')
             emailer.send_confirmation_email(user, current_site, to_email)
