@@ -138,7 +138,7 @@ class Customer(models.Model):
 
     class Meta:
         db_table = 'customer'
-        
+
 
 class CustomerUser(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -146,3 +146,6 @@ class CustomerUser(models.Model):
 
     class Meta:
         db_table = 'customer_user'
+
+    def __str__(self):
+        return f'{self.user.email} in customer {self.customer.customer_id}'
