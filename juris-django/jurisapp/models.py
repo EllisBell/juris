@@ -58,6 +58,15 @@ class Acordao(models.Model):
     def get_absolute_url(self):
         return reverse('acordao', kwargs={'acordao_id': self.acordao_id})
 
+    def descritores_as_list(self):
+        if self.descritores is None:
+            return []
+        return self.descritores.split("|")
+
+    def set_descritores_to_list(self):
+        desc_list = self.descritores_as_list()
+        self.descritores = desc_list
+
     class Meta:
         db_table = 'acordao'
 
@@ -148,4 +157,4 @@ class CustomerUser(models.Model):
         db_table = 'customer_user'
 
     def __str__(self):
-        return f'{self.user.email} in customer {self.customer.customer_id}'
+        return self.user.email + ' in customer ' + str(self.customer.customer_id)
