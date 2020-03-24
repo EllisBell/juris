@@ -111,6 +111,7 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('Endereço de email'), unique=True, 
@@ -130,3 +131,17 @@ class User(AbstractUser):
     class Meta:
         db_table = 'auth_user'
 
+
+class Customer(models.Model):
+    customer_id = models.AutoField(primary_key=True)
+    customer_name = models.TextField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        db_table = 'customer'
+
+class CustomerUser(models.Model):
+    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'customer_user'
