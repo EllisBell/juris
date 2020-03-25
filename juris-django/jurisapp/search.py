@@ -184,13 +184,13 @@ def create_acordao_doc(ac):
 
 def create_acordao_doc_with_desc(ac):
     doc = create_acordao_doc(ac)
-    descritores = ac.descritores
-    desc_list = []
+    # descritores = ac.descritores
+    # desc_list = []
     # Descritores are stored in DB as concatenated string to avoid having to make several trips to DB as that
     # was very slow. Break them up into string here to send list into es
-    if descritores:
-        desc_list = descritores.split("|")
-    doc["descritores"] = desc_list
+    # if descritores:
+    #     desc_list = descritores.split("|")
+    doc["descritores"] = ac.descritores_as_list()
     return doc
 
 

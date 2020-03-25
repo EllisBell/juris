@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 
 # Create your models here.
@@ -145,16 +146,56 @@ class Customer(models.Model):
     customer_id = models.AutoField(primary_key=True)
     customer_name = models.TextField(max_length=100, blank=True, null=True)
 
+
     class Meta:
         db_table = 'customer'
 
-
+# Explicitly defining many-to-many table here
+# As compared to e.g. the users ManyToManyField on Folder
 class CustomerUser(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'customer_user'
 
     def __str__(self):
-        return self.user.email + ' in customer ' + str(self.customer.customer_id)
+        return "{0} in customer {1}".format(self.user.email, self.customer.customer_id)
+
+
+class Folder(models.Model):
+    name = models.TextField(max_length=200)
+    description = models.TextField(blank=True, null=True, max_length=500)
+    created_at = models.DateTimeField(blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='created_folders')
+    acordaos = models.ManyToManyField(Acordao, through='SavedAcordao')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL)
+
+    class Meta:
+        db_table = 'folder'
+
+    def __str__(self):
+        return self.name
+
+# n.b. many to many table used as 'through' on folder.acordaos above
+class SavedAcordao(models.Model):
+    acordao = models.ForeignKey(Acordao, models.DO_NOTHING)
+    folder = models.ForeignKey(Folder, models.DO_NOTHING)
+    saved_at = models.DateTimeField(blank=True)
+    saved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'saved_acordao'
+
+    def __str__(self):
+        return "{0} in {1}".format(self.acordao.processo, self.folder.name)
+
+
+class AcordaoComment(models.Model):
+    saved_acordao = models.ForeignKey(SavedAcordao, models.DO_NOTHING)
+    text = models.TextField(max_length=4000)
+    created_at = models.DateTimeField()
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'acordao_comment'
