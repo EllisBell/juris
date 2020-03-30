@@ -1,0 +1,132 @@
+{% extends 'jurisapp/base.html' %}
+{% load static %}
+
+
+{% block body_block %}
+<section class="hero is-link is-height-500">
+  <div class="hero-body has-text-centered">
+    <div class="container">
+      <div class="title is-size-1 has-serif-text">
+        Dossier
+      </div>
+      <div class="spacer-bottom-50"></div>
+      <div class="spacer-bottom-50"></div>
+      <div class="subtitle">
+        Passe menos tempo à procura de jurisprudência que já encontrou.
+      </div>
+      <div class="subtitle">
+        Passe mais tempo a <span class="has-text-weight-bold">acrescentar valor</span> aos seus clientes.
+      </div>
+      <div class="spacer-bottom-70"></div>
+      <a class="button is-success" href="#signup">Sim, quero!</a>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container has-text-centered">
+    <div class="title has-serif-text">
+      Diga adeus à desorganização
+     </div>
+     <div class="is-size-5">
+      Com o Dossier, pode guardar, organizar e anotar a jurisprudência que vai querer revisitar.
+     </div>
+     <div class="is-size-5">
+       E pode fazer tudo em equipa, ajudando à colaboração e à partilha de conhecimentos.
+     </div>
+     <div class="spacer-bottom-70"></div>
+     <div class="columns spacer-top-70">
+      <div class="column is-one-third">
+        <img class="landing-img-small" src="{% static "jurisapp/images/search.svg" %}">
+        <div class="spacer-bottom-30"></div>
+        <div class="is-size-4 has-text-weight-bold has-serif-text">
+          Procure (e encontre)
+        </div>
+        <div class="spacer-bottom-20"></div>
+        <div>Pesquise jurisprudência com o nosso motor de busca, e guarde aquilo que lhe interessa.
+          Depois pode pesquisar só entre a jurisprudência guardada, para rápidamente encontrar aquele
+          acórdão que lhe dá tanto jeito.
+        </div>
+       </div>
+       <div class="column is-one-third">
+        <img class="landing-img-small" src="{% static "jurisapp/images/filing.svg" %}">
+        <div class="spacer-bottom-30"></div>
+        <div class="is-size-4 has-text-weight-bold has-serif-text">
+          Organize
+        </div>
+        <div class="spacer-bottom-20"></div>
+        <div>Organize os acórdãos por dossier, e acrescente descritores para mais fácilmente os identificar. Dossiers partilhados permitem à equipa inteira
+          ter visibilidade sobre a jurisprudência útil.
+        </div>
+       </div>
+       <div class="column is-one-third">
+        <img class="landing-img-small" src="{% static "jurisapp/images/comment.svg" %}">
+        <div class="spacer-bottom-30"></div>
+        <div class="is-size-4 has-text-weight-bold has-serif-text">
+          Comente 
+        </div>
+        <div class="spacer-bottom-20"></div>
+        <div>          
+          Escreva comentários e anotações aos acórdãos guardados, para si próprio e para os seus colegas.
+          Ficam registadas as notas e interpretações ao acórdão diretamente onde são mais relevantes.
+        </div>
+       </div>
+     </div>
+     <div class="spacer-bottom-50"></div>
+     <a class="button is-success" href="#signup">Sim, quero!</a>
+  </div>
+</section>
+<a name="signup"></a>
+<section class="section has-background-link">
+  <div class="container has-text-centered">
+    <div class="title">Estamos quase prontos!</div>
+    <div class="spacer-bottom-10"></div>
+    <div class="subtitle">
+      Deixe-nos o seu email e seja dos primeiros a saber do lançamento
+    </div>
+    <div class="spacer-bottom-30"></div>
+    <div class="columns is-centered">
+      <div class="column is-one-quarter">
+        <!-- Begin Mailchimp Signup Form -->
+<div id="mc_embed_signup">
+<form action="https://jurisprudencia.us12.list-manage.com/subscribe/post?u=b79b0933cef1d6c1cb6c0970a&amp;id=117d788035" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+<div class="mc-field-group">
+	<label for="mce-EMAIL">Email:
+</label>
+	<input class="input" type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+<div id="mergeRow-gdpr" class="mergeRow gdpr-mergeRow content__gdprBlock mc-field-group">
+  <div class="spacer-bottom-30"></div>
+    <div class="content__gdpr">
+        <label class="has-text-weight-bold">Permissões de marketing</label>
+    <fieldset class="mc_fieldset gdprRequired mc-field-group" name="interestgroup_field">
+      <label class="checkbox subfield" for="gdpr_54642">
+        <input type="checkbox" id="gdpr_54642" name="gdpr[54642]" value="Y" class="av-checkbox gdpr"> <span>Permissão para comunicações por email</span> 
+      </label>
+    </fieldset>
+    <div class="spacer-bottom-20"></div>
+        <p>Pode retirar a sua subscrição a qualquer altura - simplesmente clique no link na parte de baixo dos nossos emails.</p>
+    </div>
+    <div class="spacer-bottom-30"></div>
+    <div class="content__gdprLegal">
+        <p class="is-size-7">A nossa plataforma de marketing é a Mailchimp. Ao subscrever, reconhece que os seus dados serão transferidos para à Mailchimp para processamento. <a class="has-text-primary" href="https://mailchimp.com/legal/" target="_blank">Conheca aqui as práticas de privacidade da Mailchimp.</a></p>
+    </div>
+    <div class="spacer-bottom-20"></div>
+</div>
+	<div id="mce-responses" class="clear">
+		<div class="response" id="mce-error-response" style="display:none"></div>
+		<div class="response" id="mce-success-response" style="display:none"></div>
+	</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_b79b0933cef1d6c1cb6c0970a_117d788035" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscreva" name="subscribe" id="mc-embedded-subscribe" class="button is-success"></div>
+    </div>
+</form>
+</div>
+<script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday'; }(jQuery));var $mcj = jQuery.noConflict(true);</script>
+<!--End mc_embed_signup--> 
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

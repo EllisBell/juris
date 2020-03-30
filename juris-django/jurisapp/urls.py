@@ -15,6 +15,7 @@ urlpatterns = [
     path('acordao/<int:acordao_id>/', views.acordao, name='acordao'),
     path('acordao/<int:acordao_id>/pdf/', views.acordao_pdf, name='acordao_pdf'),
     path('recentes', views.recent_acordaos, name='recent_acordaos'),
+    path('guardar-acordao/', views.save_acordao, name='save-acordao'),
     # Registration and authentication urls
     path('registar/', views.register, name='register'), 
     path('email-ativacao-enviado/<str:email>/', views.account_activation_sent, name='account_activation_sent'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('palavra-passe-alterada', auth_views.PasswordResetCompleteView.as_view(template_name='jurisapp/registration/password_reset_complete.html'), name='password_reset_complete'),
     # Dossier urls
     path('dossier/', views.dossier_home, name='dossier_home'), 
+    path('dossier/<int:folder_id>', views.folder_detail, name='folder_detail'),
     # Static pages urls
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),

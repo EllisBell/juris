@@ -51,3 +51,29 @@ class ResendEmailForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'input'})
     )
 
+
+class SaveAcordaoForm(forms.Form):
+    acordao_id = forms.IntegerField(
+        required = True,
+        widget=forms.HiddenInput(attrs={'id': 'save-acordao-acordao-id'}),
+    )
+
+    dossier_id = forms.IntegerField(
+        required=False, 
+        widget=forms.HiddenInput(attrs={'id': 'save-acordao-dossier-id'})
+    )
+
+    dossier_name = forms.CharField(
+        required=False, 
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'input', 'id': 'new-folder-name-input', 'placeholder': 'nome'})
+    )
+
+    dossier_description = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'input', 'id': 'new-folder-name-description', 'placeholder': 'descrição (opcional)'})
+    )
+
+
+

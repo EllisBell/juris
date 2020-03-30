@@ -1,12 +1,16 @@
 @charset "utf-8";
 
 // $jurisprimary: #3273dc;
-$jurisprimary: #2E8BC0;
-$jurisprimarylight: #79cdff;
+// $jurisprimary: #2E8BC0;
+$jurisprimary: #3e72a8;
+$jurisprimarylight: #8ab2db;
 $jurisprimarylighter: #eef3fc;
+$jurisprimarypale: #C5DBF2;
+$jurisgreen: #01c260;
 
 $primary: $jurisprimary;
 $info: $jurisprimarylight;
-// $link: $jurisprimarylighter;
+$link: $jurisprimarypale;
+$success: $jurisgreen;
 
 @import "../node_modules/bulma/bulma.sass";

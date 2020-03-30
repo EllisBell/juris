@@ -1,0 +1,45 @@
+{% extends 'jurisapp/base_with_container.html' %}
+{% load static %}
+
+{% block container_block %}
+
+<div class="spacer-top-20"></div>
+<div class="columns">
+    <div class="column is-one-fifth has-background-white"> 
+        <aside class="menu">
+            <p class="menu-label">
+                General
+            </p>
+            <ul class="menu-list">
+                <li><a href="{% url 'juris_index' %}">Pesquisa geral</a></li>
+                <li><a href="{% url 'dossier_home' %}">Dossiers</a></li>
+            </ul>
+        </aside>
+    </div>
+    <div class="column">
+        <nav class="level">
+            <div class="level-left"></div>
+            <!-- Right side -->
+            <div class="level-right">
+                <div class="level-item">
+                    <div class="field has-addons">
+                        <p class="control">
+                            <input class="input" type="text" size="50" placeholder="Procure dossiers, acordaos guardados, comentários...">
+                        </p>
+                        <p class="control">
+                            <button class="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        {% comment %} <div class="spacer-top-20"></div> {% endcomment %}
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+
+{% endblock %}

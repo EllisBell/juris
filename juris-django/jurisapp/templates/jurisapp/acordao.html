@@ -1,11 +1,16 @@
-{% extends 'jurisapp/base.html' %}
+{% extends 'jurisapp/base_with_container.html' %}
 {% load static %}
 {% load i18n %}
 
-{% block body_block %}
+{% block scripts_block %}
+	<script defer src="{% static "jurisapp/js/acordaopage.js" %}"></script>
+{% endblock %}
+
+{% block container_block %}
 
 <div class="spacer-bottom-70"></div>
 <div class="columns is-desktop">
+	<!-- SIDE MENU -->
 	<div class="column is-one-quarter"> 
 		<div class="menu sticky">
 			<div id="acordao-main-info">
@@ -23,13 +28,79 @@
 			</div>
 			<div class="spacer-bottom-5"><span class="has-text-primary"><a class="button is-info" href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">Ver versão dgsi.pt</a></span></div>
 			<div class="spacer-bottom-5"><span class="has-text-primary"><a class="button is-info" href = "/acordao/{{ acordao.acordao_id }}/pdf" target="_blank">Obter PDF</a></span></div>
+			{% if user.is_authenticated %}
+				{% if ac_folders.count == 0 %}
+					<div class="spacer-bottom-5"><span class="has-text-primary"><a id="save-acordao-modal-open-btn" class="button is-primary is-outlined save-acordao-modal-btn">Guardar acórdão</a></span></div>
+				{% else %}
+					<div>
+						Acordao guardado em {{ folders.0.name }}
+					</div>
+				{% endif %}
+			{% endif %}
 		</div>
+
+		<!-- SAVE ACORDAO MODAL -->			
+		<form id="save-acordao-form" method="post">
+		<div id="save-acordao-modal" class="modal">
+			<div class="modal-background"></div>
+			<div id="save-acordao-modal-card" class="modal-card">
+			  <header class="modal-card-head">
+				<p class="modal-card-title">Guarde acórdão</p>
+				<button type="button" class="delete save-acordao-modal-btn" aria-label="close"></button>
+			  </header>
+			  <section class="modal-card-body">
+					{% csrf_token %}
+					{{ form.acordao_id }}
+					<div class="is-size-5">
+						Crie um dossier novo 🌱
+					</div>
+					<div class="spacer-bottom-10"></div>
+					<div class="field">
+						<div class="control">
+						  {{ form.dossier_name }}
+						</div>
+					  </div>
+					  <div class="field">
+						<div class="control">
+							{{ form.dossier_description }}
+						</div>
+					  </div>
+					<div class="is-size-5">Ou escolha um dossier existente 🌳</div>
+					<div class="spacer-bottom-10"></div>
+					{% for folder in all_folders %}
+						<div class="box has-background-white-ter is-shadowless existing-folder" 
+							data-name="{{ folder.name }}"
+							data-id="{{ folder.id }}"
+						>
+							{{ folder.name }}
+						</div>
+					{% endfor %}
+
+			  </section>
+			  <footer class="modal-card-foot">
+				<button type="submit" id="save-acordao-submit-btn" class="button is-success" disabled>Confirmar</button>
+				<button type="button" class="button save-acordao-modal-btn">Cancelar</button>
+				<div></div>
+				<div>A guardar em: <span id="save-acordao-folder-name" class="has-text-success">(crie ou escolha um dossier)</span></div>
+			  </footer>
+			</div>
+		  </div>
+		</form>
 	</div>
 
+	<!-- ACORDAO CONTENT -->
 	<div class="column is-half">
+		<div id="saved-acordao-success-notification" class="notification is-success is-light is-hidden">
+			<button class="delete notification-close-btn"></button>
+			O acórdão foi guardado em <span id="notification-dossier-name" class="has=has-text-weight-bold"></span>
+		</div>
+		<div id="saved-acordao-error-notification" class="notification is-danger is-light is-hidden">
+			<button class="delete notification-close-btn"></button>
+			Ups... Isto não correu muito bem. Por favor experimente outra vez. 
+		</div>
 		<div class="spacer-bottom-30"> 
 			{% for desc in acordao.descritores %}
-				<div class="descritor-box is-inline-block has-background-primary has-text-white has-text-weight-bold spacer-bottom-10 spacer-right-1">
+				<div class="descritor-box is-inline-block has-background-info has-text-white has-text-weight-bold spacer-bottom-10 spacer-right-1">
 					<span class="result-descritor">{{ desc }}</span>
 				</div> 
 			{% endfor %}

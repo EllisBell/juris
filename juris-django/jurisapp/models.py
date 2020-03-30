@@ -59,6 +59,9 @@ class Acordao(models.Model):
     def get_absolute_url(self):
         return reverse('acordao', kwargs={'acordao_id': self.acordao_id})
 
+    # This is here because the the descritores are saved in the DB as one string
+    # (for more efficient storing and retrieving of them)
+    # But need to be split up for displaying, indexing in elasticsearch etc.
     def descritores_as_list(self):
         if self.descritores is None:
             return []

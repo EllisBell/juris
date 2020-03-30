@@ -85,12 +85,3 @@ def resend_confirmation_email(request):
         form = ResendEmailForm()
 
     return render(request, 'jurisapp/registration/resend_confirmation_email.html', {'form': form})
-
-
-@login_required
-def dossier_home(request):
-    # TODO poor man's feature toggle, remove when ready
-    if not settings.DEBUG:
-        return redirect('juris_index')
-    
-    return render(request, 'jurisapp/dossier/dossier.html')

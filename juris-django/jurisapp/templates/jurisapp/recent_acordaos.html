@@ -1,8 +1,8 @@
-{% extends 'jurisapp/base.html' %}
+{% extends 'jurisapp/base_with_container.html' %}
 {% load static %}
 {% load i18n %}
 
-{% block body_block %}
+{% block container_block %}
 
 <div class="spacer-bottom-50"></div>
 
@@ -15,7 +15,7 @@
         {% for acordao in acordaos %}
         <div class="box has-background-white-ter is-shadowless spacer-bottom-20">
             <div class="acordao-result-content">
-                <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao.id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
+                <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao.acordao_id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
                 <div class="spacer-bottom-20">
                     <div class="spacer-bottom-10"><span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal.long_name }}</div>
                     {% language 'pt' %}

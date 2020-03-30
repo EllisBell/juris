@@ -12,9 +12,8 @@
 	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"> -->
 	<link rel="stylesheet" href="{% static "jurisapp/css/bulmastyles.css" %}" />
 	<link rel="stylesheet" href="{% static "jurisapp/css/style4.css" %}" />
-	<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Barlow|Playfair+Display&display=swap" rel="stylesheet">
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116554949-1"></script>
 	<!-- Hotjar Tracking Code for www.jurisprudencia.pt -->
 	<script>
@@ -64,12 +63,24 @@
 					<a class="navbar-item"  href="/recentes">acórdãos recentes</a>
 					<a class="navbar-item" href="/sobre">sobre</a>
 					<a class="navbar-item" href="/termos">termos e condições</a>
+					{% if user.is_authenticated %}
+					<div class="navbar-item has-dropdown is-hoverable"> 
+						<a class="navbar-link">
+							{{ user.get_username }}
+						</a>
+						<div class="navbar-dropdown is-right">
+							<a class="navbar-item" href="{% url 'juris_logout' %}">
+								Sair
+							</a>
+						</div>
+					</div>
+					{% endif %}
 				</div>
 			</div>
 			</div>
 		</div>
 	</nav>
-	<div class="container whole-container">
+	<div class="whole-container">
 		{% block body_block %} {% endblock %}
 	</div>
 </body>
