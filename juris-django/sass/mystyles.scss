@@ -5,12 +5,11 @@
 $jurisprimary: #3e72a8;
 $jurisprimarylight: #8ab2db;
 $jurisprimarylighter: #eef3fc;
-$jurisprimarypale: #C5DBF2;
 $jurisgreen: #01c260;
 
 $primary: $jurisprimary;
 $info: $jurisprimarylight;
-$link: $jurisprimarypale;
+//$link: $jurisprimarypale;
 $success: $jurisgreen;
 
 @import "../node_modules/bulma/bulma.sass";
