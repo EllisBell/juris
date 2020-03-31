@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from jurisapp.models import Folder
 
 def dossier_home(request):
     # TODO poor man's feature toggle, remove when ready
-    if not settings.DEBUG:
-        return redirect('juris_index')
+    # if not settings.DEBUG:
+    #     return redirect('juris_index')
     if not request.user.is_authenticated:
         return render(request, 'jurisapp/dossier/dossier_landing.html')
 
