@@ -32,6 +32,14 @@ body {
 
 /* Reusable Classes */
 
+.has-background-pale {
+	background-color: #C5DBF2;
+}
+
+.has-text-secondary {
+	color: #ff8b51;
+}
+
 .has-serif-text {
 	font-family: 'Playfair Display', serif;
 }
