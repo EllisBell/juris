@@ -92,6 +92,7 @@ $(document).ready(function() {
     $("#edit-folder-name").click(function() {
         $("#folder-name").addClass("is-hidden");
         $("#folder-name-input-area").removeClass("is-hidden");
+        $("#folder-name-input-area").focus();
         $("#edit-folder-name").addClass("is-hidden");
         $("#confirm-folder-name").removeClass("is-hidden");
       });
@@ -107,10 +108,29 @@ $(document).ready(function() {
         editFolder();
     });
 
+    $("#edit-folder-description").click(function() {
+        $("#folder-description").addClass("is-hidden");
+        $("#folder-description-input-area").removeClass("is-hidden");
+        $("#folder-description-input-area").focus();
+        $("#edit-folder-description").addClass("is-hidden");
+        $("#confirm-folder-description").removeClass("is-hidden");
+      });
+
+    $("#confirm-folder-description").click(function() {
+        var newDescription = $("#folder-description-input").val();
+        $("#folder-description").removeClass("is-hidden");
+        $("#folder-description").text(newDescription);
+        $("#folder-description-input-area").addClass("is-hidden");
+        $("#confirm-folder-description").addClass("is-hidden");
+        $("#edit-folder-description").removeClass("is-hidden");
+
+        editFolder();
+    });
+
     function editFolder() {
         var id = $("#folder-id").val();
         var newName = $("#folder-name-input").val();
-        var newDescription = $("#folder-description").text();
+        var newDescription = $("#folder-description-input").val();
         
         $.post('/edit-folder/',
         {

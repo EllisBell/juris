@@ -13,7 +13,7 @@
             Dossier: {{ folder_acordao_tuple.0.name }}
             </div>
             {% for acordao in folder_acordao_tuple.1 %}
-                {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.id descritores=acordao.descritores tribunal_name=acordao.tribunal_long_name %}
+                {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.id descritores=acordao.descritores tribunal_name=acordao.tribunal_long %}
             {% endfor %}
             </div>
         {% endfor %} 

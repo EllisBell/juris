@@ -10,14 +10,19 @@
         <div class="column is-4">
         <input type="text" id="folder-name-input" class="input" value="{{ folder.name }}">
         </div>
-        <div class="column is-1"><span id="confirm-folder-name" class="is-size-6 is-hidden pointer-on-hover">✅</span></div>
+        <div class="column is-1"><span id="confirm-folder-name" class="is-size-4 is-hidden pointer-on-hover">✅</span></div>
     </div>
     <span id="edit-folder-name" class="is-size-6 pointer-on-hover">✏️</span>
 </div>
 <div>
     <span id="folder-description" class="is-size-3">{{ folder.description }}</span>
-    <span id="edit-folder-description" class="is-size-6">✏️</span>
-    <span id="confirm-folder-description" class="is-size-6 is-hidden">✅</span>
+        <div id="folder-description-input-area" class="columns is-hidden">
+        <div class="column is-4">
+        <input type="text" id="folder-description-input" class="input" value="{{ folder.description }}">
+        </div>
+        <div class="column is-1"><span id="confirm-folder-description" class="is-size-4 is-hidden pointer-on-hover">✅</span></div>
+    </div>
+    <span id="edit-folder-description" class="is-size-6 pointer-on-hover">✏️</span>
 </div>
 <div class="spacer-top-20"></div>
 {% if folder.acordaos.count == 0 %}

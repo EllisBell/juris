@@ -2,6 +2,18 @@
 
 {% block content %}
 <div id="dossier-normal-content">
+<div class="level">
+    <div class="level-left">
+        <div class="is-size-3">Olá, {{user_name}}</div>
+
+    </div>
+    <div class="level-right">
+        <button class="button is-success is-outlined">Criar dossier</button>
+
+    </div>
+</div>
+
+<div class="spacer-bottom-20"></div>
 {% for folder in folders %}
     {% include 'jurisapp/snippets/folder_box_snippet.html' %}
 {% endfor %}

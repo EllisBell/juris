@@ -15,7 +15,7 @@ def dossier_home(request):
     current_user = request.user
     folders = current_user.folder_set.all()
 
-    context_dict = {'folders': folders}
+    context_dict = {'folders': folders, 'user_name': current_user.first_name}
     
     return render(request, 'jurisapp/dossier/dossier.html', context_dict)
 
@@ -63,7 +63,7 @@ def dossier_search(request):
 
     folder_acordaos = [folder_acordao for folder_acordao in folder_acordaos if folder_acordao[1]]
 
-    matching_folders = [folder for folder in user_folders if query in folder.name or query in folder.description]
+    matching_folders = [folder for folder in user_folders if query.lower() in folder.name.lower() or query.lower() in folder.description.lower()]
 
     context_dict = {'query': query, 'folder_acordaos': folder_acordaos, 'folders': matching_folders}
 
