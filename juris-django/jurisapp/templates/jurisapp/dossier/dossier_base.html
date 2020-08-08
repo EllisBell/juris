@@ -1,6 +1,10 @@
 {% extends 'jurisapp/base_with_container.html' %}
 {% load static %}
 
+{% block scripts_block %}
+	<script defer src="{% static "jurisapp/js/dossier.js" %}"></script>
+{% endblock %}
+
 {% block container_block %}
 
 <div class="spacer-top-20"></div>
@@ -24,7 +28,7 @@
                 <div class="level-item">
                     <div class="field has-addons">
                         <p class="control">
-                            <input class="input" type="text" size="50" placeholder="Procure dossiers, acordaos guardados, comentários...">
+                            <input id="dossier-search-input" class="input" type="text" size="50" placeholder="Procure dossiers, acordaos guardados, comentários...">
                         </p>
                         <p class="control">
                             <button class="button">

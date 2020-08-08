@@ -37,6 +37,7 @@ urlpatterns = [
     # Dossier urls
     path('dossier/', views.dossier_home, name='dossier_home'), 
     path('dossier/<int:folder_id>', views.folder_detail, name='folder_detail'),
+    re_path('dossier_search/$', views.dossier_search, name='dossier_search'),
     # Static pages urls
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),

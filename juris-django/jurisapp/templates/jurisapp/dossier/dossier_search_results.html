@@ -1,0 +1,32 @@
+<div id="dossier-tabs" class="tabs">
+    <ul>
+    <li class="is-active" data-tab="acordaos"><a>Acórdaos</a></li>
+    <li data-tab="dossiers"><a>Dossiers</a></li>
+    <li data-tab="comments"><a>Comentários</a></li>
+    </ul>
+</div>
+<div id="tab-content-all">
+    <div class="tab-content is-active" data-content="acordaos" >
+        {% for folder_acordao_tuple in folder_acordaos %}
+            <div>
+            <div class="is-size-2">
+            Dossier: {{ folder_acordao_tuple.0.name }}
+            </div>
+            {% for acordao in folder_acordao_tuple.1 %}
+                {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.id descritores=acordao.descritores tribunal_name=acordao.tribunal_long_name %}
+            {% endfor %}
+            </div>
+        {% endfor %} 
+    </div>
+
+    <div class="tab-content" data-content="dossiers">
+        {% for folder in folders %}
+            {% include 'jurisapp/snippets/folder_box_snippet.html' %}
+        {% endfor %}
+    </div>
+
+    <div class="tab-content" data-content="comments">
+        <span>comentarios</span>
+    </div>
+
+</div>

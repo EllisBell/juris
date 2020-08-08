@@ -591,4 +591,13 @@ body {
 	}
 }
 
+#tab-content-all .tab-content {
+	display: none;
+  }
+  
+#tab-content-all .tab-content.is-active {
+	display: block;
+}
+
+
 

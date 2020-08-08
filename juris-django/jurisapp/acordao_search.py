@@ -176,12 +176,17 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
         asd.page_number = 1
 
     # field to filter on and values to filter for
-    filter_dict = {"tribunal": asd.tribs}
+    filter_dict = {}
+    if asd.tribs is not None:
+        filter_dict["tribunal"] = asd.tribs
     # add processo filter if there
     if asd.processo:
         # TODO may want raw back
         filter_dict["processo.raw"] = [asd.processo, ]
         #filter_dict["processo"] = [asd.processo, ]
+    
+    if asd.acordao_ids:
+        filter_dict["id"] = asd.acordao_ids
 
     start = (asd.page_number - 1) * display_size
     exclude = ['tribunal', 'txt_integral', 'txt_parcial']

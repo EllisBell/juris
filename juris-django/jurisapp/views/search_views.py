@@ -11,7 +11,7 @@ from jurisapp import acordao_search
 def search_relevant(request):
     return search(request)
 
-
+# data is date
 def search_recent(request):
     return search(request, "data")
 
@@ -24,6 +24,7 @@ def search(request, sort_by=None):
 
     # n.b. the [] after tribs is apparently inserted by jQuery (even though we are passing 'tribs' it adds the '[]')
     tribs = request.GET.getlist('tribs[]')
+    acordao_ids = request.GET.getlist('acordao_ids[]')
 
     processo = request.GET['processo']
     print("PROC " + processo)
@@ -34,7 +35,7 @@ def search(request, sort_by=None):
     page = get_page(request)
     display = 10
 
-    asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, processo=processo,
+    asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, processo=processo, acordao_ids=acordao_ids,
                                            from_date=from_date, to_date=to_date, page_number=page)
 
     try:
@@ -63,6 +64,17 @@ def search(request, sort_by=None):
                         has_next=results['has_next'], has_previous=results['has_previous'], total_pages=total_pages,
                         processo=processo, from_date=from_date, to_date=to_date)
     return render(request, 'jurisapp/search_results.html', context_dict)
+
+
+# query can be for dossier names, comments
+# or for acordaos themselves (through ES)
+# start by doing just the ES
+# so to here, pass the query string, and a list of acordao IDs to filter by
+# (the acordao IDs of all your saved acordaos, or just the ones in the dossier you are in)
+def dossier_search(request):
+    query = request.GET['query']
+
+
 
 
 def get_page(request):

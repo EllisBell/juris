@@ -12,34 +12,7 @@
     <a class="button" href="{% url 'juris_index' %}">Procure acórdãos</a>
 {% endif %}
 {% for acordao in folder.acordaos.all %}
-<div class="box has-background-white-ter is-shadowless spacer-bottom-20">
-    <div class="acordao-result-content">
-        <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao.acordao_id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
-        <div class="spacer-bottom-20">
-            <div class="spacer-bottom-10"><span class="has-text-weight-bold">Tribunal:</span> {{ acordao.tribunal.long_name }}</div>
-            {% language 'pt' %}
-            <div class="spacer-bottom-10"><span class="has-text-weight-bold">Sessão:</span> {{ acordao.data|date:'d F Y' }}</div>
-            {% endlanguage %}
-            <div class="spacer-bottom-10"><span class="has-text-weight-bold">Relator:</span> {{acordao.relator}}</div>
-        </div>
-        <div class="spacer-top-10 spacer-bottom-10">
-            {% for desc in acordao.descritores_as_list %}
-            <div class="descritor-box is-inline-block has-background-info has-text-white has-text-weight-bold spacer-bottom-10 spacer-right-1">
-                <span class="result-descritor">{{ desc }}</span>
-            </div> 
-            {% endfor %}
-        </div>
-        <div class="long-text spacer-bottom-10">{{ acordao.sumario|truncatechars:500 }}</div>
-    </div>
-    <div class="level">
-        <div class="level-left"></div>
-        <div class="right">
-            <div class="level-item">
-                <a href="/acordao/{{ acordao.acordao_id }}" target="_blank" class="button is-info has-text-weight-bold">ver acórdão</a>
-            </div>
-        </div>
-    </div>
-</div>
+    {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores_as_list %}
 {% endfor %}
 
 {% endblock %}
