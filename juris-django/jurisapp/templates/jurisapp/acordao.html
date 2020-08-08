@@ -33,7 +33,13 @@
 					<div class="spacer-bottom-5"><span class="has-text-primary"><a id="save-acordao-modal-open-btn" class="button is-primary is-outlined save-acordao-modal-btn">Guardar acórdão</a></span></div>
 				{% else %}
 					<div>
-						Acordao guardado em {{ folders.0.name }}
+						Acordao guardado em: 
+						<ul>
+						{% for folder in ac_folders %}
+						<li><a href="{% url 'folder_detail' folder_id=folder.id %}"> {{ folder.name }} </a><li>
+						{% endfor %}
+						</ul>
+						
 					</div>
 				{% endif %}
 			{% endif %}
@@ -50,14 +56,16 @@
 			  </header>
 			  <section class="modal-card-body">
 					{% csrf_token %}
+					{{form.dossier_id}}
 					{{ form.acordao_id }}
+					{{ form.dossier_name }}
 					<div class="is-size-5">
 						Crie um dossier novo 🌱
 					</div>
 					<div class="spacer-bottom-10"></div>
 					<div class="field">
 						<div class="control">
-						  {{ form.dossier_name }}
+						  <input class="input" id="folder-name-textbox" placeholder="nome">
 						</div>
 					  </div>
 					  <div class="field">

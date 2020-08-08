@@ -26,7 +26,7 @@ def register(request):
             user.save()
             customer = Customer()
             customer.save()
-            customer_user = CustomerUser(customer_id = customer, user_id = user)
+            customer_user = CustomerUser(customer_id = customer.customer_id, user_id = user.id)
             customer_user.save()
             current_site = get_current_site(request)
             to_email = form.cleaned_data.get('email')

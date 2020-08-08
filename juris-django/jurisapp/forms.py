@@ -66,7 +66,7 @@ class SaveAcordaoForm(forms.Form):
     dossier_name = forms.CharField(
         required=False, 
         max_length=50,
-        widget=forms.TextInput(attrs={'class': 'input', 'id': 'new-folder-name-input', 'placeholder': 'nome'})
+        widget=forms.HiddenInput(attrs={'class': 'input', 'id': 'new-folder-name-input', 'placeholder': 'nome'})
     )
 
     dossier_description = forms.CharField(

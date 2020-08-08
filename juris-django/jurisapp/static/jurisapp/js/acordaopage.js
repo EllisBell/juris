@@ -21,18 +21,19 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#new-folder-name-input").keyup(function(e) {
-		var newName = $("#new-folder-name-input").val();
+	$("#folder-name-textbox").keyup(function(e) {
+		var newName = $("#folder-name-textbox").val();
 		setChosenFolderName(newName, true);
 		setChosenFolderId(null);
+		setFolderNameField(newName);
 		removeExistingFolderOutlines();
 	});
 
-	$("#save-in-new-folder-btn").click(function(e) {
-		removeExistingFolderOutlines();
-		var name = $("#new-folder-name-input").val();
-		setChosenFolderName(name, true);
-	});
+	// $("#save-in-new-folder-btn").click(function(e) {
+	// 	removeExistingFolderOutlines();
+	// 	var name = $("#new-folder-name-input").val();
+	// 	setChosenFolderName(name, true);
+	// });
 
 	$(".existing-folder").click(function(e) {
 		removeExistingFolderOutlines();
@@ -41,10 +42,15 @@ $(document).ready(function() {
 		$(this).css("border", "1px solid green");
 		var name = $(this).data("name");
 		setChosenFolderName(name, false);
+		setFolderNameField(name);
 	});
 
 	function removeExistingFolderOutlines() {
 		$(".existing-folder").css("border", "none");
+	}
+
+	function setFolderNameField(folderName) {
+		$("#new-folder-name-input").val(folderName);
 	}
 
 	function setChosenFolderName(name, isNew) {
@@ -57,7 +63,7 @@ $(document).ready(function() {
 			$("#save-acordao-folder-name").text("(crie ou escolha um dossier)");
 			$("#save-acordao-submit-btn").prop('disabled', true);
 		}
-		$("#new-folder-name-input").val(name)
+		//$("#new-folder-name-input").val(name)
 	}
 
 	function setChosenFolderId(folderId) {
