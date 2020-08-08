@@ -2,7 +2,23 @@
 {% load i18n %}
 
 {% block content %}
-
+<input id="folder-id" type="hidden" value={{folder.id}}>
+<div class="spacer-top-20"></div>
+<div>
+    <span id="folder-name" class="has-text-weight-bold is-size-1">{{ folder.name }}</span> 
+    <div id="folder-name-input-area" class="columns is-hidden">
+        <div class="column is-4">
+        <input type="text" id="folder-name-input" class="input" value="{{ folder.name }}">
+        </div>
+        <div class="column is-1"><span id="confirm-folder-name" class="is-size-6 is-hidden pointer-on-hover">✅</span></div>
+    </div>
+    <span id="edit-folder-name" class="is-size-6 pointer-on-hover">✏️</span>
+</div>
+<div>
+    <span id="folder-description" class="is-size-3">{{ folder.description }}</span>
+    <span id="edit-folder-description" class="is-size-6">✏️</span>
+    <span id="confirm-folder-description" class="is-size-6 is-hidden">✅</span>
+</div>
 <div class="spacer-top-20"></div>
 {% if folder.acordaos.count == 0 %}
     <div class="is-size-3 has-text-grey-dark">

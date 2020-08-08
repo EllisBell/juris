@@ -69,5 +69,18 @@ def dossier_search(request):
 
     return render(request, 'jurisapp/dossier/dossier_search_results.html', context_dict)
 
+@login_required
+def edit_folder(request):
+    new_name = request.POST.get('folder_name', None)
+    new_description = request.POST.get('folder_description', None)
+    folder_id = request.POST.get('folder_id', None)
+    if folder_id:
+        folder_id_num = int(folder_id)
+        folder = Folder.objects.get(pk=folder_id_num)
+        folder.name = new_name if new_name else folder.name
+        folder.description = new_description if new_description else folder.description
+        folder.save()
+    return HttpResponse(status=204)
+
 
 
