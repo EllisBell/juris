@@ -1,0 +1,26 @@
+{% extends 'jurisapp/base_with_container.html' %}
+{% load static %}
+
+{% block container_block %}
+
+<div class="container">
+    <div class="spacer-bottom-20"></div>
+    <div class="columns">
+        <div class="column is-one-third">
+            <div class="spacer-bottom-10 is-size-5">
+                Crie um novo dossier 🌱
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                
+                {% include "jurisapp/snippets/form_snippet.html" %}
+
+                <div class="spacer-bottom-20"></div>
+                <input class="button is-primary" type="submit" value="Criar">
+                <a class="button is-info" href="{% url 'dossier_home' %}">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

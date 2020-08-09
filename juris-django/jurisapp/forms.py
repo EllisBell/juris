@@ -1,7 +1,8 @@
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from .models import User
+from .models import User, Folder
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.CharField(
@@ -74,6 +75,19 @@ class SaveAcordaoForm(forms.Form):
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'input', 'id': 'new-folder-name-description', 'placeholder': 'descrição (opcional)'})
     )
+
+class CreateFolderForm(ModelForm):
+    class Meta:
+        model = Folder
+        fields = ['name', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'input'}),
+            'description': forms.TextInput(attrs={'class': 'input'})
+            }
+        labels = {
+            'name': 'Nome',
+            'description': 'Descrição'
+        }
 
 
 

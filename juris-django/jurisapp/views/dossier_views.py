@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from jurisapp.models import Folder
+from jurisapp.forms import CreateFolderForm
 from jurisapp import acordao_search
+from django.utils import timezone
 
 def dossier_home(request):
     # TODO poor man's feature toggle, remove when ready
@@ -13,7 +15,7 @@ def dossier_home(request):
         return render(request, 'jurisapp/dossier/dossier_landing.html')
 
     current_user = request.user
-    folders = current_user.folder_set.all()
+    folders = current_user.folder_set.all().order_by('-created_at')
 
     context_dict = {'folders': folders, 'user_name': current_user.first_name}
     
@@ -81,6 +83,23 @@ def edit_folder(request):
         folder.description = new_description if new_description else folder.description
         folder.save()
     return HttpResponse(status=204)
+
+@login_required
+def new_folder(request):
+    if request.method == 'POST':
+        form = CreateFolderForm(request.POST)
+        if form.is_valid():
+            folder = form.save(commit=False)
+            folder.created_at = timezone.now()
+            folder.created_by = request.user
+
+            folder.save()
+            folder.users.add(request.user)
+            return redirect('dossier_home')
+    else:
+        form = CreateFolderForm()
+
+    return render(request, 'jurisapp/dossier/new_folder.html', {'form': form})
 
 
 
