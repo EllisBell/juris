@@ -173,6 +173,7 @@ class Folder(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='created_folders')
     acordaos = models.ManyToManyField(Acordao, through='SavedAcordao')
     users = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    archived = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'folder'
