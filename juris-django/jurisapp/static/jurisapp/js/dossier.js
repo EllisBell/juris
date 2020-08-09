@@ -142,5 +142,42 @@ $(document).ready(function() {
         )
     }
 
+    $(".archive-folder-btn").click(function(e){
+        var folderId = $(e.target).data("folder-id");
+        $("#archive-folder-modal").addClass("is-active");
+        $("#archive-folder-id").val(folderId);
+    });
+
+    $(".close-archive-modal").click(function(){
+        hideArchiveFolderModal();
+    });
+
+    function hideArchiveFolderModal() {
+        $("#archive-folder-modal").removeClass("is-active");
+    }
+
+    $("#confirm-archive-folder").click(function(){
+        var folderId = $("#archive-folder-id").val();
+        $.post('/archive-folder/',
+                {folder_id: folderId},
+                function(data) {
+                    var archived = $("#folder-box-" + folderId);
+                    archived.addClass("is-hidden");
+                    hideArchiveFolderModal();
+                }
+              )
+    });
+
+    $(".unarchive-folder-btn").click(function(e){
+        var folderId = $(e.target).data("folder-id");
+        $.post('/unarchive-folder/',
+        {folder_id: folderId},
+        function(data) {
+            var unarchived = $("#folder-box-" + folderId);
+            unarchived.addClass("is-hidden");
+        }
+      );
+    });
+
 
 });

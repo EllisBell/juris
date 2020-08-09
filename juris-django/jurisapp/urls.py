@@ -36,10 +36,13 @@ urlpatterns = [
     path('palavra-passe-alterada', auth_views.PasswordResetCompleteView.as_view(template_name='jurisapp/registration/password_reset_complete.html'), name='password_reset_complete'),
     # Dossier urls
     path('dossier/', views.dossier_home, name='dossier_home'), 
+    path('dossier/arquivo/', views.dossier_archive, name='dossier_archive'),
     path('dossier/<int:folder_id>', views.folder_detail, name='folder_detail'),
     re_path('dossier_search/$', views.dossier_search, name='dossier_search'),
     path('edit-folder/', views.edit_folder, name='edit_folder'),
-    path('criar-dossier/', views.new_folder, name='new_folder'),
+    path('dossier/criar/', views.new_folder, name='new_folder'),
+    path('archive-folder/', views.archive_folder, name='archive_folder'),
+    path('unarchive-folder/', views.unarchive_folder, name='unarchive_folder'),
     # Static pages urls
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),

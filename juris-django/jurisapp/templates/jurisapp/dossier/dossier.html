@@ -2,23 +2,43 @@
 
 {% block content %}
 <div id="dossier-normal-content">
-<div class="level">
-    <div class="level-left">
-        <div class="is-size-3">Olá, {{user_name}}</div>
+    <div class="level">
+        <div class="level-left">
+            <div class="is-size-3">Olá, {{user_name}}</div>
 
-    </div>
-    <div class="level-right">
-        <a href="{% url 'new_folder' %}" class="button is-success is-outlined">Criar dossier</a>
+        </div>
+        <div class="level-right">
+            <a href="{% url 'new_folder' %}" class="button is-success is-outlined">Criar dossier</a>
 
+        </div>
     </div>
+
+    <div class="spacer-bottom-20"></div>
+    {% for folder in folders %}
+        {% include 'jurisapp/snippets/folder_box_snippet.html' %}
+    {% endfor %}
 </div>
 
-<div class="spacer-bottom-20"></div>
-{% for folder in folders %}
-    {% include 'jurisapp/snippets/folder_box_snippet.html' %}
-{% endfor %}
-</div>
 <div id="dossier-search-results">
+</div>
+
+<div id="archive-folder-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <input type="hidden" id="archive-folder-id">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Arquivar <i class="fas fa-archive"></i></p>
+      <button class="delete close-archive-modal" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <div>Tem a certeza que quer arquivar o dossier?</div>
+        <div>O dossier estará accessível no arquivo.</div>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="confirm-archive-folder" class="button is-success">Confirmar</button>
+      <button class="button close-archive-modal">Cancelar</button>
+    </footer>
+  </div>
 </div>
 
 

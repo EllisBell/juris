@@ -1,0 +1,25 @@
+{% extends 'jurisapp/dossier/dossier_base.html' %}
+
+{% block content %}
+<div id="dossier-normal-content">
+    <div class="level">
+        <div class="level-left">
+            <div class="is-size-3">Arquivo</div>
+        </div>
+        {% comment %} <div class="level-right">
+            <a href="{% url 'new_folder' %}" class="button is-success is-outlined">Criar dossier</a>
+
+        </div> {% endcomment %}
+    </div>
+
+    <div class="spacer-bottom-20"></div>
+    {% for folder in folders %}
+        {% include 'jurisapp/snippets/folder_box_snippet.html' %}
+    {% endfor %}
+</div>
+
+<div id="dossier-search-results">
+</div>
+
+
+{% endblock %}

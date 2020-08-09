@@ -15,12 +15,21 @@ def dossier_home(request):
         return render(request, 'jurisapp/dossier/dossier_landing.html')
 
     current_user = request.user
-    folders = current_user.folder_set.all().order_by('-created_at')
+    folders = current_user.folder_set.all().filter(archived=False).order_by('-created_at')
 
     context_dict = {'folders': folders, 'user_name': current_user.first_name}
     
     return render(request, 'jurisapp/dossier/dossier.html', context_dict)
 
+@login_required
+def dossier_archive(request):
+    folders = request.user.folder_set.all().filter(archived=True).order_by('-created_at')
+
+    context_dict = {'folders': folders}
+    
+    return render(request, 'jurisapp/dossier/dossier_archive.html', context_dict)
+
+# TODO check folder belongs to user
 @login_required
 def folder_detail(request, folder_id):
     folder = Folder.objects.get(pk=folder_id)
@@ -33,9 +42,10 @@ def folder_detail(request, folder_id):
 def dossier_search(request):
     query = request.GET['query']
     dossier_id = request.GET.get('dossier_id', None)
+    archived = request.GET.get('archived', False)
 
     current_user = request.user
-    user_folders = current_user.folder_set.all()
+    user_folders = current_user.folder_set.all().filter(archived=archived)
 
     folder_acordao_ids = []
 
@@ -71,6 +81,7 @@ def dossier_search(request):
 
     return render(request, 'jurisapp/dossier/dossier_search_results.html', context_dict)
 
+# TODO check folder belongs to user
 @login_required
 def edit_folder(request):
     new_name = request.POST.get('folder_name', None)
@@ -101,8 +112,25 @@ def new_folder(request):
 
     return render(request, 'jurisapp/dossier/new_folder.html', {'form': form})
 
+# TODO check folder belongs to user
+@login_required
+def archive_folder(request):
+    return set_folder_archived(request, True)
 
+# TODO check folder belongs to user
+@login_required
+def unarchive_folder(request):
+    return set_folder_archived(request, False)
 
+def set_folder_archived(request, archived):
+    folder_id = request.POST.get('folder_id', None)
+    if folder_id:
+        folder = Folder.objects.get(pk=folder_id)
+        folder.archived = archived
+        folder.save()
+        return HttpResponse(status=204)
+    
+    return HttpResponse(status=404)
 
 
 

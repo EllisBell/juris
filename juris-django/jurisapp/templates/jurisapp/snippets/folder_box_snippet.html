@@ -1,6 +1,6 @@
-    <div class="box is-shadowless has-background-light">
-                <div class="level">
-                    <div>
+    <div id="folder-box-{{folder.id}}" class="box is-shadowless has-background-light">
+                <div class="columns">
+                    <div class="column is-10">
                         <p class="has-text-weight-bold is-size-4">
                             {{ folder.name }}
                         </p>
@@ -9,26 +9,39 @@
                             {{ folder.description }}
                         </p>
                     </div>
+                    <div class="column">
+                        {% if folder.archived %}<div class="has-text-danger has-text-weight-bold is-pulled-right">arquivado</div> {% endif %}
+                    </div>
                 </div>
-                {% comment %} <div class="level"> {% endcomment %}
-                <div class="columns">
+                <div class="columns is-vcentered">
                         <div class="column is-narrow has-text-primary">
                             <p>
-                                📄{{ folder.acordaos.count }} acórdãos
+                                📄 {{ folder.acordaos.count }} {% if folder.acordaos.count == 1 %}acórdão {%else%} acórdãos {%endif%}
                             </p>
                         </div>
                         <div class="column is-3">
                             <p>
-                                🙂 {{ folder.created_by.email }}
+                                <i class="fas fa-user-circle"></i> {{ folder.created_by.email }}
                             </p>
                         </div>
-                        <div class="column">
+                        <div class="column is-3">
                             <p>
                                 🕖 {{ folder.created_at }}
                             </p>
                         </div>
-                        <div class="level-item">
-                            <a class="button is-primary" href="{% url 'folder_detail' folder_id=folder.id %}">Abrir</a>
+                        <div class="column">
+                            {% if not folder.archived %}
+                            <p data-folder-id="{{folder.id}}" class="has-text-danger pointer-on-hover archive-folder-btn">
+                                <i class="fas fa-archive"></i> Arquivar
+                            </p>
+                            {%else%}
+                            <p data-folder-id="{{folder.id}}" class="has-text-success pointer-on-hover unarchive-folder-btn">
+                                <i class="fas fa-external-link-square-alt"></i> Restaurar
+                            </p>
+                            {%endif%}
+                        </div>
+                        <div class="column is-pulled-right">
+                            <a class="button is-primary is-pulled-right" href="{% url 'folder_detail' folder_id=folder.id %}">Abrir</a>
                         </div> 
                     </div>
                 {% comment %} </div> {% endcomment %}

@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+<div id="dossier-normal-content">
 <input id="folder-id" type="hidden" value={{folder.id}}>
 <div class="spacer-top-20"></div>
 <div>
@@ -35,5 +36,9 @@
 {% for acordao in folder.acordaos.all %}
     {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores_as_list %}
 {% endfor %}
+</div>
+
+<div id="dossier-search-results">
+</div>
 
 {% endblock %}
