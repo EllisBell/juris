@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="box has-background-white-ter is-shadowless spacer-bottom-20">
+<div id="acordao-box-{{acordao_id}}" class="box has-background-white-ter is-shadowless spacer-bottom-20">
     <div class="acordao-result-content">
         <div class="result-link spacer-bottom-20"><a class="title is-5" href="/acordao/{{ acordao_id }}" target="_blank"> Processo nº {{ acordao.processo }}</a></div>
         <div class="spacer-bottom-20">
@@ -21,7 +21,12 @@
     </div>
     <div class="level">
         <div class="level-left"></div>
-        <div class="right">
+        <div class="level-right">
+            {%if in_folder %}
+            <div class="level-item">
+                <button data-acordao-id="{{acordao_id}}" class="button is-danger has-text-weight-bold remove-acordao-btn">remover</button>
+            </div>
+            {% endif %}
             <div class="level-item">
                 <a href="/acordao/{{ acordao_id }}" target="_blank" class="button is-info has-text-weight-bold">ver acórdão</a>
             </div>

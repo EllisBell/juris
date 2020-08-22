@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from jurisapp.models import Folder
+from jurisapp.models import Folder, SavedAcordao
 from jurisapp.forms import CreateFolderForm
 from jurisapp import acordao_search
 from django.utils import timezone
@@ -45,7 +45,7 @@ def dossier_search(request):
     archived = request.GET.get('archived', False)
 
     current_user = request.user
-    user_folders = current_user.folder_set.all().filter(archived=archived)
+    user_folders = current_user.folder_set.all()#.filter(archived=archived)
 
     folder_acordao_ids = []
 
@@ -126,11 +126,24 @@ def set_folder_archived(request, archived):
     folder_id = request.POST.get('folder_id', None)
     if folder_id:
         folder = Folder.objects.get(pk=folder_id)
-        folder.archived = archived
-        folder.save()
-        return HttpResponse(status=204)
+        if folder:
+            folder.archived = archived
+            folder.save()
+            return HttpResponse(status=204)
     
     return HttpResponse(status=404)
+
+def remove_acordao_from_folder(request):
+    folder_id = request.POST.get('folder_id', None)
+    acordao_id = request.POST.get('acordao_id', None)
+    if folder_id and acordao_id:
+        saved_acordao = SavedAcordao.objects.filter(folder__id=folder_id, acordao__acordao_id=acordao_id)
+        if saved_acordao:
+            saved_acordao.delete()
+            return HttpResponse(status=204)
+
+    return HttpResponse(status=404)
+
 
 
 

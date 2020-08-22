@@ -179,5 +179,36 @@ $(document).ready(function() {
       );
     });
 
+    // Remove acordao from dossier
+
+    $(".remove-acordao-btn").click(function(e){
+        var acordaoId = $(e.target).data("acordao-id");
+        $("#remove-acordao-modal").addClass("is-active");
+        $("#remove-acordao-id").val(acordaoId);
+    });
+
+    $(".close-remove-acordao-modal").click(function(){
+        hideRemoveAcordaoModal();
+    });
+
+    function hideRemoveAcordaoModal() {
+        $("#remove-acordao-modal").removeClass("is-active");
+    }
+
+    $("#confirm-remove-acordao").click(function(){
+        var acordaoId = $("#remove-acordao-id").val();
+        var folderId = $("#folder-id").val();
+        $.post('/remove-acordao/',
+                {
+                    folder_id: folderId, 
+                    acordao_id: acordaoId
+                },
+                function(data) {
+                    var removed = $("#acordao-box-" + acordaoId);
+                    removed.addClass("is-hidden");
+                    hideRemoveAcordaoModal();
+                }
+              )
+    });
 
 });

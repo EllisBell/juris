@@ -34,11 +34,30 @@
     <a class="button" href="{% url 'juris_index' %}">Procure acórdãos</a>
 {% endif %}
 {% for acordao in folder.acordaos.all %}
-    {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores_as_list %}
+    {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores_as_list in_folder=True %}
 {% endfor %}
 </div>
 
 <div id="dossier-search-results">
+</div>
+
+
+<div id="remove-acordao-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <input type="hidden" id="remove-acordao-id">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Remover <i class="fas fa-archive"></i></p>
+      <button class="delete close-remove-acordao-modal" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <div>Tem a certeza que quer remover o acórdão?</div>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="confirm-remove-acordao" class="button is-success">Confirmar</button>
+      <button class="button close-remove-acordao-modal">Cancelar</button>
+    </footer>
+  </div>
 </div>
 
 {% endblock %}

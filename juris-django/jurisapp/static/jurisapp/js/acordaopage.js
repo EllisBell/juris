@@ -29,12 +29,6 @@ $(document).ready(function() {
 		removeExistingFolderOutlines();
 	});
 
-	// $("#save-in-new-folder-btn").click(function(e) {
-	// 	removeExistingFolderOutlines();
-	// 	var name = $("#new-folder-name-input").val();
-	// 	setChosenFolderName(name, true);
-	// });
-
 	$(".existing-folder").click(function(e) {
 		removeExistingFolderOutlines();
 		var folderId = $(this).data("id");
@@ -90,15 +84,25 @@ $(document).ready(function() {
 				$('#save-acordao-modal').removeClass('is-active');
 				$('#notification-dossier-name').text(data.folder_name);
 				$('#saved-acordao-success-notification').removeClass('is-hidden');
+				refreshFolderList();
 			},
 			error: function(data) 
 			{
 				$('#save-acordao-modal').removeClass('is-active');
 				$('#saved-acordao-error-notification').removeClass('is-hidden');
 			}
-			});
-			
+			});	
 	});
-	
 
+	function refreshFolderList() {
+		acordaoId = $("#acordao-id").val();
+		
+		$.get(
+			'/folder-list/',
+			{acordao_id: acordaoId},
+			function(data) {
+				$("#folder-list").html(data);
+			}
+		);
+	}
 });

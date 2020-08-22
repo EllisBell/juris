@@ -14,9 +14,14 @@
     </div>
 
     <div class="spacer-bottom-20"></div>
+    {% if not folders %}
+    <div>Não tem dossiers ativos</div>
+    {% else %}
+    <div class="spacer-bottom-20">Tem {{folders.count}} dossiers ativos</div>
     {% for folder in folders %}
         {% include 'jurisapp/snippets/folder_box_snippet.html' %}
     {% endfor %}
+    {% endif %}
 </div>
 
 <div id="dossier-search-results">

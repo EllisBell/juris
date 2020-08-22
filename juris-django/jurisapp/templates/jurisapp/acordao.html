@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block container_block %}
-
+<input type="hidden" id="acordao-id" value="{{acordao.acordao_id}}">
 <div class="spacer-bottom-70"></div>
 <div class="columns is-desktop">
 	<!-- SIDE MENU -->
@@ -29,19 +29,7 @@
 			<div class="spacer-bottom-5"><span class="has-text-primary"><a class="button is-info" href = {{ "http://www.dgsi.pt"|add:acordao.url }} target="_blank">Ver versão dgsi.pt</a></span></div>
 			<div class="spacer-bottom-5"><span class="has-text-primary"><a class="button is-info" href = "/acordao/{{ acordao.acordao_id }}/pdf" target="_blank">Obter PDF</a></span></div>
 			{% if user.is_authenticated %}
-				{% if ac_folders.count == 0 %}
-					<div class="spacer-bottom-5"><span class="has-text-primary"><a id="save-acordao-modal-open-btn" class="button is-primary is-outlined save-acordao-modal-btn">Guardar acórdão</a></span></div>
-				{% else %}
-					<div>
-						Acordao guardado em: 
-						<ul>
-						{% for folder in ac_folders %}
-						<li><a href="{% url 'folder_detail' folder_id=folder.id %}"> {{ folder.name }} </a><li>
-						{% endfor %}
-						</ul>
-						
-					</div>
-				{% endif %}
+				<div id="folder-list">{% include "jurisapp/snippets/folder_list_snippet.html" %}</div>
 			{% endif %}
 		</div>
 

@@ -22,13 +22,30 @@ def acordao(request, acordao_id):
     ac_folders = []
     all_folders = []
     if request.user.is_authenticated:
-        ac_folders = ac.folder_set.all()
-        all_folders = request.user.folder_set.all()
+        folders = get_acordao_folders(ac, request.user)
     
     form = SaveAcordaoForm({'acordao_id': acordao_id})
 
-    context_dict = {'acordao': ac, 'form': form, 'ac_folders': ac_folders, 'all_folders': all_folders}
+    context_dict = {'acordao': ac, 'form': form, 'ac_folders': folders[0], 'all_folders': folders[1]}
     return render(request, 'jurisapp/acordao.html', context_dict)
+
+def get_acordao_folders(acordao, user):
+    ac_folders = acordao.folder_set.filter(archived=False)
+    all_folders = user.folder_set.filter(archived=False)
+    user_ac_folders = [ac_folder for ac_folder in ac_folders if ac_folder in all_folders]
+    available_folders_for_saving = [folder for folder in all_folders if folder not in user_ac_folders]
+    return (user_ac_folders, available_folders_for_saving)
+
+
+def get_folder_list_snippet(request):
+    acordao_id = request.GET.get("acordao_id", None)
+    if acordao_id:
+        ac = Acordao.objects.get(pk=acordao_id)
+        folders = get_acordao_folders(ac, request.user)
+
+        context_dict = {'ac_folders': folders[0]}
+        return render(request, 'jurisapp/snippets/folder_list_snippet.html', context_dict)
+
 
 
 def acordao_pdf(request, acordao_id):

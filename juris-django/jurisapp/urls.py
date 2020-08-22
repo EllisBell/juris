@@ -16,6 +16,7 @@ urlpatterns = [
     path('acordao/<int:acordao_id>/pdf/', views.acordao_pdf, name='acordao_pdf'),
     path('recentes', views.recent_acordaos, name='recent_acordaos'),
     path('guardar-acordao/', views.save_acordao, name='save-acordao'),
+    path('folder-list/', views.get_folder_list_snippet, name='folder_list'),
     # Registration and authentication urls
     path('registar/', views.register, name='register'), 
     path('email-ativacao-enviado/<str:email>/', views.account_activation_sent, name='account_activation_sent'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('dossier/criar/', views.new_folder, name='new_folder'),
     path('archive-folder/', views.archive_folder, name='archive_folder'),
     path('unarchive-folder/', views.unarchive_folder, name='unarchive_folder'),
+    path('remove-acordao/', views.remove_acordao_from_folder, name='remove_acordao'),
     # Static pages urls
     path('termos', TemplateView.as_view(template_name='jurisapp/termos.html'), name='termos'),
     path('sobre', TemplateView.as_view(template_name='jurisapp/sobre.html'), name='sobre'),

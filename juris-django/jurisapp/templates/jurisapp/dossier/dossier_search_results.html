@@ -7,6 +7,9 @@
 </div>
 <div id="tab-content-all">
     <div class="tab-content is-active" data-content="acordaos" >
+        {% if not folder_acordaos%}
+        <div>0 resultados</div>
+        {% endif %}
         {% for folder_acordao_tuple in folder_acordaos %}
             <div>
             <div class="is-size-2">
@@ -20,13 +23,16 @@
     </div>
 
     <div class="tab-content" data-content="dossiers">
+        {% if not folders%}
+        <div>0 resultados</div>
+        {% endif %}
         {% for folder in folders %}
             {% include 'jurisapp/snippets/folder_box_snippet.html' %}
         {% endfor %}
     </div>
 
     <div class="tab-content" data-content="comments">
-        <span>comentarios</span>
+        <span>Funcionalidade em desenvolvimento</span>
     </div>
 
 </div>

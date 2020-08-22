@@ -1,0 +1,23 @@
+{% if not ac_folders %}
+    <div class="spacer-bottom-5"><span class="has-text-primary"><a id="save-acordao-modal-open-btn" class="button is-primary is-outlined save-acordao-modal-btn">Guardar acórdão</a></span></div>
+{% else %}
+<div>
+    Acordão guardado em: 
+    <div class="spacer-bottom-5"></div>
+        <ul>
+        {% for folder in ac_folders %}
+        <li class="spacer-bottom-5">
+        <a class="has-text-link" href="{% url 'folder_detail' folder_id=folder.id %}"> {{ folder.name }} </a>
+        <li>
+        {% endfor %}
+        </ul>
+    <div class="spacer-top-10">
+        <span class="has-text-primary">
+            <a id="save-acordao-modal-open-btn" class="button is-primary is-outlined save-acordao-modal-btn">Guardar noutro dossier</a>
+        </span>
+    </div>
+</div>
+{% endif %}
+
+
+
