@@ -34,7 +34,7 @@
     <a class="button" href="{% url 'juris_index' %}">Procure acórdãos</a>
 {% endif %}
 {% for acordao in folder.acordaos.all %}
-    {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores_as_list in_folder=True %}
+    {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id tribunal_name=acordao.tribunal.long_name descritores=acordao.descritores_as_list in_folder=True %}
 {% endfor %}
 </div>
 
