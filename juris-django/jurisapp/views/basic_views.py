@@ -23,6 +23,8 @@ def acordao(request, acordao_id):
     all_folders = []
     if request.user.is_authenticated:
         folders = get_acordao_folders(ac, request.user)
+    else:
+        folders = ([], [])
     
     form = SaveAcordaoForm({'acordao_id': acordao_id})
 
