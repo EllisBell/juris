@@ -32,7 +32,7 @@ def search(request, sort_by=None):
     print(from_date)
     to_date = request.GET['toDate']
 
-    just_txt_integral = request.GET['justTxtIntegral'] == 'true'
+    just_txt_integral = request.GET.get('justTxtIntegral', '') == 'true'
 
     page = get_page(request)
     display = 10
