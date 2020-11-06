@@ -222,9 +222,6 @@ $(document).ready(function() {
     function doFreshSearch() {
          var sd = getFreshSearchData();
 
-         console.log("SEARCHDATAOBJ");
-         console.log(sd);
-
         var validSearch = isValidSearch(sd);
 
         if(!validSearch) {
