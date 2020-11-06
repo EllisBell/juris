@@ -222,6 +222,9 @@ $(document).ready(function() {
     function doFreshSearch() {
          var sd = getFreshSearchData();
 
+         console.log("SEARCHDATAOBJ");
+         console.log(sd);
+
         var validSearch = isValidSearch(sd);
 
         if(!validSearch) {
@@ -242,8 +245,14 @@ $(document).ready(function() {
         var fromDate = getDateValue($('#fromDate'));
         var toDate = getDateValue($('#toDate'));
         var page = 1;
+        var justTxtIntegral = getJustTxtIntegralValue();
 
-        return getSearchDataObj(query, tribs, processo, fromDate, toDate, page);  
+        return getSearchDataObj(query, tribs, processo, fromDate, toDate, page, justTxtIntegral);  
+    }
+
+    function getJustTxtIntegralValue() {
+        var checkbox = $("#justTxtIntegralCheck");
+        return checkbox.prop('checked');
     }
 
     // adding this function in case i wanna do some date formatting or something at some point
@@ -305,17 +314,20 @@ $(document).ready(function() {
         var firstDate = $("#currentSearch").data("from-date");; // todo get date
         var secondDate = $("#currentSearch").data("to-date");; // todo get date
 
-        return getSearchDataObj(query, tribs, processo, firstDate, secondDate, page)    
+        var justTxtIntegral = getJustTxtIntegralValue();
+
+        return getSearchDataObj(query, tribs, processo, firstDate, secondDate, page, justTxtIntegral)    
     }
 
-    function getSearchDataObj(query, tribs, processo, fromDate, toDate, page) {
+    function getSearchDataObj(query, tribs, processo, fromDate, toDate, page, justTxtIntegral) {
         var searchData = {
             query: query,
             tribs: tribs,
             processo: processo,
             fromDate: fromDate,
             toDate: toDate,
-            page: page
+            page: page,
+            justTxtIntegral: justTxtIntegral
         }
         return searchData;
     }
@@ -412,6 +424,25 @@ $(document).ready(function() {
             getRecent(searchData);
         }
     }); 
+
+    $("#justTxtIntegralCheck").change(function(event) {
+        var searchData = getCurrentSearchData();
+        showLoadingBar();
+        if(relevantIsSelected) {
+            getRelevant(searchData);
+        }
+        else {
+            getRecent(searchData);
+        }
+    });
+
+    function relevantIsSelected() {
+        return $("#relevanceBtn").data("selected");
+    }
+
+    function recentIsSelected() {
+        return $("#recentBtn").data("selected");
+    }
 
 
     function setOrderByButtonSelectedAndColours(selected) {

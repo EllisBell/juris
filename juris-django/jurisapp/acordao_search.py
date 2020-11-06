@@ -195,7 +195,7 @@ def search_with_paging(asd, display_size, sort_by, query_components=None):
                       to_date=asd.to_date, processo=asd.processo, searchable_fields=get_searchable_fields(),
                       searchable_fields_with_nums=get_searchable_fields_with_nums(), sort_by=sort_by,
                       filter_dict=filter_dict, exclude=exclude, start_at=start, res_size=display_size,
-                      query_components=query_components)
+                      query_components=query_components, just_txt_integral=asd.just_txt_integral)
 
     res = s.search_fields(sd)
 

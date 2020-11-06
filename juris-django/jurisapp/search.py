@@ -281,6 +281,10 @@ def search_fields(sd):
         # then add that to outer bool dict
         add_to_bool(outer_bool_dict, "must", middle_bool_dict)
 
+    if sd.just_txt_integral:
+        txt_int_dict = {"exists": {"field": "txt_integral"}}
+        add_to_bool(outer_bool_dict, "must", txt_int_dict)
+
     # Adding filters to outer bool
     if sd.from_date:
         body = add_date_range_filter(body, sd.from_date, sd.to_date)

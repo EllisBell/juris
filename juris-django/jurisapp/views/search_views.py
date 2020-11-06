@@ -32,11 +32,14 @@ def search(request, sort_by=None):
     print(from_date)
     to_date = request.GET['toDate']
 
+    just_txt_integral = request.GET['justTxtIntegral'] == 'true'
+
     page = get_page(request)
     display = 10
 
     asd = acordao_search.AcordaoSearchData(query=query, tribs=tribs, processo=processo, acordao_ids=acordao_ids,
-                                           from_date=from_date, to_date=to_date, page_number=page)
+                                           from_date=from_date, to_date=to_date, page_number=page, 
+                                           just_txt_integral=just_txt_integral)
 
     try:
         # results = acordao_search.get_search_results(query, tribs, page, display, sort_by)
