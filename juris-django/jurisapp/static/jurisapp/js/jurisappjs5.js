@@ -423,17 +423,20 @@ $(document).ready(function() {
     }); 
 
     $("#justTxtIntegralCheck").change(function(event) {
+        console.log("WHAT");
         var searchData = getCurrentSearchData();
         showLoadingBar();
-        if(relevantIsSelected) {
+        if(relevantIsSelected()) {
             getRelevant(searchData);
         }
         else {
+            console.log("relevant not selected");
             getRecent(searchData);
         }
     });
 
     function relevantIsSelected() {
+        console.log($("#relevanceBtn").data("selected"));
         return $("#relevanceBtn").data("selected");
     }
 
