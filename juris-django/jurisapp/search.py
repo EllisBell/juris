@@ -175,7 +175,7 @@ def create_acordao_doc(ac):
            "tribunal_long": ac.tribunal.long_name,
            "relator": ac.relator,
            "sumario": ac.sumario,
-           "txt_integral": None if ac.txt_integral and ac.txt_integral.strip() == '' else ac.txt_integral,
+           "txt_integral": None if (not ac.txt_integral or ac.txt_integral and ac.txt_integral.strip() == '') else ac.txt_integral,
            "txt_parcial": ac.txt_parcial,
            "data": ac.data
            }
