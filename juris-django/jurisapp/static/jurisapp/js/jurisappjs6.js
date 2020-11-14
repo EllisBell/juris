@@ -249,7 +249,8 @@ $(document).ready(function() {
 
     function getJustTxtIntegralValue() {
         var checkbox = $("#justTxtIntegralCheck");
-        return checkbox.prop('checked');
+        //return checkbox.prop('checked');
+        return checkbox.data("selected");
     }
 
     // adding this function in case i wanna do some date formatting or something at some point
@@ -334,7 +335,6 @@ $(document).ready(function() {
          searchData._ = Date.now();
          $.get('/search_relevant/', 
                 // data to go with request
-                //{"_": Date.now(), query: searchData.query, tribs: searchData.tribs, page: searchData.page}, 
                 searchData, 
                 // callback function
                 function(data) { displaySearchResults(data); }
@@ -401,10 +401,6 @@ $(document).ready(function() {
         label.data("selected", true);
     }
 
-    // $(".tribLabel").each(function(index) {
-    //     setTribLabel($(this));
-    // });
-
     $(".orderByButton").click(function(event) {
     	currentlyRelevant = $("#relevanceBtn").data("selected");
         
@@ -422,8 +418,21 @@ $(document).ready(function() {
         }
     }); 
 
-    $("#justTxtIntegralCheck").change(function(event) {
-        console.log("WHAT");
+    $("#justTxtIntegralCheck").click(function(event) {
+        var check = $(this);
+        var currentlySelected = getJustTxtIntegralValue();
+
+        if(currentlySelected) {
+            check.children(".ticked").css("display", "none");
+            check.children(".not-ticked").css("display", "inline");    
+        }
+        else {
+            check.children(".ticked").css("display", "inline");
+            check.children(".not-ticked").css("display", "none"); 
+        }
+
+        check.data("selected", !currentlySelected);
+
         var searchData = getCurrentSearchData();
         showLoadingBar();
         if(relevantIsSelected()) {

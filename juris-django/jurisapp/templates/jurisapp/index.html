@@ -5,7 +5,7 @@
 {% block scripts_block %}
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script defer src="{% static "jurisapp/js/jurisappjs5.js" %}"></script>
+	<script defer src="{% static "jurisapp/js/jurisappjs6.js" %}"></script>
 {% endblock %}
 
 {% block container_block %}
@@ -81,12 +81,14 @@
 		</div>
 
 		<div id="orderByButtons" class="level spacer-top-30">
-			<!-- <div class="level-left"></div> -->
 			<div class="level-left">    
 				<button class="level-item button is-primary is-light is-outlined orderByButton" id="recentBtn" data-selected="false">+ recente</button>
 				<button class="level-item button is-primary is-light is-outlined orderByButton" id="relevanceBtn" data-selected="false">+ relevante</button>
-				<input type="checkbox" id="justTxtIntegralCheck" checked>
-				<label for="justTxtIntegralCheck" class="spacer-left-3">Apenas com texto integral</label>
+				<label id="justTxtIntegralCheck" class="" data-selected="true">
+					<i class="far fa-check-circle tick-icon ticked has-text-success is-size-6"></i>
+					<i class="far fa-circle tick-icon not-ticked is-size-6"></i>
+					<span>Apenas com texto integral</span>
+				</label>
 			</div>
 		</div>
 
