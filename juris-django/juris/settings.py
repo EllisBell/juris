@@ -50,12 +50,16 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -155,12 +159,13 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Raven/Sentry (error logging) config
-RAVEN_CONFIG = {
-    'dsn': os.environ.get('SENTRY_KEY', ''),
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-}
+if not DEBUG:
+    RAVEN_CONFIG = {
+        'dsn': os.environ.get('SENTRY_KEY', ''),
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+    }
 
 # Email config
 EMAIL_USE_TLS = True
@@ -169,3 +174,8 @@ EMAIL_HOST_USER = os.environ.get('ADMIN_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('JURIS_EMAIL_PW')
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL='info@jurisprudencia.pt'
+
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

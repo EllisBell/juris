@@ -5,9 +5,9 @@ from django.contrib.postgres.search import SearchVectorField
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models import Max
+from datetime import datetime, timedelta
 
-
-# Create your models here.
 
 class Tribunal(models.Model):
     id_name = models.CharField(primary_key=True, max_length=6)
@@ -17,8 +17,13 @@ class Tribunal(models.Model):
         db_table = 'tribunal'
 
 
-# N.B. changing most fields from CharField to TextField (with no max length)
-# Hope this doesn't cause issues...
+class AcordaoManager(models.Manager):
+    def recent(self):
+        most_recent_date = Acordao.objects.aggregate(Max('date_loaded'))['date_loaded__max']
+        recent_date = most_recent_date - timedelta(days=3)
+        return super().get_queryset().filter(date_loaded__gte=recent_date).order_by('-data')
+
+
 class Acordao(models.Model):
     acordao_id = models.AutoField(primary_key=True)
     processo = models.TextField(blank=True, null=True)
@@ -52,6 +57,8 @@ class Acordao(models.Model):
     url = models.TextField(blank=True, null=True)
     date_loaded = models.DateTimeField(blank=True, null=True)
     descritores = models.TextField(blank=True, null=True)
+
+    objects = AcordaoManager()
 
     def __str__(self):
         return self.processo

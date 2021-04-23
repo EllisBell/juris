@@ -14,9 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from .sitemap import AcordaoSiteMap, StaticViewSiteMap
+from django.conf import settings
+
+if settings.DEBUG:
+    import debug_toolbar
 
 sitemaps = {
     'acordaos': AcordaoSiteMap,
@@ -29,3 +34,6 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))

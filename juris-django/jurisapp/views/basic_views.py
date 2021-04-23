@@ -1,20 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from django.db.models import Max
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.utils import timezone
 from jurisapp.models import Acordao, Folder
 from jurisapp import pdf
 from jurisapp.forms import SaveAcordaoForm
+import logging
 
+logger = logging.getLogger(__name__)
 
 def index(request):
     return render(request, 'jurisapp/index.html')
 
 
-    # individual acordao
+# individual acordao
 def acordao(request, acordao_id):
-    print("got to acordao view")
     ac = Acordao.objects.get(pk=acordao_id)
     # descritores are in a concatenated string, split them into list
     ac.set_descritores_to_list()
@@ -49,7 +49,6 @@ def get_folder_list_snippet(request):
         return render(request, 'jurisapp/snippets/folder_list_snippet.html', context_dict)
 
 
-
 def acordao_pdf(request, acordao_id):
     ac = Acordao.objects.get(pk=acordao_id)
     # todo make this a method and call from above too
@@ -65,10 +64,12 @@ def acordao_pdf(request, acordao_id):
 
 
 def recent_acordaos(request):
-    most_recent_date = Acordao.objects.aggregate(Max('date_loaded'))['date_loaded__max']
-    recent_date = most_recent_date - timedelta(days=3)
-   # recent_date = datetime.now() - timedelta(days=3)
-    acordaos = Acordao.objects.filter(date_loaded__gte=recent_date).order_by('-data')
+    acordaos = Acordao.objects.recent().select_related("tribunal")
+
+    tribs = request.GET.getlist('trib', None)
+    if tribs:
+        acordaos = acordaos.filter(tribunal__in=tribs)
+
     for acordao in acordaos:
         acordao.set_descritores_to_list()
     context_dict = {'acordaos': acordaos}
