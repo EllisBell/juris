@@ -17,11 +17,30 @@ class Tribunal(models.Model):
         db_table = 'tribunal'
 
 
-class AcordaoManager(models.Manager):
+class AcordaoQuerySet(models.QuerySet):
     def recent(self):
-        most_recent_date = Acordao.objects.aggregate(Max('date_loaded'))['date_loaded__max']
+        most_recent_date = self.aggregate(Max('date_loaded'))['date_loaded__max']
         recent_date = most_recent_date - timedelta(days=3)
-        return super().get_queryset().filter(date_loaded__gte=recent_date).order_by('-data')
+        return self.filter(date_loaded__gte=recent_date)
+
+    def recent_by_trib(self, tribs):
+        if not tribs:
+            return self.recent().order_by('-data')
+
+        qs = None
+        for trib in tribs:
+            this_qs = self.filter(tribunal=trib).recent()
+            if qs is None:
+                qs = this_qs
+            else:
+                qs = qs | this_qs
+
+        return qs.order_by('-data')
+
+
+class AcordaoManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related('tribunal')
 
 
 class Acordao(models.Model):
@@ -58,7 +77,8 @@ class Acordao(models.Model):
     date_loaded = models.DateTimeField(blank=True, null=True)
     descritores = models.TextField(blank=True, null=True)
 
-    objects = AcordaoManager()
+    # objects = AcordaoQuerySet.as_manager()
+    objects = AcordaoManager.from_queryset(AcordaoQuerySet)()
 
     def __str__(self):
         return self.processo

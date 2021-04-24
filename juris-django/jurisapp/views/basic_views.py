@@ -64,14 +64,12 @@ def acordao_pdf(request, acordao_id):
 
 
 def recent_acordaos(request):
-    acordaos = Acordao.objects.recent().select_related("tribunal")
-
     tribs = request.GET.getlist('trib', None)
-    if tribs:
-        acordaos = acordaos.filter(tribunal__in=tribs)
+    acordaos = Acordao.objects.recent_by_trib(tribs)
 
     for acordao in acordaos:
         acordao.set_descritores_to_list()
+        
     context_dict = {'acordaos': acordaos}
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
 
