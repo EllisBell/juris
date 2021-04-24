@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 from django.utils import timezone
-from jurisapp.models import Acordao, Folder
+from jurisapp.models import Acordao, Folder, Tribunal
 from jurisapp import pdf
 from jurisapp.forms import SaveAcordaoForm
 import logging
@@ -51,7 +51,6 @@ def get_folder_list_snippet(request):
 
 def acordao_pdf(request, acordao_id):
     ac = Acordao.objects.get(pk=acordao_id)
-    # todo make this a method and call from above too
     ac.set_descritores_to_list()
 
     absolute_uri = request.build_absolute_uri()
@@ -65,12 +64,13 @@ def acordao_pdf(request, acordao_id):
 
 def recent_acordaos(request):
     tribs = request.GET.getlist('trib', None)
-    acordaos = Acordao.objects.recent_by_trib(tribs)
+    acordaos = Acordao.objects.recent_by_trib(tribs).select_related('tribunal')
 
     for acordao in acordaos:
         acordao.set_descritores_to_list()
-        
-    context_dict = {'acordaos': acordaos}
+
+    active_tribs = {trib: True for trib in tribs}
+    context_dict = {'acordaos': acordaos, "active_tribs": active_tribs}
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
 
 

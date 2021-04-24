@@ -37,12 +37,6 @@ class AcordaoQuerySet(models.QuerySet):
 
         return qs.order_by('-data')
 
-
-class AcordaoManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().select_related('tribunal')
-
-
 class Acordao(models.Model):
     acordao_id = models.AutoField(primary_key=True)
     processo = models.TextField(blank=True, null=True)
@@ -77,8 +71,8 @@ class Acordao(models.Model):
     date_loaded = models.DateTimeField(blank=True, null=True)
     descritores = models.TextField(blank=True, null=True)
 
-    # objects = AcordaoQuerySet.as_manager()
-    objects = AcordaoManager.from_queryset(AcordaoQuerySet)()
+    objects = AcordaoQuerySet.as_manager()
+    #objects = AcordaoManager.from_queryset(AcordaoQuerySet)()
 
     def __str__(self):
         return self.processo
@@ -175,7 +169,6 @@ class User(AbstractUser):
 class Customer(models.Model):
     customer_id = models.AutoField(primary_key=True)
     customer_name = models.TextField(max_length=100, blank=True, null=True)
-
 
     class Meta:
         db_table = 'customer'
