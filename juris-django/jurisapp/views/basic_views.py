@@ -78,10 +78,10 @@ def recent_acordaos(request):
     active_tribs = {trib: True for trib in all_active_tribs} 
 
     for trib in all_tribs:
-        others = [f"trib={other}" for other in active_tribs if other != trib.id_name]
+        others = ["trib={}".format(other) for other in active_tribs if other != trib.id_name]
         link = "&".join(others)
         if not active_tribs.get(trib.id_name, False):
-            link += f"&trib={trib.id_name}"
+            link += "&trib={}".format(trib.id_name)
         trib.link = link
 
     context_dict = {'acordaos': acordaos, "active_tribs": active_tribs, "all_tribs": all_tribs}
