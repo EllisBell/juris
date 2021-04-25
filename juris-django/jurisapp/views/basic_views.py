@@ -61,6 +61,8 @@ def acordao_pdf(request, acordao_id):
     response['Content-Disposition'] = 'filename="' + filename + '"'
     return response
 
+all_tribs_in_order = ["STJ", "TRL", "TRP", "TRC", "TRG", "TRE"]
+
 
 def recent_acordaos(request):
     tribs = request.GET.getlist('trib', None)
@@ -69,8 +71,20 @@ def recent_acordaos(request):
     for acordao in acordaos:
         acordao.set_descritores_to_list()
 
-    active_tribs = {trib: True for trib in tribs}
-    context_dict = {'acordaos': acordaos, "active_tribs": active_tribs}
+    all_tribs = Tribunal.objects.all()
+    all_tribs = sorted(all_tribs, key=lambda x: all_tribs_in_order.index(x.id_name) if x.id_name in all_tribs_in_order else 100)
+    
+    all_active_tribs = tribs or [trib.id_name for trib in all_tribs]
+    active_tribs = {trib: True for trib in all_active_tribs} 
+
+    for trib in all_tribs:
+        others = [f"trib={other}" for other in active_tribs if other != trib.id_name]
+        link = "&".join(others)
+        if not active_tribs.get(trib.id_name, False):
+            link += f"&trib={trib.id_name}"
+        trib.link = link
+
+    context_dict = {'acordaos': acordaos, "active_tribs": active_tribs, "all_tribs": all_tribs}
     return render(request, 'jurisapp/recent_acordaos.html', context_dict)
 
 

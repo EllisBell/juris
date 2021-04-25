@@ -292,6 +292,10 @@ body {
 	max-width: 900px;
 }
 
+#tribCheckBoxes a {
+	color: inherit;
+}
+
 .tribLabel {
 	margin-right: 5px;
 	padding: 8px;

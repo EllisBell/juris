@@ -8,9 +8,26 @@
 
 <div class="title">Acórdãos Recentes</div>
 
+<div id="tribCheckBoxes" class="spacer-top-20">
+    {% for trib in all_tribs %}
+        <a href="{% url 'recent_acordaos' %}?{{ trib.link }}">
+        <label class="tribLabel spacer-bottom-10 has-background-white-ter" data-selected="true" data-trib="{{trib.id_name}}">
+            <span class="trib-long">{{ trib.long_name }}</span>
+            {% comment %} TODO this should be short name like TR Porto (need to add to DB) {% endcomment %}
+            <span class="trib-short">{{ trib.id_name }}</span>
+            {% if trib.id_name in active_tribs %}
+                <i class="far fa-check-circle tick-icon ticked has-text-primary"></i>
+            {% else %}
+                <i class="far fa-circle"></i>
+            {% endif %}
+        </label>
+        </a>
+    {% endfor %}
+</div>
+
 <div id="searchResults">
 
-<div class="columns">
+<div class="columns spacer-top-30">
     <div class="column is-three-quarters">
         {% for acordao in acordaos %}
             {% include "jurisapp/snippets/acordao_box_snippet.html" with acordao_id=acordao.acordao_id descritores=acordao.descritores tribunal_name=acordao.tribunal.long_name %}
